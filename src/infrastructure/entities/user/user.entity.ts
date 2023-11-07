@@ -23,8 +23,11 @@ export class User extends AuditableEntity {
   @Column({ length: 100, unique: true })
   username: string;
 
+  @Column({unique: true,nullable:true })
+  linkedin: string;
+
   @Factory((faker, ctx) => faker.name.fullName(ctx.gender))
-  @Column({ length: 100 })
+  @Column({ length: 100 ,nullable:true})
   name: string;
 
   // @Factory((faker, ctx) => faker.internet.password())
@@ -64,7 +67,7 @@ export class User extends AuditableEntity {
   @Column({ default: true })
   is_active: boolean;
 
-  @Factory((faker) => faker.helpers.arrayElement([Role.CLIENT, Role.DRIVER]))
+  @Factory((faker) => faker.helpers.arrayElement([Role.CLIENT, Role.PROVIDER]))
   @Column({ type: 'set', enum: Role, default: [Role.CLIENT] })
   roles: Role[];
 

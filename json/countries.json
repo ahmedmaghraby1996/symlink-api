@@ -1,0 +1,172 @@
+{
+    "countries": [
+      {
+        "name": {
+          "en": "United States",
+          "ar": "الولايات المتحدة"
+        },
+        "cities": [
+          {
+            "name": {
+              "en": "New York",
+              "ar": "نيويورك"
+            }
+          },
+          {
+            "name": {
+              "en": "Los Angeles",
+              "ar": "لوس أنجلوس"
+            }
+          },
+          {
+            "name": {
+              "en": "Chicago",
+              "ar": "شيكاغو"
+            }
+          },
+          {
+            "name": {
+              "en": "Houston",
+              "ar": "هيوستن"
+            }
+          }
+        
+        ]
+      },
+      {
+        "name": {
+          "en": "United Kingdom",
+          "ar": "المملكة المتحدة"
+        },
+        "cities": [
+          {
+            "name": {
+              "en": "London",
+              "ar": "لندن"
+            }
+          },
+          {
+            "name": {
+              "en": "Manchester",
+              "ar": "مانشستر"
+            }
+          },
+          {
+            "name": {
+              "en": "Birmingham",
+              "ar": "بيرمنغهام"
+            }
+          },
+          {
+            "name": {
+              "en": "Edinburgh",
+              "ar": "إدنبرة"
+            }
+          }
+        
+        ]
+      },
+      {
+        "name": {
+          "en": "France",
+          "ar": "فرنسا"
+        },
+        "cities": [
+          {
+            "name": {
+              "en": "Paris",
+              "ar": "باريس"
+            }
+          },
+          {
+            "name": {
+              "en": "Marseille",
+              "ar": "مرسيليا"
+            }
+          },
+          {
+            "name": {
+              "en": "Lyon",
+              "ar": "ليون"
+            }
+          },
+          {
+            "name": {
+              "en": "Toulouse",
+              "ar": "تولوز"
+            }
+          }
+       
+        ]
+      },
+   
+      {
+        "name": {
+          "en": "China",
+          "ar": "الصين"
+        },
+        "cities": [
+          {
+            "name": {
+              "en": "Beijing",
+              "ar": "بكين"
+            }
+          },
+          {
+            "name": {
+              "en": "Shanghai",
+              "ar": "شنغهاي"
+            }
+          },
+          {
+            "name": {
+              "en": "Guangzhou",
+              "ar": "غوانغتشو"
+            }
+          },
+          {
+            "name": {
+              "en": "Chongqing",
+              "ar": "تشونغتشينغ"
+            }
+          }
+        
+        ]
+      },
+      {
+        "name": {
+          "en": "Japan",
+          "ar": "اليابان"
+        },
+        "cities": [
+          {
+            "name": {
+              "en": "Tokyo",
+              "ar": "طوكيو"
+            }
+          },
+          {
+            "name": {
+              "en": "Osaka",
+              "ar": "أوساكا"
+            }
+          },
+          {
+            "name": {
+              "en": "Kyoto",
+              "ar": "كيوتو"
+            }
+          },
+          {
+            "name": {
+              "en": "Sapporo",
+              "ar": "سابورو"
+            }
+          }
+          
+        ]
+      }
+    
+    ]
+  }
+  
