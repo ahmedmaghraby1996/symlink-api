@@ -9,7 +9,7 @@ import { BaseTransaction } from 'src/core/base/database/base.transaction';
 import { ImageManager } from 'src/integration/sharp/image.manager';
 import * as sharp from 'sharp';
 import { StorageManager } from 'src/integration/storage/storage.manager';
-import { DriverSetting } from 'src/infrastructure/entities/driver/driver-setting.entity';
+
 import { Role } from 'src/infrastructure/data/enums/role.enum';
 
 @Injectable()
@@ -66,15 +66,7 @@ export class RegisterUserTransaction extends BaseTransaction<
       // save user
       const savedUser = await context.save(User, user);
 
-      // create driver setting if user is a driver
-      if (savedUser.roles.includes(Role.DRIVER)) {
-        const driverSetting = new DriverSetting({
-          user_id: savedUser.id,
-          latitude: 0,
-          longitude: 0,
-        });
-        await context.save(DriverSetting, driverSetting);
-      }
+
 
       // return user
       return savedUser;
