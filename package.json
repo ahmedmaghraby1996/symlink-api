@@ -50,11 +50,14 @@
     "nestjs-i18n": "^10.2.6",
     "npm-check-updates": "^16.7.4",
     "passport-jwt": "^4.0.1",
+    "path": "^0.12.7",
     "pluralize": "^8.0.0",
     "reflect-metadata": "0.1.13",
     "rxjs": "7.8.0",
     "sharp": "^0.31.3",
-    "typeorm": "^0.3.12"
+    "typeorm": "^0.3.12",
+    "utils": "^0.3.1",
+    "webpack": "^5.89.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.2.0",
