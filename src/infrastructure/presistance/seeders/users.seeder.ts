@@ -73,7 +73,7 @@ export class UsersSeeder implements Seeder {
       phone: '+966555551111',
       phone_verified_at: new Date(),
       avatar: 'https://i.pravatar.cc/150?img=2',
-      roles: [Role.DRIVER],
+      roles: [Role.PROVIDER],
       gender: Gender.MALE,
     });
 

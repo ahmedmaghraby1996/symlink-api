@@ -5,33 +5,36 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  Matches,
+  isStrongPassword,
 } from 'class-validator';
 import { Unique } from 'src/core/validators/unique-constraints.validator';
 import { Role } from 'src/infrastructure/data/enums/role.enum';
 
 export class RegisterRequest {
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  name: string;
 
-  @ApiPropertyOptional()
+
+  @ApiProperty()
   @IsOptional()
   @IsNotEmpty()
   @IsEmail()
   @Unique('User')
-  email?: string;
+  email: string;
 
-  @ApiProperty()
+
+  @ApiPropertyOptional()
   @IsNotEmpty()
-  @Unique('User')
-  phone: string;
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, {
+    message: 'Password too weak. It must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long.',
+  })
+  
+  password?: string;
 
   @ApiProperty({ type: 'file', required: false })
   @IsOptional()
-  avatarFile: Express.Multer.File;
+  avatarFile?: Express.Multer.File;
 
-  @ApiProperty({ default: Role.CLIENT, enum: [Role.CLIENT, Role.DRIVER] })
+  @ApiProperty({ default: Role.CLIENT, enum: [Role.CLIENT, Role.PROVIDER] })
   @IsNotEmpty()
   @IsEnum(Role)
   role: Role;
