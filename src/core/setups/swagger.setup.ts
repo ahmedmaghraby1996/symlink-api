@@ -9,7 +9,7 @@ import { UserModule } from 'src/modules/user/user.module';
 export default (app: INestApplication, config: ConfigService) => {
   const operationIdFactory = (controllerKey: string, methodKey: string) =>
     methodKey;
-    config.get('APP_HOST')
+   console.log( config.get('APP_HOST'))
   const publicConfig = new DocumentBuilder()
     .addBearerAuth()
     .setTitle(`${config.get('APP_NAME')} API`)
