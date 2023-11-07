@@ -8,17 +8,19 @@ import { Logger, RequestMethod, ValidationPipe } from '@nestjs/common';
 import { useContainer } from 'class-validator';
 
 async function bootstrap() {
+  
   const app = await NestFactory.create(AppModule);
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
+  const config = app.get<ConfigService>(ConfigService);
+  const app_env = config.get('APP_ENV');
   app.enableCors();
-  app.use(helmet()); // helmet
+ if(app_env == 'production') app.use(helmet()); // helmet
   app.use(compression());
   app.setGlobalPrefix('v1', {
     exclude: [{ path: 'swagger', method: RequestMethod.GET }],
   });
 
-  const config = app.get<ConfigService>(ConfigService);
-  const app_env = config.get('APP_ENV');
+ 
 
   if (app_env !== 'production') {
  console.log(app_env)
