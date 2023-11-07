@@ -21,12 +21,12 @@ async function bootstrap() {
   const app_env = config.get('APP_ENV');
 
   if (app_env !== 'production') {
-    console.log("here")
+ console.log(app_env)
     Logger.log(`App running on ${app_env} environment`);
     SwaggerSetup(app, config);
   }
 
-  console.log("there")
+  
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
