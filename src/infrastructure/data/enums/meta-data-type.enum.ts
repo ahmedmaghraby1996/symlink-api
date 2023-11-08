@@ -1,4 +1,8 @@
 export enum MetaDataType {
-    assment_type = 'assment_type',
-    apis_size = 'apis_size'
-  } 
+  type_of_assessment = 'Type_of_assessment',
+  apis_size = 'apis_size',
+  average_applications='average_applications',
+  color_mobile = 'color_mobile',
+  evaluation_is_internal_or_external ='evaluation_is_internal_or_external'
+
+}

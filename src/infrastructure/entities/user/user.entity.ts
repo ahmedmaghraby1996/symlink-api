@@ -11,6 +11,7 @@ import { Gender } from 'src/infrastructure/data/enums/gender.enum';
 import { Role } from 'src/infrastructure/data/enums/role.enum';
 import { Language } from 'src/infrastructure/data/enums/language.enum';
 import { Address } from './address.entity';
+import { RequestForProposal } from '../request-for-proposal/request-for-proposal.entity';
 
 @Entity()
 export class User extends AuditableEntity {
@@ -75,6 +76,9 @@ export class User extends AuditableEntity {
     cascade: true,
   })
   addresses: Promise<Address[]>;
+
+  @OneToMany(() => RequestForProposal, (requestForProposal) => requestForProposal.user)
+    request_for_proposal: RequestForProposal[]
 
   constructor(partial: Partial<User>) {
     super();

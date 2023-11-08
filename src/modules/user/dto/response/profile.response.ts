@@ -10,7 +10,6 @@ export class UserInfoResponse {
   avatar: string;
   phone: string;
   email: string;
-  
 
   constructor(partial: Partial<UserInfoResponse>) {
     this.id = partial.id;
@@ -26,8 +25,5 @@ export class UserInfoResponse {
         this.avatar = toUrl(this.avatar);
       }
     }
-    
   }
 }
-
-
