@@ -37,6 +37,7 @@ export class UserController {
     user.email = req.email;
     user.name = req.name;
    user.linkedin=req.linkedin;
+   user.city_id=req.city_id;
    
     const result = await this.userService.update(user);
     return new UserInfoResponse(result);

@@ -27,7 +27,7 @@ export default (app: INestApplication, config: ConfigService) => {
     include: [
       AuthenticationModule,
       UserModule,
-      // AddressModule,
+      AddressModule,
       FileModule,
       CategoryModule,
       MetaDataModule,

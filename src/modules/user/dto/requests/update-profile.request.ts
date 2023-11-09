@@ -21,6 +21,12 @@ export class UpdateProfileRequest {
     @IsString()  
     linkedin:string
 
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsNotEmpty()
+    @IsString()  
+    city_id:string
+
 
 
     @ApiProperty({ type: 'file', required: false })

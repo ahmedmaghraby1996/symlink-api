@@ -4,6 +4,8 @@ import {
   Column,
   BeforeInsert,
   OneToMany,
+  ManyToMany,
+  ManyToOne,
 } from 'typeorm';
 import { Factory } from 'nestjs-seeder';
 import { randNum } from 'src/core/helpers/cast.helper';
@@ -12,6 +14,7 @@ import { Role } from 'src/infrastructure/data/enums/role.enum';
 import { Language } from 'src/infrastructure/data/enums/language.enum';
 import { Address } from './address.entity';
 import { RequestForProposal } from '../request-for-proposal/request-for-proposal.entity';
+import { City } from '../country/city.entity';
 
 @Entity()
 export class User extends AuditableEntity {
@@ -67,6 +70,11 @@ export class User extends AuditableEntity {
 
   @Column({ default: true })
   is_active: boolean;
+
+  @ManyToOne(()=>City,city=>city.users)
+  city:City
+  @Column({nullable:true})
+  city_id:string
 
   @Factory((faker) => faker.helpers.arrayElement([Role.CLIENT, Role.PROVIDER]))
   @Column({ type: 'set', enum: Role, default: [Role.CLIENT] })
