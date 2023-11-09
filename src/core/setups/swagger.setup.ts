@@ -3,7 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AddressModule } from 'src/modules/address/address.module';
 import { AuthenticationModule } from 'src/modules/authentication/authentication.module';
+import { CategoryModule } from 'src/modules/category/category.module';
 import { FileModule } from 'src/modules/file/file.module';
+import { MetaDataModule } from 'src/modules/meta-data/meta-data.module';
+import { RequestForProposalModule } from 'src/modules/request-for-proposal/request-for-proposal.module';
 import { UserModule } from 'src/modules/user/user.module';
 
 export default (app: INestApplication, config: ConfigService) => {
@@ -26,6 +29,9 @@ export default (app: INestApplication, config: ConfigService) => {
       UserModule,
       AddressModule,
       FileModule,
+      CategoryModule,
+      MetaDataModule,
+      RequestForProposalModule
     ],
     operationIdFactory,
   });

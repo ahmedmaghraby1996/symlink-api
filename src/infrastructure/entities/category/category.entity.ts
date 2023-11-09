@@ -6,16 +6,17 @@ import {
     OneToMany,
 } from 'typeorm';
 import { MetaData } from '../meta-data/meta-data.entity';
+import { RequestForProposal } from '../request-for-proposal/request-for-proposal.entity';
 
 @Entity()
 export class Category extends BaseEntity {
 
-    @Column()
+    @Column({unique: true})
     name_ar: string;
 
-    @Column()
+    @Column({unique: true})
     name_en: string;
 
-    @OneToMany(() => MetaData, (metaData) => metaData.category)
-    meta_data: MetaData[]
+    @OneToMany(() => RequestForProposal, (requestForProposal) => requestForProposal.category)
+    request_for_proposal: RequestForProposal[]
 }
