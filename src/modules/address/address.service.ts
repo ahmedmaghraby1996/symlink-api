@@ -10,88 +10,28 @@ import { EntityRelatedValidator } from 'src/core/validators/entity-related.valid
 import { PaginatedRequest } from 'src/core/base/requests/paginated.request';
 import { applyQueryFilters, applyQuerySort } from 'src/core/helpers/service-related.helper';
 import { SetFavoriteAddressTransaction } from './utils/transactions/set-favorite-address.transaction';
+import { City } from 'src/infrastructure/entities/country/city.entity';
+import { Country } from 'src/infrastructure/entities/country/country.entity';
+import { BaseService } from 'src/core/base/service/service.base';
 
 @Injectable({ scope: Scope.REQUEST })
-export class AddressService extends BaseUserService<Address> {
+export class AddressService extends BaseService<Country> {
   constructor(
-    @InjectRepository(Address)
-    public _repo: Repository<Address>,
+    @InjectRepository(Country)
+    public country_repo: Repository<Country>,
+    @InjectRepository(City)
+    public city_repo: Repository<City>,
     @Inject(REQUEST) request: Request,
-    private entityRelatedValidator: EntityRelatedValidator,
-    @Inject(SetFavoriteAddressTransaction)
-    private setFavoriteAddressTransaction: SetFavoriteAddressTransaction,
-    private context: EntityManager,
+   
   ) {
-    super(_repo, request);
+    super(country_repo);
   }
 
-  override async findAll(query?: PaginatedRequest): Promise<Address[]> {
-    applyQueryFilters(query, `user_id=${super.currentUser.id}`);
-    applyQuerySort(query, `is_favorite=desc`);
-    applyQuerySort(query, `last_used_at=desc`);
-    return await super.findAll(query);
+  async getCities(id:string)
+  {
+return await  this.city_repo.find({where:{country_id:id}})
   }
 
-  override async findOne(id: string): Promise<Address> {
-    const item = await super.findOne(id);
-    this.entityRelatedValidator.isExist(item);
-    this.entityRelatedValidator.ownership(item, super.currentUser);
-    return item;
-  }
 
-  async findByAccount(
-    query: AddressByAccountRequest,
-  ): Promise<Address[]> {
-    if (!query.account) return [];
-    const user = await this.context.query(
-      `SELECT * FROM users WHERE account = '${query.account}' LIMIT 1`,
-    );
-    if (!user[0]) return [];
-    return await this._repo.find({ where: { user_id: user[0].id } });
-  }
 
-  override async create(entity: Address): Promise<Address> {
-    // if entity has property user_id, set it to the current user
-    entity.user_id = super.currentUser.id;
-    entity.location = `POINT(${entity.latitude} ${entity.longitude})`;
-    return await super.create(entity);
-  }
-
-  override async update(entity: Address): Promise<Address> {
-    // get the entity first
-    const user = super.currentUser;
-    entity.user_id = user.id;
-    const item = await super.findOne(entity.id);
-    this.entityRelatedValidator.isExist(item);
-    this.entityRelatedValidator.ownership(item, super.currentUser);
-
-    // update the entity
-    return await super.update(entity);
-  }
-
-  override async delete(id: string): Promise<DeleteResult> {
-    // get the entity first
-    const item = await super.findOne(id);
-    if (!item) throw new NotFoundException();
-    this.entityRelatedValidator.isExist(item);
-    this.entityRelatedValidator.ownership(item, super.currentUser);
-    // delete the entity
-    return await super.delete(id);
-  }
-
-  async setFavorite(id: string): Promise<Address> {
-    const item = await super.findOne(id);
-    this.entityRelatedValidator.isExist(item);
-    this.entityRelatedValidator.ownership(item, super.currentUser);
-    item.is_favorite = true;
-    return await super.update(item);
-  }
-
-  async removeFavorite(id: string): Promise<Address> {
-    const item = await super.findOne(id);
-    this.entityRelatedValidator.isExist(item);
-    this.entityRelatedValidator.ownership(item, super.currentUser);
-    item.is_favorite = false;
-    return await super.update(item);
-  }
 }
