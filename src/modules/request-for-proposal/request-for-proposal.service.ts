@@ -8,7 +8,7 @@ import { REQUEST } from '@nestjs/core';
 import { UserInfoResponse } from '../user/dto/response/profile.response';
 import { RequestForProposalResponse } from './dto/request-for-proposal.response';
 import { MetaData } from 'src/infrastructure/entities/meta-data/meta-data.entity';
-import { plainToInstance } from 'class-transformer';
+import { plainToClass, plainToInstance } from 'class-transformer';
 @Injectable()
 export class RequestForProposalService {
   constructor(
@@ -25,15 +25,13 @@ export class RequestForProposalService {
     const requestForProposal = this.requestForProposalRepository.create(
       createRequestForProposalRequest,
     );
-    requestForProposal.user_id = this.request.user.id;
     return await this.requestForProposalRepository.save(requestForProposal);
   }
 
   async getAllRequestForProposal() {
     const requestForProposal = await this.requestForProposalRepository.find({
-      where: { user_id: this.request.user.id },
+      where: {  },
       relations: {
-        user: true,
         category: true,
         assessments_type_meta_data: true,
         apis_size_meta_data: true,
@@ -42,6 +40,7 @@ export class RequestForProposalService {
         evaluation_is_internal_or_external_meta_data: true,
       },
     });
+    
     const listRequestForProposalDto = requestForProposal.map(item => new RequestForProposalResponse(item))
     return listRequestForProposalDto;
   }

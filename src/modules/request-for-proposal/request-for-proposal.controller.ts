@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { RequestForProposalService } from './request-for-proposal.service';
 import { CreateRequestForProposalRequest } from './dto/create-request-for-proposal.request';
@@ -9,6 +9,7 @@ import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { Roles } from '../authentication/guards/roles.decorator';
 import { RolesGuard } from '../authentication/guards/roles.guard';
 import { RequestForProposalResponse } from './dto/request-for-proposal.response';
+import { I18nResponse } from 'src/core/helpers/i18n.helper';
 @ApiBearerAuth()
 @ApiHeader({
   name: 'Accept-Language',
@@ -21,6 +22,8 @@ import { RequestForProposalResponse } from './dto/request-for-proposal.response'
 export class RequestForProposalController {
   constructor(
     private readonly requestForProposalService: RequestForProposalService,
+    @Inject(I18nResponse) private readonly _i18nResponse: I18nResponse,
+
   ) {}
   @Roles(Role.CLIENT)
   @Post()
@@ -37,7 +40,9 @@ export class RequestForProposalController {
   @Get()
   async getAllRequestForProposal(){
     const requestForProposal = await this.requestForProposalService.getAllRequestForProposal();
-    return new ActionResponse<RequestForProposalResponse[]>(requestForProposal);
+    const data: RequestForProposalResponse[] = this._i18nResponse.entity(requestForProposal);
+
+    return new ActionResponse<RequestForProposalResponse[]>(data);
 
   }
 }

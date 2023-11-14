@@ -4,6 +4,7 @@ import { Module } from '@nestjs/common';
 import { CategoryModule } from './category/category.module';
 import { MetaDataModule } from './meta-data/meta-data.module';
 import { RequestForProposalModule } from './request-for-proposal/request-for-proposal.module';
+import { MultiRfpModule } from './multi-rfp/multi-rfp.module';
 
 @Module({
     imports: [
@@ -11,6 +12,7 @@ import { RequestForProposalModule } from './request-for-proposal/request-for-pro
         CategoryModule,
         MetaDataModule,
         RequestForProposalModule,
+        MultiRfpModule,
     ],
     exports: [
         AddressModule,

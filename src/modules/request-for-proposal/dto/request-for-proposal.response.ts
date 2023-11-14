@@ -1,5 +1,6 @@
 import { th } from '@faker-js/faker';
 import { Exclude, Expose, Type } from 'class-transformer';
+import { RequestForProposalStatus } from 'src/infrastructure/data/enums/request-for-proposal.enum';
 import { Category } from 'src/infrastructure/entities/category/category.entity';
 import { MetaData } from 'src/infrastructure/entities/meta-data/meta-data.entity';
 import { User } from 'src/infrastructure/entities/user/user.entity';
@@ -53,8 +54,16 @@ export class RequestForProposalResponse {
   @Expose() active_directory: boolean;
 
   @Expose() details_ips_scoped: string;
+
+  @Expose() request_for_proposal_status: RequestForProposalStatus;
+
+  @Expose() created_at: Date;
+
+  @Expose() updated_at: Date;
+
   constructor(data: Partial<RequestForProposalResponse>) {
     Object.assign(this, data);
+    
     this.user = new UserInfoResponse(data.user);
   }
 }
