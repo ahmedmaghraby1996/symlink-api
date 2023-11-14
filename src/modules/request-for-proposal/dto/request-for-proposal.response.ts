@@ -10,8 +10,7 @@ import { UserInfoResponse } from 'src/modules/user/dto/response/profile.response
 export class RequestForProposalResponse {
   @Expose() category: Category;
 
-  @Expose()
-  user: UserInfoResponse;
+
 
   @Expose() assessments_type_meta_data: MetaData;
 
@@ -55,7 +54,6 @@ export class RequestForProposalResponse {
 
   @Expose() details_ips_scoped: string;
 
-  @Expose() request_for_proposal_status: RequestForProposalStatus;
 
   @Expose() created_at: Date;
 
@@ -64,6 +62,5 @@ export class RequestForProposalResponse {
   constructor(data: Partial<RequestForProposalResponse>) {
     Object.assign(this, data);
     
-    this.user = new UserInfoResponse(data.user);
   }
 }

@@ -1,0 +1,87 @@
+[
+    {
+        "type": "times",
+        "name_ar": "خلال ساعات العمل",
+        "name_en": "during working hours"
+    },
+    {
+        "type": "times",
+        "name_ar": "عطلات نهاية الأسبوع",
+        "name_en": "Weekends"
+    },
+    {
+        "type": "times",
+        "name_ar": "بدون تفضيل",
+        "name_en": "Without preference"
+    },
+    {
+        "type": "Type_of_assessment",
+        "name_ar": "الويب",
+        "name_en": "Web"
+    },
+    {
+        "type": "Type_of_assessment",
+        "name_ar": "مراجعة تكوين الهندسة المعمارية",
+        "name_en": "Architecture composition review"
+    },
+    {
+        "type": "apis_size",
+        "name_ar": "صغير (1-5 وظائف واجهة برمجة التطبيقات)",
+        "name_en": "Small (1-5 API functions)"
+    },
+    {
+        "type": "apis_size",
+        "name_ar": "المتوسطة (6-20 وظائف API)",
+        "name_en": "Medium (6-20 API functions)"
+    },
+    {
+        "type": "apis_size",
+        "name_ar": "كبير (20+ وظائف API)",
+        "name_en": "Large (20+ API functions)"
+    },
+    {
+        "type": "average_applications",
+        "name_ar": "صغيرة (1-5 شاشات )",
+        "name_en": "Small (1-5 screens)"
+    },
+    {
+        "type": "average_applications",
+        "name_ar": "متوسط (6-20 شاشات )",
+        "name_en": "Medium (6-20 screens)"
+    },
+    {
+        "type": "average_applications",
+        "name_ar": "كبير (+20 شاشات )",
+        "name_en": "Large (+20 screens)"
+    },
+    {
+        "type": "color_mobile",
+        "name_ar": "ابيض",
+        "name_en": "white"
+    },
+    {
+        "type": "color_mobile",
+        "name_ar": "رمادي",
+        "name_en": "ashen"
+    },
+    {
+        "type": "color_mobile",
+        "name_ar": "اسود",
+        "name_en": "black"
+    },
+    {
+        "type": "evaluation_is_internal_or_external",
+        "name_ar": "داخلي",
+        "name_en": "internal"
+    },
+    {
+        "type": "evaluation_is_internal_or_external",
+        "name_ar": "خارجي",
+        "name_en": "external"
+    },
+    {
+        "type": "evaluation_is_internal_or_external",
+        "name_ar": "كلاهما",
+        "name_en": "both of them"
+    }
+]
