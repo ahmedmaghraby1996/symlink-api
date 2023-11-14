@@ -15,6 +15,7 @@ import { Language } from 'src/infrastructure/data/enums/language.enum';
 import { Address } from './address.entity';
 import { RequestForProposal } from '../request-for-proposal/request-for-proposal.entity';
 import { City } from '../country/city.entity';
+import { MultiRFP } from '../multi-rfp/multi-rfp.entity';
 
 @Entity()
 export class User extends AuditableEntity {
@@ -85,8 +86,9 @@ export class User extends AuditableEntity {
   })
   addresses: Promise<Address[]>;
 
-  @OneToMany(() => RequestForProposal, (requestForProposal) => requestForProposal.user)
-    request_for_proposal: RequestForProposal[]
+
+  @OneToMany(() => MultiRFP, (multiRFP) => multiRFP.user)
+  multi_RFP: MultiRFP[] 
 
   constructor(partial: Partial<User>) {
     super();

@@ -6,6 +6,7 @@ import { MetaData } from "../entities/meta-data/meta-data.entity";
 import { RequestForProposal } from "../entities/request-for-proposal/request-for-proposal.entity";
 import { City } from "../entities/country/city.entity";
 import { Country } from "../entities/country/country.entity";
+import { MultiRFP } from "../entities/multi-rfp/multi-rfp.entity";
 
 export const DB_ENTITIES = [
   User,
@@ -15,7 +16,8 @@ export const DB_ENTITIES = [
   MetaData,
   RequestForProposal,
   City,
-  Country
+  Country,
+  MultiRFP
 ];
 
 export const DB_VIEWS = [];

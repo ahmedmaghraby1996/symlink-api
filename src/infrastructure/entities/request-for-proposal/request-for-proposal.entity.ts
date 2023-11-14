@@ -11,8 +11,19 @@ import { MetaData } from '../meta-data/meta-data.entity';
 import { MetaDataType } from 'src/infrastructure/data/enums/meta-data-type.enum';
 import { Category } from '../category/category.entity';
 import { User } from '../user/user.entity';
+import { RequestForProposalStatus } from 'src/infrastructure/data/enums/request-for-proposal.enum';
+import { AuditableEntity } from 'src/infrastructure/base/auditable.entity';
+import { MultiRFP } from '../multi-rfp/multi-rfp.entity';
 @Entity()
-export class RequestForProposal extends BaseEntity {
+export class RequestForProposal extends  AuditableEntity {
+
+  @ManyToOne(() => MultiRFP, (multiRfp) => multiRfp.request_for_proposal)
+  @JoinColumn({ name: 'multi_RFP_id' })
+  multi_RFP: MultiRFP;
+
+
+
+
   @ManyToOne(() => Category, (category) => category.request_for_proposal)
   @JoinColumn({ name: 'category_id' })
   category: Category;
@@ -20,12 +31,7 @@ export class RequestForProposal extends BaseEntity {
   @Column()
   category_id: string;
 
-  @ManyToOne(() => User, (user) => user.request_for_proposal)
-  @JoinColumn({ name: 'user_id' })
-  user: User;
 
-  @Column()
-  user_id: string;
   //Type of evaluation?
   @ManyToOne(() => MetaData, (metaData) => metaData.assessments_type_request)
   @JoinColumn({ name: 'assessments_type_id' })
@@ -75,7 +81,7 @@ export class RequestForProposal extends BaseEntity {
 
   @Column({ nullable: true })
   external_applications_num: number;
-  
+
   //List applications with domain:(i.e.domain.com)
   @Column({ type: 'longtext', nullable: true })
   list_applications_with_scope: string;
@@ -95,7 +101,7 @@ export class RequestForProposal extends BaseEntity {
   //How many user roles do you have in this application? i.e. normal user, admin, admin etc
   @Column({ nullable: true })
   How_many_user_roles: number;
-  
+
   //How to access the app: (i.e. Apple/Google stores link)
   @Column({ type: 'longtext', nullable: true })
   how_to_access_the_application: string;
@@ -131,4 +137,11 @@ export class RequestForProposal extends BaseEntity {
   //IPS Scoped List: (i.e. 1.1.1.1)
   @Column({ type: 'longtext', nullable: true })
   details_ips_scoped: string;
+
+  @Column({
+    type: 'enum',
+    enum: RequestForProposalStatus,
+    default: RequestForProposalStatus.PENDING,
+  })
+  request_for_proposal_status: RequestForProposalStatus;
 }
