@@ -5,6 +5,7 @@ import { CategoryModule } from './category/category.module';
 import { MetaDataModule } from './meta-data/meta-data.module';
 import { RequestForProposalModule } from './request-for-proposal/request-for-proposal.module';
 import { MultiRfpModule } from './multi-rfp/multi-rfp.module';
+import { ProviderModule } from './provider/provider.module';
 
 @Module({
     imports: [
@@ -13,6 +14,7 @@ import { MultiRfpModule } from './multi-rfp/multi-rfp.module';
         MetaDataModule,
         RequestForProposalModule,
         MultiRfpModule,
+        ProviderModule,
     ],
     exports: [
         AddressModule,

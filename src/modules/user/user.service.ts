@@ -21,7 +21,7 @@ export class UserService extends BaseService<User> {
   async getProfile() {
     //retrieve user by find with reviews as relation
     const user = await this._repo.findOne({
-        where: { id: this.request.user.id },
+        where: { id: this.request.user.id },relations:{city:{country:true}}
        
     })
     return user;

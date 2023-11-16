@@ -11,6 +11,7 @@ import * as sharp from 'sharp';
 import { StorageManager } from 'src/integration/storage/storage.manager';
 
 import { Role } from 'src/infrastructure/data/enums/role.enum';
+import { ProviderInfo } from 'src/infrastructure/entities/provider-info/provider-info.entity';
 
 @Injectable()
 export class RegisterUserTransaction extends BaseTransaction<
@@ -66,7 +67,11 @@ export class RegisterUserTransaction extends BaseTransaction<
       // save user
       const savedUser = await context.save(User, user);
 
-
+        if(savedUser.roles.includes(Role.PROVIDER)){
+const provider_info= new ProviderInfo({user_id:savedUser.id})
+          await context.save(provider_info)
+          
+        }
 
       // return user
       return savedUser;

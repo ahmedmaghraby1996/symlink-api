@@ -4,7 +4,7 @@ import { Body, ClassSerializerInterceptor, Controller, Get, Inject, Put, Uploade
 import { UserService } from './user.service';
 import { UpdateProfileRequest } from './dto/requests/update-profile.request';
 import { User } from 'src/infrastructure/entities/user/user.entity';
-import { ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiConsumes, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadValidator } from 'src/core/validators/upload.validator';
     import { UserInfoResponse } from './dto/response/profile.response';
@@ -13,12 +13,26 @@ import { REQUEST } from '@nestjs/core';
 import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { RolesGuard } from '../authentication/guards/roles.guard';
 import { ActionResponse } from 'src/core/base/responses/action.response';
+import { plainToInstance } from 'class-transformer';
+import { toUrl } from 'src/core/helpers/file.helper';
+import { I18nResponse } from 'src/core/helpers/i18n.helper';
+
+
+
+@ApiBearerAuth()
+@ApiHeader({
+  name: 'Accept-Language',
+  required: false,
+  description: 'Language header: en, ar',
+})
+@ApiTags('User')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller()
 export class UserController {
 
   constructor(private readonly userService: UserService,
+    @Inject(I18nResponse) private readonly _i18nResponse: I18nResponse,
     @Inject(REQUEST) readonly request: Request,) { }
 
 
@@ -35,17 +49,19 @@ export class UserController {
     req.file = file;
     if (req.file ) await this.userService.updateImage(req);
     user.email = req.email;
-    user.name = req.name;
+      user.name = req.name;
    user.linkedin=req.linkedin;
    user.city_id=req.city_id;
    
     const result = await this.userService.update(user);
-    return new UserInfoResponse(result);
+    return new ActionResponse( this._i18nResponse.entity(   new  UserInfoResponse(result))  );
   }
   
 @Get('/profile')
 async getProfile() {
-    return await new ActionResponse(await this.userService.getProfile());
+    const profile=  await this.userService.getProfile();
+  profile.avatar= toUrl(profile.avatar)
+return new ActionResponse( this._i18nResponse.entity(  profile))
 }
   
 }

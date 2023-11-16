@@ -7,6 +7,9 @@ import { RequestForProposal } from "../entities/request-for-proposal/request-for
 import { City } from "../entities/country/city.entity";
 import { Country } from "../entities/country/country.entity";
 import { MultiRFP } from "../entities/multi-rfp/multi-rfp.entity";
+import { ProviderInfo } from "../entities/provider-info/provider-info.entity";
+import { ProviderProject } from "../entities/provider-info/provider-project.entity";
+import { ProviderCertificate } from "../entities/provider-info/provider-certificate.entity";
 
 export const DB_ENTITIES = [
   User,
@@ -17,7 +20,10 @@ export const DB_ENTITIES = [
   RequestForProposal,
   City,
   Country,
-  MultiRFP
+  MultiRFP,
+  ProviderInfo,
+  ProviderProject,
+  ProviderCertificate
 ];
 
 export const DB_VIEWS = [];

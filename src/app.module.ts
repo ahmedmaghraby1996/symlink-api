@@ -8,18 +8,20 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CoreModule } from './core/core.module';
 import { FileModule } from './modules/file/file.module';
+import { ProviderModule } from './modules/provider/provider.module';
 
 @Module({
   imports: [
-    AssemblyModule,         // ?Assembly
-    CoreModule,             // !Global
-    InfrastructureModule,   // !Global
-    IntegrationModule,      // !Global
-    UserModule,             // !Global
-    AuthenticationModule,   // !Global
-    FileModule,             // !Global
+    AssemblyModule, // ?Assembly
+    CoreModule, // !Global
+    InfrastructureModule, // !Global
+    IntegrationModule, // !Global
+    UserModule, // !Global
+    AuthenticationModule, // !Global
+    FileModule,
+    ProviderModule, // !Global
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}
