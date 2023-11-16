@@ -7,6 +7,7 @@ import { CategoryModule } from 'src/modules/category/category.module';
 import { FileModule } from 'src/modules/file/file.module';
 import { MetaDataModule } from 'src/modules/meta-data/meta-data.module';
 import { MultiRfpModule } from 'src/modules/multi-rfp/multi-rfp.module';
+import { ProviderModule } from 'src/modules/provider/provider.module';
 import { RequestForProposalModule } from 'src/modules/request-for-proposal/request-for-proposal.module';
 import { UserModule } from 'src/modules/user/user.module';
 
@@ -33,7 +34,8 @@ export default (app: INestApplication, config: ConfigService) => {
       CategoryModule,
       MetaDataModule,
       RequestForProposalModule,
-      MultiRfpModule
+      MultiRfpModule,
+      ProviderModule  
     ],
     operationIdFactory,
   });

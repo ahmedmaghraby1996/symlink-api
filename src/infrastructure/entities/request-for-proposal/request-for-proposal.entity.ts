@@ -24,6 +24,7 @@ export class RequestForProposal extends  AuditableEntity {
 
 
 
+
   @ManyToOne(() => Category, (category) => category.request_for_proposal)
   @JoinColumn({ name: 'category_id' })
   category: Category;
