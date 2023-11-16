@@ -9,9 +9,16 @@ import {
 import { Category } from '../category/category.entity';
 import { MetaDataType } from 'src/infrastructure/data/enums/meta-data-type.enum';
 import { RequestForProposal } from '../request-for-proposal/request-for-proposal.entity';
+import { MultiRFP } from '../multi-rfp/multi-rfp.entity';
 
 @Entity()
 export class MetaData extends BaseEntity {
+
+  @OneToMany(
+    () => MultiRFP,
+    (multiRFP) => multiRFP.time_type_meta_data,
+  )
+  time_type_request: MultiRFP[];
   @OneToMany(
     () => RequestForProposal,
     (requestForProposal) => requestForProposal.assessments_type_meta_data,

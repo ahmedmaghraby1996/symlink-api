@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
@@ -20,6 +21,7 @@ import { Role } from 'src/infrastructure/data/enums/role.enum';
 import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { Roles } from '../authentication/guards/roles.decorator';
 import { RolesGuard } from '../authentication/guards/roles.guard';
+import { FilterMetaDataRequest } from './dto/filter-create-meta-data.request';
 @ApiBearerAuth()
 @ApiHeader({
   name: 'Accept-Language',
@@ -34,10 +36,9 @@ export class MetaDataController {
     private readonly metaDataService: MetaDataService,
     @Inject(I18nResponse) private readonly _i18nResponse: I18nResponse,
   ) {}
-
   @Get()
-  async getAllMetaData() {
-    const allMetaData = await this.metaDataService.getAllMetaData();
+  async getAllMetaData(@Query() filterMetaDataRequest: FilterMetaDataRequest) {
+    const allMetaData = await this.metaDataService.getAllMetaData(filterMetaDataRequest);
     const data: MetaData[] = this._i18nResponse.entity(allMetaData);
     return new ActionResponse<MetaData[]>(data);
   }

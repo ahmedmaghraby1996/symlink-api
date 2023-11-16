@@ -17,15 +17,15 @@ import { MultiRFP } from '../multi-rfp/multi-rfp.entity';
 @Entity()
 export class RequestForProposal extends  AuditableEntity {
 
-  @ManyToOne(() => MultiRFP, (multiRfp) => multiRfp.request_for_proposal)
-  @JoinColumn({ name: 'multi_RFP_id' })
+  @ManyToOne(() => MultiRFP, (multiRfp) => multiRfp.request_for_proposal,{onDelete: 'CASCADE'})
+  @JoinColumn()
   multi_RFP: MultiRFP;
 
+  @Column()
+  multi_RFP_id: string;
 
 
-
-
-  @ManyToOne(() => Category, (category) => category.request_for_proposal)
+  @ManyToOne(() => Category, (category) => category.request_for_proposal,{onDelete: 'CASCADE'})
   @JoinColumn({ name: 'category_id' })
   category: Category;
 
@@ -34,14 +34,14 @@ export class RequestForProposal extends  AuditableEntity {
 
 
   //Type of evaluation?
-  @ManyToOne(() => MetaData, (metaData) => metaData.assessments_type_request)
+  @ManyToOne(() => MetaData, (metaData) => metaData.assessments_type_request,{onDelete: 'CASCADE'})
   @JoinColumn({ name: 'assessments_type_id' })
   assessments_type_meta_data: MetaData;
 
   @Column({ nullable: true })
   assessments_type_id: string;
   //How many API functions do you have in the application? (Example: register, log in, create ticket, close ticket, etc.)
-  @ManyToOne(() => MetaData, (metaData) => metaData.apis_size_request)
+  @ManyToOne(() => MetaData, (metaData) => metaData.apis_size_request,{onDelete: 'CASCADE'})
   @JoinColumn({ name: 'apis_size_id' })
   apis_size_meta_data: MetaData;
 
@@ -50,7 +50,7 @@ export class RequestForProposal extends  AuditableEntity {
   //What is the average size of these applications?
   @ManyToOne(
     () => MetaData,
-    (metaData) => metaData.average_applications_request,
+    (metaData) => metaData.average_applications_request,{onDelete: 'CASCADE'}
   )
   @JoinColumn({ name: 'average_applications_id' })
   average_applications_meta_data: MetaData;
@@ -58,7 +58,7 @@ export class RequestForProposal extends  AuditableEntity {
   @Column({ nullable: true })
   average_applications_id: string;
   //What is the color in the mobile project?
-  @ManyToOne(() => MetaData, (metaData) => metaData.color_mobile_request)
+  @ManyToOne(() => MetaData, (metaData) => metaData.color_mobile_request,{onDelete: 'CASCADE'})
   @JoinColumn({ name: 'color_mobile_id' })
   color_mobile_meta_data: MetaData;
 
@@ -67,7 +67,7 @@ export class RequestForProposal extends  AuditableEntity {
   //Is the evaluation internal/external?
   @ManyToOne(
     () => MetaData,
-    (metaData) => metaData.evaluation_is_internal_or_external_request,
+    (metaData) => metaData.evaluation_is_internal_or_external_request,{onDelete: 'CASCADE'}
   )
   @JoinColumn({ name: 'evaluation_is_internal_or_external_id' })
   evaluation_is_internal_or_external_meta_data: MetaData;
@@ -139,10 +139,5 @@ export class RequestForProposal extends  AuditableEntity {
   @Column({ type: 'longtext', nullable: true })
   details_ips_scoped: string;
 
-  @Column({
-    type: 'enum',
-    enum: RequestForProposalStatus,
-    default: RequestForProposalStatus.PENDING,
-  })
-  request_for_proposal_status: RequestForProposalStatus;
+
 }

@@ -1,0 +1,26 @@
+[
+    {
+        "name_ar": "الويب",
+        "name_en": "Web"
+    },
+    {
+        "name_ar": "مراجعة تكوين الهندسة المعمارية",
+        "name_en": "Architecture composition review"
+    },
+    {
+        "name_ar": "مصدر الرمز",
+        "name_en": "Code source"
+    },
+    {
+        "name_ar": "الهاتف",
+        "name_en": "the phone"
+    },
+    {
+        "name_ar": "الشبكة",
+        "name_en": "the network"
+    },
+    {
+        "name_ar": "صيد التهديد",
+        "name_en": "Threat hunting"
+    }
+]

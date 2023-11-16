@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { RolesGuard } from '../authentication/guards/roles.guard';
@@ -20,6 +20,12 @@ export class MultiRfpController {
     }
     @Post()
     async createMultiRFP(@Body() createMultiRFPRequest: CreateMultiRFPRequest) {
+        console.log('createMultiRFPRequest', createMultiRFPRequest);
         return await this.multiRfpService.createMultiRFP(createMultiRFPRequest);
+    }
+
+    @Get()
+    async getAllMultiRFP() {
+        return await this.multiRfpService.getAllMultiRFP();
     }
 }

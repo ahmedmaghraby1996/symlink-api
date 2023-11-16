@@ -33,9 +33,8 @@ export default (app: INestApplication, config: ConfigService) => {
       FileModule,
       CategoryModule,
       MetaDataModule,
-      RequestForProposalModule,
-      MultiRfpModule,
-      ProviderModule  
+     // RequestForProposalModule,
+      MultiRfpModule
     ],
     operationIdFactory,
   });
