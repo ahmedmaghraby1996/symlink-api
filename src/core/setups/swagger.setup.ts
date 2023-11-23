@@ -2,6 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AddressModule } from 'src/modules/address/address.module';
+import { AttachedFilesModule } from 'src/modules/attached-files/attached-files.module';
 import { AuthenticationModule } from 'src/modules/authentication/authentication.module';
 import { CategoryModule } from 'src/modules/category/category.module';
 import { FileModule } from 'src/modules/file/file.module';
@@ -34,7 +35,8 @@ export default (app: INestApplication, config: ConfigService) => {
       CategoryModule,
       MetaDataModule,
       ProviderModule,
-      MultiRfpModule
+      MultiRfpModule,
+      AttachedFilesModule
      // RequestForProposalModule,
      
     ],
