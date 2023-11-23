@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RequestForProposal } from 'src/infrastructure/entities/request-for-proposal/request-for-proposal.entity';
@@ -42,6 +42,7 @@ export class MultiRfpService {
       where: { user_id: this.request.user.id },
       relations: {
         user: true,
+        time_type_meta_data: true,
         request_for_proposal: {
           category: true,
           assessments_type_meta_data: true,
@@ -53,5 +54,26 @@ export class MultiRfpService {
       },
     });
     return allMultiRFPForUser.map((item) => new MultiRFPResponse(item));
+  }
+  async getMultiRFP(id: string) {
+    const multiRFP = await this.multiRFPRepository.findOne({
+      where: { id },
+      relations: {
+        user: true,
+        time_type_meta_data: true,
+        request_for_proposal: {
+          category: true,
+          assessments_type_meta_data: true,
+          apis_size_meta_data: true,
+          color_mobile_meta_data: true,
+          average_applications_meta_data: true,
+          evaluation_is_internal_or_external_meta_data: true,
+        },
+      },
+    });
+    if (!multiRFP) {
+      throw new NotFoundException('This Project not found');
+    }
+    return new MultiRFPResponse(multiRFP);
   }
 }

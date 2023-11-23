@@ -6,6 +6,7 @@ import { MetaDataModule } from './meta-data/meta-data.module';
 import { RequestForProposalModule } from './request-for-proposal/request-for-proposal.module';
 import { MultiRfpModule } from './multi-rfp/multi-rfp.module';
 import { ProviderModule } from './provider/provider.module';
+import { AttachedFilesModule } from './attached-files/attached-files.module';
 
 @Module({
     imports: [
@@ -15,6 +16,7 @@ import { ProviderModule } from './provider/provider.module';
         RequestForProposalModule,
         MultiRfpModule,
         ProviderModule,
+        AttachedFilesModule,
     ],
     exports: [
         AddressModule,

@@ -10,6 +10,7 @@ import { MultiRFP } from "../entities/multi-rfp/multi-rfp.entity";
 import { ProviderInfo } from "../entities/provider-info/provider-info.entity";
 import { ProviderProject } from "../entities/provider-info/provider-project.entity";
 import { ProviderCertificate } from "../entities/provider-info/provider-certificate.entity";
+import { AttachedFiles } from "../entities/attached-files/attached-files.entity";
 
 export const DB_ENTITIES = [
   User,
@@ -23,7 +24,8 @@ export const DB_ENTITIES = [
   MultiRFP,
   ProviderInfo,
   ProviderProject,
-  ProviderCertificate
+  ProviderCertificate,
+  AttachedFiles
 ];
 
 export const DB_VIEWS = [];

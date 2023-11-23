@@ -4,6 +4,7 @@ import { AuditableEntity } from "src/infrastructure/base/auditable.entity";
 import { User } from "../user/user.entity";
 import { RequestForProposalStatus } from "src/infrastructure/data/enums/request-for-proposal.enum";
 import { MetaData } from "../meta-data/meta-data.entity";
+import { AttachedFiles } from "../attached-files/attached-files.entity";
 
 @Entity()
 export class MultiRFP extends  AuditableEntity{
@@ -12,6 +13,13 @@ export class MultiRFP extends  AuditableEntity{
         (requestForProposal) => requestForProposal.multi_RFP,
       )
       request_for_proposal: RequestForProposal[];
+
+      @OneToMany(
+        () => AttachedFiles,
+        (attachedFiles) => attachedFiles.multi_RFP,
+      )
+      attachedFiles: AttachedFiles[];
+
 
       @Column({
         type: 'enum',
