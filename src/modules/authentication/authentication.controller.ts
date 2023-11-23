@@ -30,6 +30,7 @@ export class AuthenticationController {
     const result = plainToInstance(AuthResponse, authData, {
       excludeExtraneousValues: true,
     });
+    result.role=authData.roles[0];
     return new ActionResponse<AuthResponse>(result);
   }
 
