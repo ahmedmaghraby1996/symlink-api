@@ -85,6 +85,11 @@ export class CreateRequestForProposalRequest {
 
   @ApiProperty({ nullable: true, required: false })
   @IsOptional()
+  @IsString()
+  how_can_the_assessor_access_it: string;
+  
+  @ApiProperty({ nullable: true, required: false })
+  @IsOptional()
   @IsNumber()
   how_many_IPS_should_be_tested_in_servers: number;
 

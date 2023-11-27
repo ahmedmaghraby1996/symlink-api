@@ -107,6 +107,9 @@ export class RequestForProposal extends  AuditableEntity {
   @Column({ type: 'longtext', nullable: true })
   how_to_access_the_application: string;
 
+  @Column({ type: 'longtext', nullable: true })
+  how_can_the_assessor_access_it: string;
+
   //How many IPS should be servers?
   @Column({ nullable: true })
   how_many_IPS_should_be_tested_in_servers: number;

@@ -16,13 +16,13 @@
     },
     {
         "type": "Type_of_assessment",
-        "name_ar": "الويب",
-        "name_en": "Web"
+        "name_ar": "تقييم الضعف",
+        "name_en": "Vulnerability Assessment"
     },
     {
         "type": "Type_of_assessment",
-        "name_ar": "مراجعة تكوين الهندسة المعمارية",
-        "name_en": "Architecture composition review"
+        "name_ar": "اختبار الاختراق",
+        "name_en": "Penetration Testing"
     },
     {
         "type": "apis_size",
@@ -57,31 +57,31 @@
     {
         "type": "color_mobile",
         "name_ar": "ابيض",
-        "name_en": "white"
+        "name_en": "White"
     },
     {
         "type": "color_mobile",
         "name_ar": "رمادي",
-        "name_en": "ashen"
+        "name_en": "Ashen"
     },
     {
         "type": "color_mobile",
         "name_ar": "اسود",
-        "name_en": "black"
+        "name_en": "Black"
     },
     {
         "type": "evaluation_is_internal_or_external",
         "name_ar": "داخلي",
-        "name_en": "internal"
+        "name_en": "Internal"
     },
     {
         "type": "evaluation_is_internal_or_external",
         "name_ar": "خارجي",
-        "name_en": "external"
+        "name_en": "External"
     },
     {
         "type": "evaluation_is_internal_or_external",
         "name_ar": "كلاهما",
-        "name_en": "both of them"
+        "name_en": "Both"
     }
 ]
