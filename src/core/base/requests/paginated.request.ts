@@ -26,13 +26,13 @@ export interface IncludesFilter {
 
 export class PaginatedRequest {
   @Transform(({ value }) => toRightNumber(value, { min: 1 }))
-  @ApiProperty({ required: false, minimum: 1 })
+  @ApiProperty({ required: false, minimum: 1,default: 1 })
   @IsOptional()
   @IsNumber()
   page: number;
 
   @Transform(({ value }) => toRightNumber(value, { min: 1 }))
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false ,default: 10 })
   @IsOptional()
   @IsNumber()
   limit: number;

@@ -19,5 +19,6 @@
     "titleBar.inactiveBackground": "#fca13099",
     "titleBar.inactiveForeground": "#15202b99"
   },
-  "liveServer.settings.port": 5501
+  "liveServer.settings.port": 5501,
+  "editor.inlineSuggest.showToolbar": "always"
 }

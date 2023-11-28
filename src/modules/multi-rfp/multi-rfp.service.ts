@@ -9,15 +9,20 @@ import { CreateMultiRFPRequest } from './dto/create-multi-RFP.request';
 import { plainToInstance } from 'class-transformer';
 import { RequestForProposalService } from '../request-for-proposal/request-for-proposal.service';
 import { MultiRFPResponse } from './dto/multi-rfp.response';
+import { BaseService } from 'src/core/base/service/service.base';
+import { PaginatedRequest } from 'src/core/base/requests/paginated.request';
+import { applyQueryFilters } from 'src/core/helpers/service-related.helper';
 @Injectable()
-export class MultiRfpService {
+export class MultiRfpService extends BaseService<MultiRFP> {
   constructor(
     @InjectRepository(RequestForProposal)
     private requestForProposalRepository: Repository<RequestForProposal>,
     @InjectRepository(MultiRFP)
     private multiRFPRepository: Repository<MultiRFP>,
     @Inject(REQUEST) private readonly request: Request,
-  ) {}
+  ) {
+    super(multiRFPRepository);
+  }
   async createMultiRFP(createMultiRFPRequest: CreateMultiRFPRequest) {
     const { projects, project_name, time_type_id } = createMultiRFPRequest;
 
@@ -37,25 +42,29 @@ export class MultiRfpService {
     }
     return await this.multiRFPRepository.save(multiRFP);
   }
-  async getAllMultiRFP() {
-    const allMultiRFPForUser = await this.multiRFPRepository.find({
-      where: { user_id: this.request.user.id },
-      relations: {
-        user: true,
-        time_type_meta_data: true,
-        request_for_proposal: {
-          category: true,
-          assessments_type_meta_data: true,
-          apis_size_meta_data: true,
-          color_mobile_meta_data: true,
-          average_applications_meta_data: true,
-          evaluation_is_internal_or_external_meta_data: true,
-        },
-      },
-    });
+  async getMyAllMultiRFP(query?: PaginatedRequest) {
+    applyQueryFilters(query, `user_id=${this.request.user.id }`);
+    const allMultiRFPForUser =  await super.findAll(query);
+
+    // const allMultiRFPForUser = await this.multiRFPRepository.find({
+    //   where: { user_id: this.request.user.id },
+    //   relations: {
+    //     user: true,
+    //     time_type_meta_data: true,
+    //     request_for_proposal: {
+    //       category: true,
+    //       assessments_type_meta_data: true,
+    //       apis_size_meta_data: true,
+    //       color_mobile_meta_data: true,
+    //       average_applications_meta_data: true,
+    //       evaluation_is_internal_or_external_meta_data: true,
+    //     },
+    //   },
+    // });
     return allMultiRFPForUser.map((item) => new MultiRFPResponse(item));
   }
-  async getMultiRFP(id: string) {
+
+  async getSingleMultiRFP(id: string) {
     const multiRFP = await this.multiRFPRepository.findOne({
       where: { id },
       relations: {
