@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Inject, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { RolesGuard } from '../authentication/guards/roles.guard';
@@ -7,6 +16,8 @@ import { CreateMultiRFPRequest } from './dto/create-multi-RFP.request';
 import { I18nResponse } from 'src/core/helpers/i18n.helper';
 import { MultiRFPResponse } from './dto/multi-rfp.response';
 import { ActionResponse } from 'src/core/base/responses/action.response';
+import { PaginatedRequest } from 'src/core/base/requests/paginated.request';
+import { PaginatedResponse } from 'src/core/base/responses/paginated.response';
 @ApiBearerAuth()
 @ApiHeader({
   name: 'Accept-Language',
@@ -28,15 +39,23 @@ export class MultiRfpController {
   }
 
   @Get()
-  async getAllMultiRFP() {
-    const allMultiRFPForUser = await this.multiRfpService.getAllMultiRFP();
-    const data: MultiRFPResponse[] = this._i18nResponse.entity(allMultiRFPForUser);
-    return new ActionResponse<MultiRFPResponse[]>(data);
+  async getMyAllMultiRFP(@Query() query?: PaginatedRequest) {
+    const allMultiRFPForUser = await this.multiRfpService.getMyAllMultiRFP(query);
+    const data: MultiRFPResponse[] =
+      this._i18nResponse.entity(allMultiRFPForUser);
+      if (query.page && query.limit) {
+        const total = await this.multiRfpService.count();
+        return new PaginatedResponse<MultiRFPResponse[]>(data, {
+          meta: { total, ...query },
+        });
+      } else {
+        return new ActionResponse<MultiRFPResponse[]>(data);
+      }
   }
 
   @Get(':id')
-  async getMultiRFP(@Param('id') id: string) {
-    const multiRFP = await this.multiRfpService.getMultiRFP(id);
+  async getSingleMultiRFP(@Param('id') id: string) {
+    const multiRFP = await this.multiRfpService.getSingleMultiRFP(id);
     const data: MultiRFPResponse = this._i18nResponse.entity(multiRFP);
     return new ActionResponse<MultiRFPResponse>(data);
   }
