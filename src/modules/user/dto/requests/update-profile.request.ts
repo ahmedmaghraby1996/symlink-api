@@ -1,6 +1,6 @@
 //UpdateProfile request
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 import { Unique } from "src/core/validators/unique-constraints.validator";
 
 export class UpdateProfileRequest {
@@ -26,6 +26,15 @@ export class UpdateProfileRequest {
     @IsNotEmpty()
     @IsString()  
     city_id:string
+
+    @ApiPropertyOptional()
+@IsOptional()
+@IsNotEmpty()
+@IsNumber()
+phone:string
+
+
+
 
 
 

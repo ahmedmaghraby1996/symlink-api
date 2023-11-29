@@ -50,6 +50,7 @@ export class UserController {
     if (req.file ) await this.userService.updateImage(req);
     user.email = req.email;
       user.name = req.name;
+      user.phone=req.phone;
    user.linkedin=req.linkedin;
    user.city_id=req.city_id;
    
