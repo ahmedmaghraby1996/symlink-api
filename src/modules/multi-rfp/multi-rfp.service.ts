@@ -43,7 +43,7 @@ export class MultiRfpService extends BaseService<MultiRFP> {
     return await this.multiRFPRepository.save(multiRFP);
   }
   async getMyAllMultiRFP(query?: PaginatedRequest) {
-    applyQueryFilters(query, `user_id=${this.request.user.id }`);
+   // applyQueryFilters(query, `user_id=${this.request.user.id }`);
     const allMultiRFPForUser =  await super.findAll(query);
 
     // const allMultiRFPForUser = await this.multiRFPRepository.find({
