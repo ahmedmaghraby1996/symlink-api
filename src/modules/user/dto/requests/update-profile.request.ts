@@ -30,7 +30,6 @@ export class UpdateProfileRequest {
     @ApiPropertyOptional()
 @IsOptional()
 @IsNotEmpty()
-@IsNumber()
 phone:string
 
 
