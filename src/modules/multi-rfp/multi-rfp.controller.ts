@@ -40,17 +40,24 @@ export class MultiRfpController {
 
   @Get()
   async getMyAllMultiRFP(@Query() query?: PaginatedRequest) {
-    const allMultiRFPForUser = await this.multiRfpService.getMyAllMultiRFP(query);
+    const allMultiRFPForUser = await this.multiRfpService.getMyAllMultiRFP(
+      query,
+    );
     const data: MultiRFPResponse[] =
       this._i18nResponse.entity(allMultiRFPForUser);
-      if (query.page && query.limit) {
-        const total = await this.multiRfpService.count();
-        return new PaginatedResponse<MultiRFPResponse[]>(data, {
-          meta: { total, ...query },
-        });
-      } else {
-        return new ActionResponse<MultiRFPResponse[]>(data);
-      }
+    if (query.page && query.limit) {
+
+      const totalPage = Math.ceil(
+        (await this.multiRfpService.count()) / query.limit,
+      );
+      const total = await this.multiRfpService.count();
+
+      return new PaginatedResponse<MultiRFPResponse[]>(data, {
+        meta: { total, page: query.page, limit: query.limit, totalPage },
+      });
+    } else {
+      return new ActionResponse<MultiRFPResponse[]>(data);
+    }
   }
 
   @Get(':id')
