@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Get, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ProviderService } from './provider.service';
 import { ProviderProjectRequest } from './dto/requests/provider-project-request';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiHeader, ApiProperty, ApiTags } from '@nestjs/swagger';
@@ -27,6 +27,18 @@ export class ProviderController {
 constructor(
     private readonly providerService: ProviderService
 ){}
+
+
+@Get('info') 
+async getInfo(){
+const info=await this.providerService.getEductional();
+const certifcate= await this.providerService.getCertificates();
+const projects=await this.providerService.getProjects();
+return new ActionResponse( {
+  info,certifcate,projects
+})
+
+}
 
 @Put("/update-eductional-info")
 
