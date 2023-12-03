@@ -12,6 +12,7 @@ import { plainToInstance } from 'class-transformer';
 import { ProviderInfoRequest } from './dto/requests/provider-info-reqest';
 import { FileService } from '../file/file.service';
 import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
+import { toUrl } from 'src/core/helpers/file.helper';
 
 @Injectable()
 export class ProviderService extends BaseUserService<ProviderInfo> {
@@ -62,6 +63,26 @@ async addProivderCertifcate(req: UploadFileRequest) {
     
   }
 
+
+  async getCertificates(){
+    const provider=await this.getProvider();
+   return  (await this.providerCetificateRepository.find({where:{provider_info_id:provider.id,},select:["id","file",'type']})).map((e)=>{e.file=toUrl(e.file); return e})
+  }
+  async getProjects(){
+    const provider=await this.getProvider();
+   return  await this.providerProjectRepository.find({where:{provider_info_id:provider.id},select:['id','name','description','date']})
+
+  }
+  async getEductional(){
+
+    const provider=await this.getProvider();
+    const proivderInfo = await this.providerInfoRepository.findOne({where:{id:provider.id},select:["educational_info"]})
+    return proivderInfo.educational_info;
+    
+
+  }
+  
+  
 
 
   async getProvider() {
