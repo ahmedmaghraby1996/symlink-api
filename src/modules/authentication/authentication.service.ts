@@ -44,7 +44,7 @@ export class AuthenticationService {
   }
 
   async login(user: any) {
-    if (!user) throw new BadRequestException('message.invalid_credentials');
+    if (!user) throw new BadRequestException('Email or password is incorrect');
     const payload = { username: user.username, sub: user.id };
     return {
       ...user,

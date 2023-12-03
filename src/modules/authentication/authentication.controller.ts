@@ -30,6 +30,9 @@ export class AuthenticationController {
     const result = plainToInstance(AuthResponse, authData, {
       excludeExtraneousValues: true,
     });
+    console.log('result',result.avatar);
+    console.log('result',result.avatar);
+
     result.role=authData.roles[0];
     return new ActionResponse<AuthResponse>(result);
   }
@@ -45,9 +48,12 @@ export class AuthenticationController {
   ): Promise<ActionResponse<RegisterResponse>> {
     req.avatarFile = avatarFile;
     const user = await this.authService.register(req);
+    console.log("user Register",user );
     const result = plainToInstance(RegisterResponse, user, {
       excludeExtraneousValues: true,
     });
+    console.log("user Register result",result );
+
     return new ActionResponse<RegisterResponse>(result, {
       statusCode: HttpStatus.CREATED,
     });
