@@ -6,19 +6,23 @@ export class PaginatedResponse<T> extends ActionResponse<T> {
     meta?: {
         page: number,
         limit: number,
-        total: number
+        total: number,
+totalPage: number,
+
     };
 
     constructor(data: T, options: {
         statusCode?: number,
         message?: string,
-        meta?: { page: number, limit: number, total: number }
+        meta?: { page: number, limit: number, total: number,totalPage: number}
     }) {
         super(data, options);
         this.meta = {
             page: parseInt(options.meta?.page as any),
             limit: parseInt(options.meta?.limit as any),
-            total: parseInt(options.meta?.total as any)
+            total: parseInt(options.meta?.total as any),
+            totalPage: parseInt(options.meta?.totalPage as any),
+
         };
     }
 }
