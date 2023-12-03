@@ -24,12 +24,30 @@ export class MultiRfpService extends BaseService<MultiRFP> {
     super(multiRFPRepository);
   }
   async createMultiRFP(createMultiRFPRequest: CreateMultiRFPRequest) {
-    const { projects, project_name, time_type_id } = createMultiRFPRequest;
+    const {
+       projects,
+        project_name,
+         time_type_id,
+         expiration_date,
+         firstFullName,
+         firstEmail,
+         firstMobile,
+         secondEmail,
+         secondFullName,
+         secondMobile
+       } = createMultiRFPRequest;
 
     const multiRFP = this.multiRFPRepository.create({
       user_id: this.request.user.id,
       project_name,
       time_type_id,
+      expiration_date,
+      firstFullName,
+      firstEmail,
+      firstMobile,
+      secondEmail,
+      secondFullName,
+      secondMobile
     });
     await this.multiRFPRepository.save(multiRFP);
     console.log('multiRFP', multiRFP);
