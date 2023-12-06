@@ -6,7 +6,7 @@ import { AttachedFilesType } from 'src/infrastructure/data/enums/attached-files-
 @Entity()
 export class AttachedFiles extends AuditableEntity {
   @Column()
-  type: AttachedFilesType;
+  type:string
 
   @Column()
   name: string;
