@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -22,6 +23,9 @@ import { ActionResponse } from 'src/core/base/responses/action.response';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateAttachedFilesRequest } from './dto/Create-attached-files.request';
 import { UploadValidator } from 'src/core/validators/upload.validator';
+import { AttachedFilesFilterRequest } from './dto/attached-files-filter.request';
+import { PageMetaDto } from 'src/core/helpers/pagination/page-meta.dto';
+import { PageDto } from 'src/core/helpers/pagination/page.dto';
 @ApiBearerAuth()
 @ApiHeader({
   name: 'Accept-Language',
@@ -35,10 +39,14 @@ export class AttachedFilesController {
   constructor(private readonly attachedFilesService: AttachedFilesService) {}
 
   @Get(':id')
-  async getAllAttachedFiles(@Param('id') id: string) {
-    return new ActionResponse(
-      await this.attachedFilesService.getAllAttachedFilesForProject(id),
-    );
+  async getAllAttachedFiles(@Param('id') id: string,@Query() attachedFilesFilterRequest: AttachedFilesFilterRequest) {
+    const { limit, page } = attachedFilesFilterRequest;
+
+    const {attachedFilesDto,count} = await this.attachedFilesService.getAllAttachedFilesForProject(id,attachedFilesFilterRequest)
+
+    const pageMetaDto = new PageMetaDto(page, limit, count);
+
+    return new PageDto(attachedFilesDto, pageMetaDto);
   }
   @UseInterceptors(ClassSerializerInterceptor, FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
@@ -48,7 +56,6 @@ export class AttachedFilesController {
     @UploadedFile(new UploadValidator().build()) file: Express.Multer.File,
   ) {
     createAttachedFilesRequest.file = file;
-
     return new ActionResponse(
       await this.attachedFilesService.addAttachedFileToProject(createAttachedFilesRequest),
     );

@@ -3,7 +3,7 @@ import { AttachedFilesType } from "src/infrastructure/data/enums/attached-files-
 
 export class AttachedFilesResponse{
     multi_RFP_id: string;
-    type: AttachedFilesType;
+    type: string;
   
     name: string;
   

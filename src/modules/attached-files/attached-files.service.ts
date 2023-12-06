@@ -10,6 +10,7 @@ import { StorageManager } from 'src/integration/storage/storage.manager';
 import * as sharp from 'sharp';
 import { AttachedFilesResponse } from './dto/attached-files.response';
 import { MultiRFP } from 'src/infrastructure/entities/multi-rfp/multi-rfp.entity';
+import { AttachedFilesFilterRequest } from './dto/attached-files-filter.request';
 
 @Injectable()
 export class AttachedFilesService {
@@ -24,7 +25,10 @@ export class AttachedFilesService {
 
   ) {}
 
-  async getAllAttachedFilesForProject(id: string) {
+  async getAllAttachedFilesForProject(id: string,attachedFilesFilterRequest:AttachedFilesFilterRequest) {
+    const { page, limit } = attachedFilesFilterRequest;
+
+    const skip = (page - 1) * limit;
     const multiRFP = await this.multiRFPRepository.findOne({
       where: { id },
 
@@ -32,19 +36,21 @@ export class AttachedFilesService {
     if (!multiRFP) {
       throw new NotFoundException('This Project not found');
     }
-    const attachedFiles = await this.attachedFilesRepository.find({
+    const [attachedFiles, count] = await this.attachedFilesRepository.findAndCount({
+      skip,
+      take: limit,
       where: { multi_RFP_id: id },
     });
     const attachedFilesDto = attachedFiles.map(
       (x) => new AttachedFilesResponse(x),
     );
-    return attachedFilesDto;
+    return {attachedFilesDto,count};
   }
   async addAttachedFileToProject(
     createAttachedFilesRequest: CreateAttachedFilesRequest,
   ) {
 
-    const { file, multi_RFP_id, name, type } = createAttachedFilesRequest;
+    const { file, multi_RFP_id, name } = createAttachedFilesRequest;
 
     const multiRFP = await this.multiRFPRepository.findOne({
       where: { id :multi_RFP_id},
@@ -71,6 +77,7 @@ export class AttachedFilesService {
       createAttachedFilesRequest,
     );
     createAttachedFile.url = path;
+    createAttachedFile.type=file.mimetype;
     const attachedFile = await this.attachedFilesRepository.save(
       createAttachedFile,
     );

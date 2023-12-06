@@ -17,12 +17,7 @@ export class CreateAttachedFilesRequest {
   @ApiProperty({ type: 'file', required: true })
   file: Express.Multer.File;
 
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsIn([
-    AttachedFilesType.IMAGE
-  ])
-  type: AttachedFilesType;
+
 
 
 }
