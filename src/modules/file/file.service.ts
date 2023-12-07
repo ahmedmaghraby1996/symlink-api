@@ -27,10 +27,14 @@ export class FileService {
             const ext = req.file.originalname.split('.').pop();
             const randName = req.file.originalname.split('.').shift() + '-' + new Date().getTime();
             const fileLocation = `${baseUrl}/${dir}/${randName}.${ext}`;
+            
             // use sharp to resize image
+            if(req.file.mimetype.includes("image")){
             const resizedImage = await sharp(req.file.buffer)
                 .toBuffer();
-            await this.storage.getDisk().put(fileLocation, resizedImage);
+            await this.storage.getDisk().put(fileLocation, resizedImage);}
+            else 
+            await this.storage.getDisk().put(fileLocation, req.file.buffer);
             return fileLocation;
         } catch (error) {
             throw error;
