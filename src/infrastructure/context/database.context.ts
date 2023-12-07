@@ -11,6 +11,7 @@ import { ProviderInfo } from "../entities/provider-info/provider-info.entity";
 import { ProviderProject } from "../entities/provider-info/provider-project.entity";
 import { ProviderCertificate } from "../entities/provider-info/provider-certificate.entity";
 import { AttachedFiles } from "../entities/attached-files/attached-files.entity";
+import { Offer } from "../entities/offer/offer.entity";
 
 export const DB_ENTITIES = [
   User,
@@ -25,7 +26,9 @@ export const DB_ENTITIES = [
   ProviderInfo,
   ProviderProject,
   ProviderCertificate,
-  AttachedFiles
+  AttachedFiles,
+  Offer
+
 ];
 
 export const DB_VIEWS = [];

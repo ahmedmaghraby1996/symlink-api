@@ -18,6 +18,12 @@ import { MultiRFPResponse } from './dto/multi-rfp.response';
 import { ActionResponse } from 'src/core/base/responses/action.response';
 import { PaginatedRequest } from 'src/core/base/requests/paginated.request';
 import { PaginatedResponse } from 'src/core/base/responses/paginated.response';
+import { MultiRFPFilterRequest } from './dto/multiRFP-filter.request';
+import { PageMetaDto } from 'src/core/helpers/pagination/page-meta.dto';
+import { PageDto } from 'src/core/helpers/pagination/page.dto';
+import { Roles } from '../authentication/guards/roles.decorator';
+import { Role } from 'src/infrastructure/data/enums/role.enum';
+
 @ApiBearerAuth()
 @ApiHeader({
   name: 'Accept-Language',
@@ -32,34 +38,61 @@ export class MultiRfpController {
     private readonly multiRfpService: MultiRfpService,
     @Inject(I18nResponse) private readonly _i18nResponse: I18nResponse,
   ) {}
+
+  @Roles(Role.CLIENT)
   @Post()
   async createMultiRFP(@Body() createMultiRFPRequest: CreateMultiRFPRequest) {
     console.log('createMultiRFPRequest', createMultiRFPRequest);
     return await this.multiRfpService.createMultiRFP(createMultiRFPRequest);
   }
+  @Roles(Role.CLIENT)
 
-  @Get()
-  async getMyAllMultiRFP(@Query() query?: PaginatedRequest) {
-    const allMultiRFPForUser = await this.multiRfpService.getMyAllMultiRFP(
-      query,
+  @Get('client-All-MultiRFP')
+  async clientGetMyAllMultiRFP(
+    @Query() multiRFPFilterRequest: MultiRFPFilterRequest,
+  ) {
+    const { limit, page } = multiRFPFilterRequest;
+
+    const { allMultiRFPForUserDto, count } =
+      await this.multiRfpService.clientGetMyAllMultiRFP(multiRFPFilterRequest);
+    const data: MultiRFPResponse[] = this._i18nResponse.entity(
+      allMultiRFPForUserDto,
     );
-    const data: MultiRFPResponse[] =
-      this._i18nResponse.entity(allMultiRFPForUser);
-    if (query.page && query.limit) {
+    const pageMetaDto = new PageMetaDto(page, limit, count);
 
-      const totalPage = Math.ceil(
-        (await this.multiRfpService.count()) / query.limit,
-      );
-      const total = await this.multiRfpService.count();
-
-      return new PaginatedResponse<MultiRFPResponse[]>(data, {
-        meta: { total, page: query.page, limit: query.limit, totalPage },
-      });
-    } else {
-      return new ActionResponse<MultiRFPResponse[]>(data);
-    }
+    return new PageDto(data, pageMetaDto);
   }
+  @Roles(Role.PROVIDER)
 
+  @Get('provider-All-MultiRFP')
+  async providerGetMyAllMultiRFP(
+    @Query() multiRFPFilterRequest: MultiRFPFilterRequest,
+  ) {
+    const { limit, page } = multiRFPFilterRequest;
+    const { allMultiRFPForUserDto, count } =
+      await this.multiRfpService.provideGetMyAllMultiRFP(multiRFPFilterRequest);
+    const data: MultiRFPResponse[] = this._i18nResponse.entity(
+      allMultiRFPForUserDto,
+    );
+    const pageMetaDto = new PageMetaDto(page, limit, count);
+
+    return new PageDto(data, pageMetaDto);
+  }
+  @Roles(Role.PROVIDER)
+
+  @Get('provider-all-offers')
+  async getProjectsSubmittedOffer(
+    @Query() multiRFPFilterRequest: MultiRFPFilterRequest,
+  ) {
+    const { limit, page } = multiRFPFilterRequest;
+
+    const { projects, count } = await this.multiRfpService.providerGetOffers(
+      multiRFPFilterRequest,
+    );
+    const pageMetaDto = new PageMetaDto(page, limit, count);
+
+    return new PageDto(projects, pageMetaDto);
+  }
   @Get(':id')
   async getSingleMultiRFP(@Param('id') id: string) {
     const multiRFP = await this.multiRfpService.getSingleMultiRFP(id);
