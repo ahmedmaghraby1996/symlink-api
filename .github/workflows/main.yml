@@ -4,20 +4,21 @@ name: Deploy
 on:
   push:
     branches:
-      - master-{x}
+      - main-{x}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@main
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
+            cd ..
             cd /var/www/${{ secrets.PROJECT }}
             git pull
             sudo npm i
