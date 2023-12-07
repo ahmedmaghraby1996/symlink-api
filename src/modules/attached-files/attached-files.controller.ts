@@ -26,6 +26,8 @@ import { UploadValidator } from 'src/core/validators/upload.validator';
 import { AttachedFilesFilterRequest } from './dto/attached-files-filter.request';
 import { PageMetaDto } from 'src/core/helpers/pagination/page-meta.dto';
 import { PageDto } from 'src/core/helpers/pagination/page.dto';
+import { Roles } from '../authentication/guards/roles.decorator';
+import { Role } from 'src/infrastructure/data/enums/role.enum';
 @ApiBearerAuth()
 @ApiHeader({
   name: 'Accept-Language',
@@ -48,6 +50,8 @@ export class AttachedFilesController {
 
     return new PageDto(attachedFilesDto, pageMetaDto);
   }
+  @Roles(Role.CLIENT)
+
   @UseInterceptors(ClassSerializerInterceptor, FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
   @Post()

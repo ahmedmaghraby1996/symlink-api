@@ -16,6 +16,7 @@ import { Address } from './address.entity';
 import { RequestForProposal } from '../request-for-proposal/request-for-proposal.entity';
 import { City } from '../country/city.entity';
 import { MultiRFP } from '../multi-rfp/multi-rfp.entity';
+import { Offer } from '../offer/offer.entity';
 
 @Entity()
 export class User extends AuditableEntity {
@@ -89,6 +90,11 @@ export class User extends AuditableEntity {
 
   @OneToMany(() => MultiRFP, (multiRFP) => multiRFP.user)
   multi_RFP: MultiRFP[] 
+
+  @OneToMany(() => Offer, (offer) => offer.user)
+  offers: Offer[] 
+
+
 
   constructor(partial: Partial<User>) {
     super();
