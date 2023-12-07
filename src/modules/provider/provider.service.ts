@@ -21,7 +21,6 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
     @Inject(FileService) private _fileService: FileService,
     @InjectRepository(ProviderInfo)
     private readonly providerInfoRepository: Repository<ProviderInfo>,
-    
 
     @InjectRepository(ProviderCertificate)
     private readonly providerCetificateRepository: Repository<ProviderCertificate>,
@@ -43,53 +42,59 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
     const proivder = await this.getProvider();
 
     const providerProject = plainToInstance(ProviderProject, req);
-providerProject.provider_info=proivder;
-  return  await this.providerProjectRepository.save(providerProject)
-
+    providerProject.provider_info = proivder;
+    return await this.providerProjectRepository.save(providerProject);
   }
 
-
-
-async addProivderCertifcate(req: UploadFileRequest) {
-     
- 
-  
-    const tempImage = await this._fileService.upload(req, 'provider-certifcate');
+  async addProivderCertifcate(req: UploadFileRequest) {
+    const tempImage = await this._fileService.upload(
+      req,
+      'provider-certifcate',
+    );
     const proivder = await this.getProvider();
 
-    const providerCertifacte = new ProviderCertificate({file:tempImage,provider_info:proivder,type:req.file.mimetype})
+    const providerCertifacte = new ProviderCertificate({
+      file: tempImage,
+      provider_info: proivder,
+      type: req.file.mimetype,
+      name: req.file.originalname,
+    });
 
-  return  await this.providerCetificateRepository.save(providerCertifacte)
-    
+    return await this.providerCetificateRepository.save(providerCertifacte);
   }
 
-
-  async getCertificates(){
-    const provider=await this.getProvider();
-   return  (await this.providerCetificateRepository.find({where:{provider_info_id:provider.id,},select:["id","file",'type']})).map((e)=>{e.file=toUrl(e.file); return e})
+  async getCertificates() {
+    const provider = await this.getProvider();
+    return (
+      await this.providerCetificateRepository.find({
+        where: { provider_info_id: provider.id },
+        select: ['id', 'file', 'type'],
+      })
+    ).map((e) => {
+      e.file = toUrl(e.file);
+      return e;
+    });
   }
-  async getProjects(){
-    const provider=await this.getProvider();
-   return  await this.providerProjectRepository.find({where:{provider_info_id:provider.id},select:['id','name','description','date']})
-
+  async getProjects() {
+    const provider = await this.getProvider();
+    return await this.providerProjectRepository.find({
+      where: { provider_info_id: provider.id },
+      select: ['id', 'name', 'description', 'date'],
+    });
   }
-  async getEductional(){
+  async getEductional() {
+    const provider = await this.getProvider();
+    const proivderInfo = await this.providerInfoRepository.findOne({
+      where: { id: provider.id },
+      select: ['educational_info'],
+    });
 
-    const provider=await this.getProvider();
-    const proivderInfo = await this.providerInfoRepository.findOne({where:{id:provider.id},select:["educational_info"]})
-   
-    return proivderInfo == null? "":proivderInfo.educational_info ;
-    
-
+    return proivderInfo == null ? '' : proivderInfo.educational_info;
   }
-  
-  
-
 
   async getProvider() {
     return await this.providerInfoRepository.findOne({
-      where: { user_id: super.currentUser.id},
-   
+      where: { user_id: super.currentUser.id },
     });
   }
 }
