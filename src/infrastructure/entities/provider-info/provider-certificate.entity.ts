@@ -15,6 +15,9 @@ file:string
 type:string
 
 
+@Column({nullable:true})
+name:string
+
 
 @ManyToOne(()=>ProviderInfo,(providerInfo)=>providerInfo.provider_certificates)
 @JoinColumn({name:'provider_info_id'})

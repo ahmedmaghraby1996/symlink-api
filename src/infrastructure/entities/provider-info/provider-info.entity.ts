@@ -10,7 +10,7 @@ import { OwnedEntity } from "src/infrastructure/base/owned.entity";
 export class ProviderInfo extends OwnedEntity{
 
 
-@Column({nullable:true})
+@Column({nullable:true,type: 'text'})
 educational_info:string
 
 @OneToMany(()=>ProviderCertificate, (providerCertificate)=>providerCertificate.provider_info)
