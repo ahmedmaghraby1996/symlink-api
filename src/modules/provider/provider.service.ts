@@ -77,7 +77,8 @@ async addProivderCertifcate(req: UploadFileRequest) {
 
     const provider=await this.getProvider();
     const proivderInfo = await this.providerInfoRepository.findOne({where:{id:provider.id},select:["educational_info"]})
-    return proivderInfo.educational_info;
+   
+    return proivderInfo == null? "":proivderInfo.educational_info ;
     
 
   }
