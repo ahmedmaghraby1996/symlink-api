@@ -7,6 +7,7 @@ import { RequestForProposalModule } from './request-for-proposal/request-for-pro
 import { MultiRfpModule } from './multi-rfp/multi-rfp.module';
 import { ProviderModule } from './provider/provider.module';
 import { AttachedFilesModule } from './attached-files/attached-files.module';
+import { OffersModule } from './offers/offers.module';
 
 @Module({
     imports: [
@@ -17,6 +18,7 @@ import { AttachedFilesModule } from './attached-files/attached-files.module';
         MultiRfpModule,
         ProviderModule,
         AttachedFilesModule,
+        OffersModule,
     ],
     exports: [
         AddressModule,

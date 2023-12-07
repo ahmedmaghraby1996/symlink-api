@@ -11,6 +11,8 @@ import * as sharp from 'sharp';
 import { AttachedFilesResponse } from './dto/attached-files.response';
 import { MultiRFP } from 'src/infrastructure/entities/multi-rfp/multi-rfp.entity';
 import { AttachedFilesFilterRequest } from './dto/attached-files-filter.request';
+import { FileService } from '../file/file.service';
+import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
 
 @Injectable()
 export class AttachedFilesService {
@@ -22,62 +24,57 @@ export class AttachedFilesService {
     @Inject(StorageManager) private readonly storageManager: StorageManager,
     @Inject(ImageManager) private readonly imageManager: ImageManager,
     @Inject(REQUEST) private readonly request: Request,
-
+    @Inject(FileService) private _fileService: FileService,
   ) {}
 
-  async getAllAttachedFilesForProject(id: string,attachedFilesFilterRequest:AttachedFilesFilterRequest) {
+  async getAllAttachedFilesForProject(
+    id: string,
+    attachedFilesFilterRequest: AttachedFilesFilterRequest,
+  ) {
     const { page, limit } = attachedFilesFilterRequest;
 
     const skip = (page - 1) * limit;
     const multiRFP = await this.multiRFPRepository.findOne({
       where: { id },
-
     });
     if (!multiRFP) {
       throw new NotFoundException('This Project not found');
     }
-    const [attachedFiles, count] = await this.attachedFilesRepository.findAndCount({
-      skip,
-      take: limit,
-      where: { multi_RFP_id: id },
-    });
+    const [attachedFiles, count] =
+      await this.attachedFilesRepository.findAndCount({
+        skip,
+        take: limit,
+        where: { multi_RFP_id: id },
+      });
     const attachedFilesDto = attachedFiles.map(
       (x) => new AttachedFilesResponse(x),
     );
-    return {attachedFilesDto,count};
+    return { attachedFilesDto, count };
   }
   async addAttachedFileToProject(
     createAttachedFilesRequest: CreateAttachedFilesRequest,
   ) {
-
     const { file, multi_RFP_id, name } = createAttachedFilesRequest;
 
     const multiRFP = await this.multiRFPRepository.findOne({
-      where: { id :multi_RFP_id},
-
+      where: { id: multi_RFP_id },
     });
     if (!multiRFP) {
       throw new NotFoundException('This Project not found');
     }
 
-    const resizedImage = await this.imageManager.resize(file, {
-      size: {},
-      options: {
-        fit: sharp.fit.cover,
-        position: sharp.strategy.entropy,
-      },
-    });
-
-    // save image
-    const path = await this.storageManager.store(
-      { buffer: resizedImage, originalname: file.originalname },
-      { path: 'banners' },
+    const uploadFileRequest = new UploadFileRequest();
+    uploadFileRequest.file = file;
+    const tempImage = await this._fileService.upload(
+      uploadFileRequest,
+      'attached-files',
     );
+
     const createAttachedFile = this.attachedFilesRepository.create(
       createAttachedFilesRequest,
     );
-    createAttachedFile.url = path;
-    createAttachedFile.type=file.mimetype;
+    createAttachedFile.url = tempImage;
+    createAttachedFile.type = file.mimetype;
     const attachedFile = await this.attachedFilesRepository.save(
       createAttachedFile,
     );

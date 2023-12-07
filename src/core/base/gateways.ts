@@ -13,7 +13,7 @@ export abstract class Gateways {
     static UpdateLocation = 'update-location';
     /** driver-offer */
     static DriverOffer = 'driver-offer';
-  }
+  };
 
   /**
    * Order gateway
@@ -29,5 +29,18 @@ export abstract class Gateways {
     static OrderOffer = 'order-offer';
     /** order-tracking */
     static OrderTracking = 'order-tracking';
-  }
+  };
+
+  /**
+   * Order gateway
+   * @static
+   * @memberof Gateways
+   * @example offer
+   */
+  static Offer = class {
+    /** order */
+    static Namespace = 'offer';
+    /** order-offer */
+    static offerCreated = 'multi_RFP_id-';
+  };
 }
