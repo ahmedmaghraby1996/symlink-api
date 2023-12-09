@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { RequestForProposal } from '../request-for-proposal/request-for-proposal.entity';
 import { AuditableEntity } from 'src/infrastructure/base/auditable.entity';
 import { User } from '../user/user.entity';
@@ -6,6 +6,7 @@ import { RequestForProposalStatus } from 'src/infrastructure/data/enums/request-
 import { MetaData } from '../meta-data/meta-data.entity';
 import { AttachedFiles } from '../attached-files/attached-files.entity';
 import { Offer } from '../offer/offer.entity';
+import { Discussion } from '../discussions/discussions.entity';
 
 @Entity()
 export class MultiRFP extends AuditableEntity {
@@ -70,4 +71,7 @@ export class MultiRFP extends AuditableEntity {
 
   @Column()
   secondMobile: string;
+
+  @OneToOne(() => Discussion, (discussion) => discussion.multi_RFP)
+  discussions: Discussion;
 }
