@@ -14,6 +14,8 @@ import { AttachedFiles } from "../entities/attached-files/attached-files.entity"
 import { Offer } from "../entities/offer/offer.entity";
 import { Discussion } from "../entities/discussions/discussion.entity";
 import { Message } from "../entities/discussions/message.entity";
+import { DiscussionAttachment } from "../entities/discussions/discussion-attachment.entity";
+import { Reply } from "../entities/discussions/reply.entity";
 
 export const DB_ENTITIES = [
   User,
@@ -31,7 +33,9 @@ export const DB_ENTITIES = [
   AttachedFiles,
   Offer,
   Discussion,
-  Message
+  Message,
+  Reply,
+  DiscussionAttachment
 ];
 
 export const DB_VIEWS = [];
