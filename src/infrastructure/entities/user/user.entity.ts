@@ -18,6 +18,7 @@ import { City } from '../country/city.entity';
 import { MultiRFP } from '../multi-rfp/multi-rfp.entity';
 import { Offer } from '../offer/offer.entity';
 import { Message } from '../discussions/message.entity';
+import { Reply } from '../discussions/reply.entity';
 
 @Entity()
 export class User extends AuditableEntity {
@@ -97,6 +98,9 @@ export class User extends AuditableEntity {
 
   @OneToMany(() => Message, message => message.user)
   messages: Message[]
+
+  @OneToMany(() => Reply, reply => reply.user)
+  replies: Reply[]
 
     constructor(partial: Partial<User>) {
       super();
