@@ -6,7 +6,7 @@ import { RequestForProposalStatus } from 'src/infrastructure/data/enums/request-
 import { MetaData } from '../meta-data/meta-data.entity';
 import { AttachedFiles } from '../attached-files/attached-files.entity';
 import { Offer } from '../offer/offer.entity';
-import { Discussion } from '../discussions/discussions.entity';
+import { Discussion } from '../discussions/discussion.entity';
 
 @Entity()
 export class MultiRFP extends AuditableEntity {

@@ -17,6 +17,7 @@ import { RequestForProposal } from '../request-for-proposal/request-for-proposal
 import { City } from '../country/city.entity';
 import { MultiRFP } from '../multi-rfp/multi-rfp.entity';
 import { Offer } from '../offer/offer.entity';
+import { Message } from '../discussions/message.entity';
 
 @Entity()
 export class User extends AuditableEntity {
@@ -29,11 +30,11 @@ export class User extends AuditableEntity {
   @Column({ length: 100, unique: true })
   username: string;
 
-  @Column({unique: true,nullable:true })
+  @Column({ unique: true, nullable: true })
   linkedin: string;
 
   @Factory((faker, ctx) => faker.name.fullName(ctx.gender))
-  @Column({ length: 100 ,nullable:true})
+  @Column({ length: 100, nullable: true })
   name: string;
 
   // @Factory((faker, ctx) => faker.internet.password())
@@ -73,10 +74,10 @@ export class User extends AuditableEntity {
   @Column({ default: true })
   is_active: boolean;
 
-  @ManyToOne(()=>City,city=>city.users)
-  city:City
-  @Column({nullable:true})
-  city_id:string
+  @ManyToOne(() => City, city => city.users)
+  city: City
+  @Column({ nullable: true })
+  city_id: string
 
   @Factory((faker) => faker.helpers.arrayElement([Role.CLIENT, Role.PROVIDER]))
   @Column({ type: 'set', enum: Role, default: [Role.CLIENT] })
@@ -89,17 +90,18 @@ export class User extends AuditableEntity {
 
 
   @OneToMany(() => MultiRFP, (multiRFP) => multiRFP.user)
-  multi_RFP: MultiRFP[] 
+  multi_RFP: MultiRFP[]
 
   @OneToMany(() => Offer, (offer) => offer.user)
-  offers: Offer[] 
+  offers: Offer[]
 
+  @OneToMany(() => Message, message => message.user)
+  messages: Message[]
 
-
-  constructor(partial: Partial<User>) {
-    super();
-    Object.assign(this, partial);
-  }
+    constructor(partial: Partial<User>) {
+      super();
+      Object.assign(this, partial);
+    }
 
   // generate unique id in this pattern: ######
   private uniqueIdGenerator(): string {
