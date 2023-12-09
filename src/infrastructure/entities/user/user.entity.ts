@@ -19,6 +19,7 @@ import { MultiRFP } from '../multi-rfp/multi-rfp.entity';
 import { Offer } from '../offer/offer.entity';
 import { Message } from '../discussions/message.entity';
 import { Reply } from '../discussions/reply.entity';
+import { Reaction } from '../discussions/reaction.entity';
 
 @Entity()
 export class User extends AuditableEntity {
@@ -102,10 +103,13 @@ export class User extends AuditableEntity {
   @OneToMany(() => Reply, reply => reply.user)
   replies: Reply[]
 
-    constructor(partial: Partial<User>) {
-      super();
-      Object.assign(this, partial);
-    }
+  @OneToMany(() => Reaction, (reaction) => reaction.user)
+  reactions: Reaction[];
+
+  constructor(partial: Partial<User>) {
+    super();
+    Object.assign(this, partial);
+  }
 
   // generate unique id in this pattern: ######
   private uniqueIdGenerator(): string {

@@ -16,6 +16,7 @@ import { Discussion } from "../entities/discussions/discussion.entity";
 import { Message } from "../entities/discussions/message.entity";
 import { DiscussionAttachment } from "../entities/discussions/discussion-attachment.entity";
 import { Reply } from "../entities/discussions/reply.entity";
+import { Reaction } from "../entities/discussions/reaction.entity";
 
 export const DB_ENTITIES = [
   User,
@@ -35,7 +36,8 @@ export const DB_ENTITIES = [
   Discussion,
   Message,
   Reply,
-  DiscussionAttachment
+  DiscussionAttachment,
+  Reaction
 ];
 
 export const DB_VIEWS = [];

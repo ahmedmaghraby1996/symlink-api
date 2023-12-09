@@ -3,6 +3,7 @@ import { Message } from "./message.entity";
 import { AuditableEntity } from "src/infrastructure/base/auditable.entity";
 import { User } from "../user/user.entity";
 import { DiscussionAttachment } from "./discussion-attachment.entity";
+import { Reaction } from "./reaction.entity";
 
 @Entity()
 export class Reply extends AuditableEntity {
@@ -17,4 +18,7 @@ export class Reply extends AuditableEntity {
 
     @OneToMany(() => DiscussionAttachment, (attachment) => attachment.reply)
     attachments: DiscussionAttachment[];
+
+    @OneToMany(() => Reaction, (reaction) => reaction.reply)
+    reactions: Reaction[];
 }
