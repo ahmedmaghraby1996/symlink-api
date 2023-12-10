@@ -19,7 +19,7 @@ export class Message extends AuditableEntity {
 
   @ManyToOne(() => User, (user) => user.messages, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
-  user: User; 
+  user: User;
 
   @Column({ nullable: false })
   user_id: string;
@@ -29,4 +29,7 @@ export class Message extends AuditableEntity {
 
   @OneToMany(() => DiscussionAttachment, (attachment) => attachment.message)
   attachments: DiscussionAttachment[];
+
+  @Column({ default: 0 })
+  replies_count: number;
 }
