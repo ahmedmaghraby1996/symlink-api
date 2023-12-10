@@ -6,5 +6,6 @@ import { RequestForProposalModule } from '../request-for-proposal/request-for-pr
 @Module({
   controllers: [MultiRfpController],
   providers: [MultiRfpService],
+  exports: [MultiRfpService],
 })
 export class MultiRfpModule {}
