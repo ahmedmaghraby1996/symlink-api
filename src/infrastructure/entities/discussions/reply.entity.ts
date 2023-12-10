@@ -13,7 +13,7 @@ export class Reply extends AuditableEntity {
     @JoinColumn({ name: 'message_id' })
     message: Message;
 
-    @Column()
+    @Column({nullable: true})
     message_id: string;
 
     @ManyToOne(() => User, (user) => user.replies, { onDelete: 'CASCADE' })
@@ -23,11 +23,11 @@ export class Reply extends AuditableEntity {
     @Column({ nullable: false })
     user_id: string;
 
-    @ManyToOne(() => Reply, (reply) => reply.replies, { nullable: true })
+    @ManyToOne(() => Reply, (reply) => reply.replies, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'parent_reply_id' })
     parent_reply: Reply;
 
-    @Column()
+    @Column({nullable: true})
     parent_reply_id: string;
 
     @OneToMany(() => Reply, (reply) => reply.parent_reply)
