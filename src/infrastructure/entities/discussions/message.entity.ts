@@ -1,29 +1,32 @@
 import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
-import { Discussion } from './discussion.entity';
 import { AuditableEntity } from 'src/infrastructure/base/auditable.entity';
 import { User } from '../user/user.entity';
 import { Reply } from './reply.entity';
 import { DiscussionAttachment } from './discussion-attachment.entity';
-import { Reaction } from './reaction.entity';
+import { MultiRFP } from '../multi-rfp/multi-rfp.entity';
 
 @Entity()
 export class Message extends AuditableEntity {
   @Column('text')
   message_content: string;
 
-  @ManyToOne(() => Discussion, (discussion) => discussion.messages)
-  discussion: Discussion;
+  @ManyToOne(() => MultiRFP, (rfp) => rfp.messages)
+  @JoinColumn({ name: 'multi_rfp_id' })
+  multi_RFP: MultiRFP;
+
+  @Column({ nullable: false })
+  multi_rfp_id: string;
 
   @ManyToOne(() => User, (user) => user.messages, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  user: User; 
+
+  @Column({ nullable: false })
+  user_id: string;
 
   @OneToMany(() => Reply, (reply) => reply.message)
   replies: Reply[];
 
   @OneToMany(() => DiscussionAttachment, (attachment) => attachment.message)
   attachments: DiscussionAttachment[];
-
-  @OneToMany(() => Reaction, (reaction) => reaction.message)
-  reactions: Reaction[];
 }

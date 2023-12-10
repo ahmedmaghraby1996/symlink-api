@@ -12,11 +12,9 @@ import { ProviderProject } from "../entities/provider-info/provider-project.enti
 import { ProviderCertificate } from "../entities/provider-info/provider-certificate.entity";
 import { AttachedFiles } from "../entities/attached-files/attached-files.entity";
 import { Offer } from "../entities/offer/offer.entity";
-import { Discussion } from "../entities/discussions/discussion.entity";
 import { Message } from "../entities/discussions/message.entity";
 import { DiscussionAttachment } from "../entities/discussions/discussion-attachment.entity";
 import { Reply } from "../entities/discussions/reply.entity";
-import { Reaction } from "../entities/discussions/reaction.entity";
 
 export const DB_ENTITIES = [
   User,
@@ -33,11 +31,9 @@ export const DB_ENTITIES = [
   ProviderCertificate,
   AttachedFiles,
   Offer,
-  Discussion,
   Message,
   Reply,
   DiscussionAttachment,
-  Reaction
 ];
 
 export const DB_VIEWS = [];

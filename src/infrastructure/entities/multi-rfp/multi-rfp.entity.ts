@@ -6,7 +6,7 @@ import { RequestForProposalStatus } from 'src/infrastructure/data/enums/request-
 import { MetaData } from '../meta-data/meta-data.entity';
 import { AttachedFiles } from '../attached-files/attached-files.entity';
 import { Offer } from '../offer/offer.entity';
-import { Discussion } from '../discussions/discussion.entity';
+import { Message } from '../discussions/message.entity';
 
 @Entity()
 export class MultiRFP extends AuditableEntity {
@@ -72,6 +72,11 @@ export class MultiRFP extends AuditableEntity {
   @Column()
   secondMobile: string;
 
-  @OneToOne(() => Discussion, (discussion) => discussion.multi_RFP)
-  discussions: Discussion;
+  @OneToMany(() => Message, (message) => message.multi_RFP, {cascade: true})
+  messages: Message[];
+
+
+  @Column({ default: true, name: "is_private _discussion" })
+  isPrivateDiscussion: boolean
+
 }
