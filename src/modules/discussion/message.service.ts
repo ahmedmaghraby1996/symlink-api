@@ -53,4 +53,13 @@ export class MessageService {
     async findMessageWithId(message_id: string) {
         return await this.messageRepository.findOne({ where: { id: message_id } });
     }
+
+    async updateMessageRepliesCount(messageId: string, increment: number = 1) {
+        await this.messageRepository
+            .createQueryBuilder()
+            .update(Message)
+            .set({ replies_count: () => `replies_count + ${increment}` })
+            .where('id = :messageId', { messageId })
+            .execute();
+    }
 }

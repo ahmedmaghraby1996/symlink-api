@@ -1,6 +1,6 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { MultiRfpService } from '../multi-rfp/multi-rfp.service';
@@ -36,7 +36,9 @@ export class ReplyService {
             message: message,
         });
 
-        return await this.replyRepository.save(newReply);
+        const savedReply = await this.replyRepository.save(newReply);
+        await this.messsageService.updateMessageRepliesCount(message_id);
+        return savedReply;
     }
 
     async createReplyReplyMessage(multi_RFP_id: string, reply_id: string, reply: CreateReplyDTO) {
@@ -57,25 +59,30 @@ export class ReplyService {
             parent_reply: parentReply,
         });
 
-        return await this.replyRepository.save(newReply);
+        const saveReply = await this.replyRepository.save(newReply);
+        await this.updateNestedRepliesCount(reply_id);
+        return saveReply;
     }
 
-    async getRepliesByChunk(messageId: string, offset: number, limit: number) {
-        const message = await this.messsageService.findMessageWithId(messageId);
-        if (!message) {
-            throw new NotFoundException('Message not found');
-        }
-
-        return await this.replyRepository.find({
-            where: { message_id: messageId },
-            order: { created_at: 'DESC' }, 
-            take: limit,
-            skip: offset,
-            relations: ['replies'],
-        });
+    async getRepliesByChunk(identifierId: string, offset: number, limit: number) {
+        return this.replyRepository.createQueryBuilder('reply')
+            .where('reply.message_id = :identifierId OR reply.parent_reply_id = :identifierId', { identifierId })
+            .orderBy('reply.created_at', 'DESC')
+            .take(limit)
+            .skip(offset)
+            .getMany();
     }
 
     async findReplyWithId(reply_id: string) {
         return await this.replyRepository.findOne({ where: { id: reply_id } });
+    }
+
+    async updateNestedRepliesCount(replyId: string, increment: number = 1) {
+        await this.replyRepository
+            .createQueryBuilder()
+            .update(Reply)
+            .set({ replies_count: () => `replies_count + ${increment}` })
+            .where('id = :replyId', { replyId })
+            .execute();
     }
 }

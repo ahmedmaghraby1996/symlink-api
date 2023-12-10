@@ -1,8 +1,6 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { RolesGuard } from '../authentication/guards/roles.guard';
-import { Role } from 'src/infrastructure/data/enums/role.enum';
-import { Roles } from '../authentication/guards/roles.decorator';
 import { CreateMessageDTO } from './dto/create-message.dto';
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { MessageService } from './message.service';
@@ -56,12 +54,12 @@ export class DiscussionController {
         return await this.replyService.createReplyReplyMessage(multi_RFP_id, reply_id, message);
     }
 
-    @Get(':multi_RFP_id/messages/:message_id/replies/:offset/:limit')
+    @Get(':multi_RFP_id/messages/:identifier_id/replies/:offset/:limit')
     async getRepliesByChunk(
-        @Param("message_id") messageId: string,
+        @Param("identifier_id") identifierId: string,
         @Param("offset") offset: number,
         @Param("limit") limit: number
     ) {
-        return await this.replyService.getRepliesByChunk(messageId, offset, limit);
+        return await this.replyService.getRepliesByChunk(identifierId, offset, limit);
     }
 }
