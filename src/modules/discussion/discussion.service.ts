@@ -48,7 +48,7 @@ export class DiscussionService {
         }
     }
 
-    private getCurrentUser(): User {
+    getCurrentUser(): User {
         return this.request.user;
     }
 
@@ -102,7 +102,7 @@ export class DiscussionService {
         throw new NotFoundException('Message not found');
     }
 
-    private async findMultiRFPOrFail(multi_rfp_id: string) {
+    async findMultiRFPOrFail(multi_rfp_id: string) {
         const multiRFP = await this.multiRfpService.findOne(multi_rfp_id);
         if (!multiRFP) {
             throw new NotFoundException('Multi RFP not found');
