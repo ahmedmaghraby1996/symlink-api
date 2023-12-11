@@ -76,7 +76,7 @@ export class MultiRFP extends AuditableEntity {
   messages: Message[];
 
 
-  @Column({ default: true, name: "is_private _discussion" })
+  @Column({ default: false, name: "is_private _discussion" })
   isPrivateDiscussion: boolean
 
 }
