@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString } from "class-validator";
 
-export class CreateReplyDTO {
+export class CreateDiscussionObjectDTO {
     @IsNotEmpty()
     @IsString()
-    reply_content: string;
+    body_text: string;
 }
