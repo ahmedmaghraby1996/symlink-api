@@ -43,4 +43,9 @@ export abstract class Gateways {
     /** order-offer */
     static offerCreated = 'multi_RFP_id-';
   };
+
+  static Discussion = class {
+    /** discussion */
+    static Namespace = 'discussion';
+  }
 }

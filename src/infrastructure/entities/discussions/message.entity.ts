@@ -8,7 +8,7 @@ import { MultiRFP } from '../multi-rfp/multi-rfp.entity';
 @Entity()
 export class Message extends AuditableEntity {
   @Column('text')
-  message_content: string;
+  body_text: string;
 
   @ManyToOne(() => MultiRFP, (rfp) => rfp.messages)
   @JoinColumn({ name: 'multi_rfp_id' })

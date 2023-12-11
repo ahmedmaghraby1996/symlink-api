@@ -7,7 +7,7 @@ import { DiscussionAttachment } from "./discussion-attachment.entity";
 @Entity()
 export class Reply extends AuditableEntity {
     @Column('text')
-    reply_content: string;
+    body_text: string;
 
     @ManyToOne(() => Message, (message) => message.replies, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'message_id' })
