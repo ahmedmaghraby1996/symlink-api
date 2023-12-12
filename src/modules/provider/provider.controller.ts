@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Get, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ProviderService } from './provider.service';
 import { ProviderProjectRequest } from './dto/requests/provider-project-request';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiHeader, ApiProperty, ApiTags } from '@nestjs/swagger';
@@ -72,4 +72,14 @@ return new ActionResponse( await this.providerService.addProivderCertifcate(req)
 
   }
 
+@Delete("project/:id")
+async deleteProviderProject(@Param("id") id: string) {
+  return new ActionResponse (await this.providerService.deleteProject(id));
+  
+}
+@Delete("certificate/:id")
+async deleteCertificateProject(@Param("id") id: string) {
+  return new ActionResponse (await this.providerService.deleteCertifcate(id));
+  
+}
 }
