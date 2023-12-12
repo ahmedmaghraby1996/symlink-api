@@ -22,8 +22,6 @@ export class MultiRFP extends AuditableEntity {
   @OneToMany(() => Offer, (offer) => offer.multi_RFP)
   offers: Offer[];
 
-
-
   @Column({
     type: 'enum',
     enum: RequestForProposalStatus,
@@ -74,9 +72,4 @@ export class MultiRFP extends AuditableEntity {
 
   @OneToMany(() => Message, (message) => message.multi_RFP, {cascade: true})
   messages: Message[];
-
-
-  @Column({ default: false, name: "is_private _discussion" })
-  isPrivateDiscussion: boolean
-
 }
