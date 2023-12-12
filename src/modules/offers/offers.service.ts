@@ -77,15 +77,11 @@ export class OffersService extends BaseService<Offer> {
       throw new BadRequestException('You have already made an offer');
     }
     const offer = await this.offersRepository.save(new_Offer);
-    this.offerGateway.server.emit(
-      `${Gateways.Offer.offerCreated}${multi_RFP_id}`,
-      {
-        action: 'ADD_NEW_OFFER',
-        data: {
-          offer,
-        },
-      },
-    );
+    this.offerGateway.handleNewOffer({
+      multip_RFP_id: multi_RFP_id,
+      offer: offer,
+    });
+
     return offer;
   }
 
