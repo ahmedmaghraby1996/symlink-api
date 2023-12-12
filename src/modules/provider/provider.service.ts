@@ -99,17 +99,6 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
     });
   }
 
-  async deleteProject(project_id: string) {
-    const provider = await this.getProvider();
-    const project = await this.providerProjectRepository.findOne({
-      where: { id: project_id, provider_info_id: provider.id },
-    });
-    if (project == null) {
-      throw new NotFoundException('project not found');
-    }
-    await this.providerProjectRepository.delete(project_id);
-  }
-
   async updateProject(project_id: string, req: UpdateProvProjectRequest) {
     const provider = await this.getProvider();
     const project = await this.providerProjectRepository.findOne({

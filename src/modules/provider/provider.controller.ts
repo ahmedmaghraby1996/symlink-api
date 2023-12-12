@@ -76,12 +76,4 @@ export class ProviderController {
     return new ActionResponse(await this.providerService.addProivderCertifcate(req))
 
   }
-
-  @Delete("/delete-project/:project_id")
-  async deleteProject(@Param("project_id") project_id: string) {
-    return new ActionResponse(await this.providerService.deleteProject(project_id))
-
-  }
-
-
 }
