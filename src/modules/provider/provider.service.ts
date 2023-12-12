@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseUserService } from 'src/core/base/service/user-service.base';
 import { ProviderInfo } from 'src/infrastructure/entities/provider-info/provider-info.entity';
@@ -79,7 +79,7 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
     const provider = await this.getProvider();
     return await this.providerProjectRepository.find({
       where: { provider_info_id: provider.id },
-      select: ['id', 'name', 'description', 'date'],
+      select: ['id', 'name', 'description', 'start_date', 'end_date'],
     });
   }
   async getEductional() {
@@ -96,5 +96,16 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
     return await this.providerInfoRepository.findOne({
       where: { user_id: super.currentUser.id },
     });
+  }
+
+  async deleteProject(project_id: string) {
+    const provider = await this.getProvider();
+    const project = await this.providerProjectRepository.findOne({
+      where: { id: project_id, provider_info_id: provider.id },
+    });
+    if (project == null) {
+      throw new NotFoundException('project not found');
+    }
+    await this.providerProjectRepository.delete(project_id);
   }
 }
