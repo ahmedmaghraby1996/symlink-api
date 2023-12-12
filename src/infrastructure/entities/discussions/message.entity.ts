@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { AuditableEntity } from 'src/infrastructure/base/auditable.entity';
 import { User } from '../user/user.entity';
 import { Reply } from './reply.entity';
@@ -27,8 +27,12 @@ export class Message extends AuditableEntity {
   @OneToMany(() => Reply, (reply) => reply.message)
   replies: Reply[];
 
-  @OneToMany(() => DiscussionAttachment, (attachment) => attachment.message)
-  attachments: DiscussionAttachment[];
+  @OneToOne(() => DiscussionAttachment, (attachment) => attachment.message)
+  @JoinColumn({ name: 'attachment_id' })
+  attachment: DiscussionAttachment;
+
+  @Column({ nullable: true })
+  attachment_id: string;
 
   @Column({ default: 0 })
   replies_count: number;

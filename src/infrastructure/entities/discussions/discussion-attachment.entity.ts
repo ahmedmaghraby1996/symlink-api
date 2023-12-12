@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToOne } from 'typeorm';
 import { Message } from './message.entity';
 import { Reply } from './reply.entity';
 import { AuditableEntity } from 'src/infrastructure/base/auditable.entity';
@@ -6,25 +6,18 @@ import { AuditableEntity } from 'src/infrastructure/base/auditable.entity';
 @Entity()
 export class DiscussionAttachment extends AuditableEntity {
   @Column()
-  attachment_type: string;
+  file_type: string;
 
   @Column()
   file_name: string;
 
   @Column()
-  file_path: string;
+  file_url: string;
 
-  @ManyToOne(() => Message, (message) => message.attachments)
-  @JoinColumn({ name: 'message_id' })
+  @OneToOne(() => Message, (message) => message.attachment)
   message: Message;
 
-  @Column()
-  message_id: string;
-
-  @ManyToOne(() => Reply, (reply) => reply.attachments)
-  @JoinColumn({ name: 'reply_id' })
+  @OneToOne(() => Reply, (reply) => reply.attachment)
   reply: Reply;
 
-  @Column()
-  reply_id: string;
 }
