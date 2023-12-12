@@ -114,9 +114,26 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
   }
 
   async deleteCertifcate(id: string) {
+    const provider = await this.getProvider();
+    const certifcate = await this.providerCetificateRepository.findOne({
+      where: { id, provider_info_id: provider.id },
+    });
+    if (certifcate == null) {
+      throw new NotFoundException('certifcate not found');
+    }
+
     return await this.providerCetificateRepository.delete({ id });
   }
   async deleteProject(id: string) {
+    const provider = await this.getProvider();
+    const project = await this.providerProjectRepository.findOne({
+      where: { id, provider_info_id: provider.id },
+    });
+    console.log(project)
+    if (project == null) {
+      throw new NotFoundException('project not found');
+    }
+
     return await this.providerProjectRepository.delete({ id });
   }
 }
