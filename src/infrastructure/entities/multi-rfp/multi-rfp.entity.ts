@@ -40,6 +40,9 @@ export class MultiRFP extends AuditableEntity {
   @Column()
   user_id: string;
 
+  @Column({nullable:true})
+  provider_id: string;
+  
   //Type of evaluation?
   @ManyToOne(() => MetaData, (metaData) => metaData.time_type_request, {
     onDelete: 'CASCADE',
