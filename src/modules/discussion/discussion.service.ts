@@ -11,31 +11,52 @@ import { MultiRfpService } from '../multi-rfp/multi-rfp.service';
 import { Reply } from 'src/infrastructure/entities/discussions/reply.entity';
 import { OptionalMessageQueryDTO } from './dto/optional-message-query.dto';
 import { User } from 'src/infrastructure/entities/user/user.entity';
+import { MultiRFP } from 'src/infrastructure/entities/multi-rfp/multi-rfp.entity';
+import { FileService } from '../file/file.service';
+import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
+import { DiscussionAttachment } from 'src/infrastructure/entities/discussions/discussion-attachment.entity';
 
 @Injectable()
 export class DiscussionService {
     constructor(
-        @InjectRepository(Message)
-        private messageRepository: Repository<Message>,
+        @InjectRepository(Message) private readonly messageRepository: Repository<Message>,
+        @InjectRepository(Reply) private readonly replyRepository: Repository<Reply>,
+        @InjectRepository(DiscussionAttachment) private readonly discussionAttachmentRepository: Repository<DiscussionAttachment>,
         @Inject(REQUEST) private readonly request: Request,
-        @InjectRepository(Reply)
-        private replyRepository: Repository<Reply>,
         private readonly multiRfpService: MultiRfpService,
         private readonly discussionGateway: DiscussionGateway,
+        @Inject(FileService) private _fileService: FileService,
     ) { }
 
-    async createMessage(multi_rfp_id: string, { message_id }: OptionalMessageQueryDTO, message: CreateDiscussionObjectDTO) {
+    async createMessage(multi_rfp_id: string, { message_id }: OptionalMessageQueryDTO, { body_text, file }: CreateDiscussionObjectDTO) {
         const user = this.getCurrentUser();
         const multiRFP = await this.findMultiRFPOrFail(multi_rfp_id);
+        let attachedFile = null;
+        if (file) {
+            const uploadFileRequest = new UploadFileRequest();
+            uploadFileRequest.file = file;
+            const tempImage = await this._fileService.upload(
+                uploadFileRequest,
+                `discussion/${multi_rfp_id}`,
+            );
+
+            const createAttachedFile = this.discussionAttachmentRepository.create({
+                file_url: tempImage,
+                file_name: file.originalname,
+                file_type: file.mimetype,
+            })
+            attachedFile = await this.discussionAttachmentRepository.save(createAttachedFile);
+        }
+
         if (message_id) {
             const existingEntity = await this.findEntityByIdOrFail(message_id);
-            const newReply = await this.createAndSaveReply(message, user, existingEntity);
-            this.notifyAction(multi_rfp_id, newReply);
+            const newReply = await this.createAndSaveReply({ body_text, attachment: attachedFile }, user, existingEntity);
+            this.notifyAction(multiRFP, newReply);
             this.updateRepliesCount(existingEntity)
             return newReply;
         } else {
-            const newMessage = await this.createAndSaveNewMessage(message, user, multiRFP);
-            this.notifyAction(multi_rfp_id, newMessage);
+            const newMessage = await this.createAndSaveNewMessage({ body_text, attachment: attachedFile }, user, multiRFP);
+            this.notifyAction(multiRFP, newMessage);
             return newMessage;
         }
     }
@@ -52,19 +73,21 @@ export class DiscussionService {
         return this.request.user;
     }
 
-    private async createAndSaveNewMessage(message: CreateDiscussionObjectDTO, user: any, multiRFP: any) {
+    private async createAndSaveNewMessage(message: { body_text: string, attachment: DiscussionAttachment }, user: any, multiRFP: any) {
+        console.log(message.attachment)
         const newMessage = this.messageRepository.create({
             body_text: message.body_text,
+            attachment: message.attachment,
             user: user,
             multi_RFP: multiRFP,
         });
         return await this.messageRepository.save(newMessage);
     }
 
-    private async createAndSaveReply(reply: CreateDiscussionObjectDTO, user: User, parentEntity: Message | Reply): Promise<Reply> {
+    private async createAndSaveReply(reply: { body_text: string, attachment: DiscussionAttachment }, user: User, parentEntity: Message | Reply): Promise<Reply> {
         const newReply = parentEntity instanceof Message
-            ? this.replyRepository.create({ body_text: reply.body_text, user, message: parentEntity })
-            : this.replyRepository.create({ body_text: reply.body_text, user, parent_reply: parentEntity });
+            ? this.replyRepository.create({ body_text: reply.body_text, user, message: parentEntity, attachment: reply.attachment })
+            : this.replyRepository.create({ body_text: reply.body_text, user, parent_reply: parentEntity, attachment: reply.attachment });
 
         return await this.replyRepository.save(newReply);
     }
@@ -72,7 +95,7 @@ export class DiscussionService {
     private async fetchMessagesByChunk(multi_rfp_id: string, offset: number, limit: number) {
         return await this.messageRepository.find({
             where: { multi_rfp_id: multi_rfp_id },
-            relations: ['user'],
+            relations: ['user', 'attachment'],
             order: { created_at: 'DESC' },
             skip: offset,
             take: limit,
@@ -81,6 +104,7 @@ export class DiscussionService {
 
     private async fetchRepliesByChunk(message_id: string, offset: number, limit: number) {
         return this.replyRepository.createQueryBuilder('reply')
+            .leftJoinAndSelect('reply.attachment', 'attachment')
             .where('reply.message_id = :message_id OR reply.parent_reply_id = :message_id', { message_id })
             .orderBy('reply.created_at', 'DESC')
             .take(limit)
@@ -115,9 +139,10 @@ export class DiscussionService {
         await entity.save();
     }
 
-    private notifyAction(rfp_id: string, entity: Message | Reply) {
+    private notifyAction(multi_RFP: MultiRFP, entity: Message | Reply) {
         this.discussionGateway.handleSendMessage({
-            rfp_id, action: 'CREATED',
+            multi_RFP,
+            action: 'CREATED',
             entity_type: entity instanceof Message ? 'Message' : 'Reply',
             entity
         });
