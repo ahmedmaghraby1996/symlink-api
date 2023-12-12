@@ -8,6 +8,12 @@ type SocketIOMiddleWare = {
     (client: Socket, next: (err?: Error) => void);
 };
 
+declare module 'socket.io' {
+    interface Socket {
+        user: User; // Add your user property
+    }
+}
+
 export const SocketAuthMiddleware = (
     configService: ConfigService,
     userRepository?: Repository<User>,
