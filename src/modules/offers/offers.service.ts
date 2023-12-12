@@ -86,7 +86,7 @@ export class OffersService extends BaseService<Offer> {
   }
 
   async acceptOffer(offer_id: string, multi_RFP_id: string) {
-    return this.acceptOfferTransaction.run({ multi_RFP_id, offer_id });
+    return this.acceptOfferTransaction.run({offer_id,multi_RFP_id});
   }
 
   async getAcceptedOffer(multi_RFP_id: string) {
