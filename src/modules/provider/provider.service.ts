@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseUserService } from 'src/core/base/service/user-service.base';
 import { ProviderInfo } from 'src/infrastructure/entities/provider-info/provider-info.entity';
@@ -13,6 +13,7 @@ import { ProviderInfoRequest } from './dto/requests/provider-info-reqest';
 import { FileService } from '../file/file.service';
 import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
 import { toUrl } from 'src/core/helpers/file.helper';
+import { UpdateProvProjectRequest } from './dto/requests/update-provier-project-request';
 import { ActionResponse } from 'src/core/base/responses/action.response';
 
 @Injectable()
@@ -69,7 +70,7 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
     return (
       await this.providerCetificateRepository.find({
         where: { provider_info_id: provider.id },
-        select: ['id', 'file', 'type','name'],
+        select: ['id', 'file', 'type', 'name'],
       })
     ).map((e) => {
       e.file = toUrl(e.file);
@@ -80,7 +81,7 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
     const provider = await this.getProvider();
     return await this.providerProjectRepository.find({
       where: { provider_info_id: provider.id },
-      select: ['id', 'name', 'description', 'date'],
+      select: ['id', 'name', 'description', 'start_date', 'end_date'],
     });
   }
   async getEductional() {
@@ -99,11 +100,23 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
     });
   }
 
+  async updateProject(project_id: string, req: UpdateProvProjectRequest) {
+    const provider = await this.getProvider();
+    const project = await this.providerProjectRepository.findOne({
+      where: { id: project_id, provider_info_id: provider.id },
+    });
+    if (project == null) {
+      throw new NotFoundException('project not found');
+    }
+
+    Object.assign(project, req);
+    return await this.providerProjectRepository.save(project);
+  }
 
   async deleteCertifcate(id: string) {
-     return await  this.providerCetificateRepository.delete({ id });
+    return await this.providerCetificateRepository.delete({ id });
   }
   async deleteProject(id: string) {
-    return await  this.providerProjectRepository.delete({ id });
- }
+    return await this.providerProjectRepository.delete({ id });
+  }
 }

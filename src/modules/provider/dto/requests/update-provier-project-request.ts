@@ -1,13 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger"
 import { Expose } from "class-transformer"
-import { IsDate, IsNotEmpty, IsString } from "class-validator"
+import { IsOptional, IsString } from "class-validator"
 
-export class ProviderProjectRequest {
+export class UpdateProvProjectRequest {
     
     @Expose()
     @ApiProperty()
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     name:string
     
     @Expose()
@@ -21,7 +21,7 @@ export class ProviderProjectRequest {
     @Expose()
     @ApiProperty()
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     description:string
 
 }

@@ -12,6 +12,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 
 import { ProviderInfoRequest } from './dto/requests/provider-info-reqest';
 import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
+import { UpdateProvProjectRequest } from './dto/requests/update-provier-project-request';
 
 @ApiBearerAuth()
 @ApiHeader({
@@ -24,33 +25,38 @@ import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
 
 @Controller('provider')
 export class ProviderController {
-constructor(
+  constructor(
     private readonly providerService: ProviderService
-){}
+  ) { }
 
 
-@Get('info') 
-async getInfo(){
-const info=await this.providerService.getEductional();
-const certifcate= await this.providerService.getCertificates();
-const projects=await this.providerService.getProjects();
-return new ActionResponse( {
-  info,certifcate,projects
-})
+  @Get('info')
+  async getInfo() {
+    const info = await this.providerService.getEductional();
+    const certifcate = await this.providerService.getCertificates();
+    const projects = await this.providerService.getProjects();
+    return new ActionResponse({
+      info, certifcate, projects
+    })
 
-}
+  }
 
-@Put("/update-eductional-info")
-
+  @Put("/update-eductional-info")
   @ApiProperty()
-async updateEductionalInfo (@Body() req: ProviderInfoRequest  ) {
-  return new ActionResponse(  await this.providerService.updateEductionalInfo(req));
+  async updateEductionalInfo(@Body() req: ProviderInfoRequest) {
+    return new ActionResponse(await this.providerService.updateEductionalInfo(req));
 
-}
+  }
 
-@Post("/add-project")
-async addProivderProject(@Body() req: ProviderProjectRequest) {
-   return new ActionResponse (await this.providerService.addProivderProject(req));
+  @Put("/update-project/:project_id")
+  async updateProject(@Param("project_id") project_id: string, @Body() req: UpdateProvProjectRequest) {
+    return new ActionResponse(await this.providerService.updateProject(project_id, req));
+
+  }
+
+  @Post("/add-project")
+  async addProivderProject(@Body() req: ProviderProjectRequest) {
+    return new ActionResponse(await this.providerService.addProivderProject(req));
 
   }
 
@@ -63,23 +69,22 @@ async addProivderProject(@Body() req: ProviderProjectRequest) {
     type: UploadFileRequest, // Use the DTO class representing your file entity
   })
   async addProivderCertifcate(
-    @Body() req:UploadFileRequest,
+    @Body() req: UploadFileRequest,
     @UploadedFile(new UploadValidator().build()) file: Express.Multer.File,
-    )  {
-        req.file=file
-        console.log(file)
-return new ActionResponse( await this.providerService.addProivderCertifcate(req))
+  ) {
+    req.file = file
+    return new ActionResponse(await this.providerService.addProivderCertifcate(req))
 
   }
 
-@Delete("project/:id")
-async deleteProviderProject(@Param("id") id: string) {
-  return new ActionResponse (await this.providerService.deleteProject(id));
-  
-}
-@Delete("certificate/:id")
-async deleteCertificateProject(@Param("id") id: string) {
-  return new ActionResponse (await this.providerService.deleteCertifcate(id));
-  
-}
+  @Delete("project/:id")
+  async deleteProviderProject(@Param("id") id: string) {
+    return new ActionResponse(await this.providerService.deleteProject(id));
+
+  }
+  @Delete("certificate/:id")
+  async deleteCertificateProject(@Param("id") id: string) {
+    return new ActionResponse(await this.providerService.deleteCertifcate(id));
+
+  }
 }

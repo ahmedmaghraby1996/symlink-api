@@ -11,7 +11,10 @@ export class ProviderProject extends AuditableEntity{
 name:string
 
 @Column()
-date:Date
+start_date:Date
+
+@Column()
+end_date:Date
 
 @Column()
 description:string
