@@ -48,7 +48,7 @@ export class OffersController {
     return this.offersService.addOfferToProject(createOfferRequest);
   }
   @Roles(Role.CLIENT)
-  @Post('acceptOffer')
+  @Post(':offer_id/:multi_RFP_id/acceptOffer')
   async acceptOffer(@Param('offer_id') offer_id: string, @Param('multi_RFP_id') multi_RFP_id: string) {
     return this.offersService.acceptOffer(offer_id, multi_RFP_id);
   }
