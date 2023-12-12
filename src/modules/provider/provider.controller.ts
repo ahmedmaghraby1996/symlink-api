@@ -12,6 +12,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 
 import { ProviderInfoRequest } from './dto/requests/provider-info-reqest';
 import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
+import { UpdateProvProjectRequest } from './dto/requests/update-provier-project-request';
 
 @ApiBearerAuth()
 @ApiHeader({
@@ -41,10 +42,15 @@ export class ProviderController {
   }
 
   @Put("/update-eductional-info")
-
   @ApiProperty()
   async updateEductionalInfo(@Body() req: ProviderInfoRequest) {
     return new ActionResponse(await this.providerService.updateEductionalInfo(req));
+
+  }
+
+  @Put("/update-project/:project_id")
+  async updateProject(@Param("project_id") project_id: string, @Body() req: UpdateProvProjectRequest) {
+    return new ActionResponse(await this.providerService.updateProject(project_id, req));
 
   }
 
@@ -74,5 +80,8 @@ export class ProviderController {
   @Delete("/delete-project/:project_id")
   async deleteProject(@Param("project_id") project_id: string) {
     return new ActionResponse(await this.providerService.deleteProject(project_id))
+
   }
+
+
 }

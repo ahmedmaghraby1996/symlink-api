@@ -13,6 +13,7 @@ import { ProviderInfoRequest } from './dto/requests/provider-info-reqest';
 import { FileService } from '../file/file.service';
 import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
 import { toUrl } from 'src/core/helpers/file.helper';
+import { UpdateProvProjectRequest } from './dto/requests/update-provier-project-request';
 
 @Injectable()
 export class ProviderService extends BaseUserService<ProviderInfo> {
@@ -107,5 +108,18 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
       throw new NotFoundException('project not found');
     }
     await this.providerProjectRepository.delete(project_id);
+  }
+
+  async updateProject(project_id: string, req: UpdateProvProjectRequest) {
+    const provider = await this.getProvider();
+    const project = await this.providerProjectRepository.findOne({
+      where: { id: project_id, provider_info_id: provider.id },
+    });
+    if (project == null) {
+      throw new NotFoundException('project not found');
+    }
+
+    Object.assign(project, req);
+    return await this.providerProjectRepository.save(project);
   }
 }
