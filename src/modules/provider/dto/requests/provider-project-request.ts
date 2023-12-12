@@ -12,8 +12,11 @@ export class ProviderProjectRequest {
     
     @Expose()
     @ApiProperty()
+    start_date:Date
 
-    date:Date
+    @Expose()
+    @ApiProperty()
+    end_date:Date
     
     @Expose()
     @ApiProperty()
