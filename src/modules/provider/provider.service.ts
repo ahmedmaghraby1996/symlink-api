@@ -13,6 +13,7 @@ import { ProviderInfoRequest } from './dto/requests/provider-info-reqest';
 import { FileService } from '../file/file.service';
 import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
 import { toUrl } from 'src/core/helpers/file.helper';
+import { ActionResponse } from 'src/core/base/responses/action.response';
 
 @Injectable()
 export class ProviderService extends BaseUserService<ProviderInfo> {
@@ -68,7 +69,7 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
     return (
       await this.providerCetificateRepository.find({
         where: { provider_info_id: provider.id },
-        select: ['id', 'file', 'type'],
+        select: ['id', 'file', 'type','name'],
       })
     ).map((e) => {
       e.file = toUrl(e.file);
@@ -97,4 +98,12 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
       where: { user_id: super.currentUser.id },
     });
   }
+
+
+  async deleteCertifcate(id: string) {
+     return await  this.providerCetificateRepository.delete({ id });
+  }
+  async deleteProject(id: string) {
+    return await  this.providerProjectRepository.delete({ id });
+ }
 }
