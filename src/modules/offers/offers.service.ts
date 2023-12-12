@@ -77,19 +77,28 @@ export class OffersService extends BaseService<Offer> {
       throw new BadRequestException('You have already made an offer');
     }
     const offer = await this.offersRepository.save(new_Offer);
-    this.offerGateway.server.emit(
-      `${Gateways.Offer.offerCreated}${multi_RFP_id}`,
-      {
-        action: 'ADD_NEW_OFFER',
-        data: {
-          offer,
-        },
-      },
-    );
+    this.offerGateway.handleNewOffer({
+      multip_RFP_id: multi_RFP_id,
+      offer: offer,
+    });
+
     return offer;
   }
 
   async acceptOffer(offer_id: string, multi_RFP_id: string) {
     return this.acceptOfferTransaction.run({offer_id,multi_RFP_id});
+  }
+
+  async getAcceptedOffer(multi_RFP_id: string) {
+    const offer = await this.offersRepository.findOne({
+      where: {
+        multi_RFP_id: multi_RFP_id,
+        is_accepted: true
+      },
+    });
+    if (!offer) {
+      throw new NotFoundException('No offer founds or not accepted yet');
+    }
+    return offer;
   }
 }

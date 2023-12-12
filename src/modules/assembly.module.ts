@@ -8,6 +8,7 @@ import { MultiRfpModule } from './multi-rfp/multi-rfp.module';
 import { ProviderModule } from './provider/provider.module';
 import { AttachedFilesModule } from './attached-files/attached-files.module';
 import { OffersModule } from './offers/offers.module';
+import { DiscussionModule } from './discussion/discussion.module';
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { OffersModule } from './offers/offers.module';
         ProviderModule,
         AttachedFilesModule,
         OffersModule,
+        DiscussionModule
     ],
     exports: [
         AddressModule,
