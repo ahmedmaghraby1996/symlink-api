@@ -1,5 +1,5 @@
 import { JwtService } from '@nestjs/jwt';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { LoginRequest } from './dto/requests/signin.dto';
 import { Inject } from '@nestjs/common/decorators';
 import { ConfigService } from '@nestjs/config';
@@ -12,6 +12,9 @@ import { SendOtpTransaction } from './transactions/send-otp.transaction';
 import { UserService } from '../user/user.service';
 import { VerifyOtpTransaction } from './transactions/verify-otp.transaction';
 import { jwtSignOptions } from 'src/core/setups/jwt.setup';
+import { RequestResetPassword } from './dto/requests/request-reset-password';
+import { SendEmailService } from '../send-email/send-email.service';
+import { readEnv } from 'src/core/helpers/env.helper';
 
 @Injectable()
 export class AuthenticationService {
@@ -22,6 +25,7 @@ export class AuthenticationService {
     @Inject(VerifyOtpTransaction) private readonly verifyOtpTransaction: VerifyOtpTransaction,
     @Inject(JwtService) private readonly jwtService: JwtService,
     @Inject(ConfigService) private readonly _config: ConfigService,
+    @Inject(SendEmailService) private readonly sendEmailService: SendEmailService,
   ) { }
 
   async validateUser(req: LoginRequest): Promise<any> {
@@ -63,5 +67,22 @@ export class AuthenticationService {
 
   async verifyOtp(req: VerifyOtpRequest) {
     return await this.verifyOtpTransaction.run(req);
+  }
+
+  async requestResetPassword(req: RequestResetPassword) {
+    const user = await this.userService.findOne([
+      { email: req.email },
+    ] as any);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const token = this.jwtService.sign({ username: user.username }, { secret: this._config.get<string>('app.key'), expiresIn: '1h' })
+    const resetPasswordUrl = readEnv('APP_HOST') + '/auth/reset-password?token=' + token;
+
+    await this.sendEmailService.sendResetPasswordEmail(user.email, resetPasswordUrl);
+    
+    return true;
   }
 }

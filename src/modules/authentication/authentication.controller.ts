@@ -78,8 +78,8 @@ export class AuthenticationController {
   }
 
   @Post(Router.Auth.RequestResetPasswordEmail)
-  async requestResetPasswordEmail(@Body() req: RequestResetPassword): Promise<ActionResponse<boolean>> {
-    const result = await this.authService.requestResetPasswordEmail(req);
+  async requestResetPassword(@Body() req: RequestResetPassword): Promise<ActionResponse<boolean>> {
+    const result = await this.authService.requestResetPassword(req);
 
     return new ActionResponse<boolean>(result);
   }
