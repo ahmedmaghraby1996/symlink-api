@@ -15,6 +15,7 @@ import { jwtSignOptions } from 'src/core/setups/jwt.setup';
 import { RequestResetPassword } from './dto/requests/request-reset-password';
 import { SendEmailService } from '../send-email/send-email.service';
 import { readEnv } from 'src/core/helpers/env.helper';
+import { ResetPasswordRequest } from './dto/requests/reset-password';
 
 @Injectable()
 export class AuthenticationService {
@@ -75,14 +76,35 @@ export class AuthenticationService {
     ] as any);
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new BadRequestException('Email not found');
     }
 
     const token = this.jwtService.sign({ username: user.username }, { secret: this._config.get<string>('app.key'), expiresIn: '1h' })
-    const resetPasswordUrl = readEnv('APP_HOST') + '/auth/reset-password?token=' + token;
+    const resetPasswordUrl = readEnv('APP_HOST') + '/v1/auth/reset-password/' + token;
 
     await this.sendEmailService.sendResetPasswordEmail(user.email, resetPasswordUrl);
-    
+
     return true;
+  }
+
+  async resetPassword(resetToken: string, req: ResetPasswordRequest) {
+    const { newPassword } = req;
+    const payload = this.jwtService.verify(resetToken, { secret: this._config.get<string>('app.key') });
+    const user = await this.userService.findOne([
+      { username: payload.username },
+    ] as any);
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    user.password = await bcrypt.hash(newPassword + this._config.get('app.key'), 10);
+    await user.save();
+
+    const newPayload = { username: user.username, sub: user.id };
+    return {
+      ...user,
+      access_token: this.jwtService.sign(newPayload, jwtSignOptions(this._config)),
+    };
   }
 }
