@@ -12,6 +12,7 @@ import { LoginRequest } from './dto/requests/signin.dto';
 import { VerifyOtpRequest } from './dto/requests/verify-otp.dto';
 import { AuthResponse } from './dto/responses/auth.response';
 import { RegisterResponse } from './dto/responses/register.response';
+import { RequestResetPassword } from './dto/requests/request-reset-password';
 
 @ApiTags(Router.Auth.ApiTag)
 @Controller(Router.Auth.Base)
@@ -30,10 +31,10 @@ export class AuthenticationController {
     const result = plainToInstance(AuthResponse, authData, {
       excludeExtraneousValues: true,
     });
-    console.log('result',result.avatar);
-    console.log('result',result.avatar);
+    console.log('result', result.avatar);
+    console.log('result', result.avatar);
 
-    result.role=authData.roles[0];
+    result.role = authData.roles[0];
     return new ActionResponse<AuthResponse>(result);
   }
 
@@ -48,11 +49,11 @@ export class AuthenticationController {
   ): Promise<ActionResponse<RegisterResponse>> {
     req.avatarFile = avatarFile;
     const user = await this.authService.register(req);
-    console.log("user Register",user );
+    console.log("user Register", user);
     const result = plainToInstance(RegisterResponse, user, {
       excludeExtraneousValues: true,
     });
-    console.log("user Register result",result );
+    console.log("user Register result", result);
 
     return new ActionResponse<RegisterResponse>(result, {
       statusCode: HttpStatus.CREATED,
@@ -75,4 +76,13 @@ export class AuthenticationController {
     });
     return new ActionResponse<AuthResponse>(result);
   }
+
+  @Post(Router.Auth.RequestResetPasswordEmail)
+  async requestResetPasswordEmail(@Body() req: RequestResetPassword): Promise<ActionResponse<boolean>> {
+    const result = await this.authService.requestResetPasswordEmail(req);
+
+    return new ActionResponse<boolean>(result);
+  }
+
+
 }
