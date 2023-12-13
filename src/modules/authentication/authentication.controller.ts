@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, HttpStatus, Inject, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, HttpStatus, Inject, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
@@ -12,6 +12,8 @@ import { LoginRequest } from './dto/requests/signin.dto';
 import { VerifyOtpRequest } from './dto/requests/verify-otp.dto';
 import { AuthResponse } from './dto/responses/auth.response';
 import { RegisterResponse } from './dto/responses/register.response';
+import { RequestResetPassword } from './dto/requests/request-reset-password';
+import { ResetPasswordRequest } from './dto/requests/reset-password';
 
 @ApiTags(Router.Auth.ApiTag)
 @Controller(Router.Auth.Base)
@@ -30,10 +32,10 @@ export class AuthenticationController {
     const result = plainToInstance(AuthResponse, authData, {
       excludeExtraneousValues: true,
     });
-    console.log('result',result.avatar);
-    console.log('result',result.avatar);
+    console.log('result', result.avatar);
+    console.log('result', result.avatar);
 
-    result.role=authData.roles[0];
+    result.role = authData.roles[0];
     return new ActionResponse<AuthResponse>(result);
   }
 
@@ -48,11 +50,11 @@ export class AuthenticationController {
   ): Promise<ActionResponse<RegisterResponse>> {
     req.avatarFile = avatarFile;
     const user = await this.authService.register(req);
-    console.log("user Register",user );
+    console.log("user Register", user);
     const result = plainToInstance(RegisterResponse, user, {
       excludeExtraneousValues: true,
     });
-    console.log("user Register result",result );
+    console.log("user Register result", result);
 
     return new ActionResponse<RegisterResponse>(result, {
       statusCode: HttpStatus.CREATED,
@@ -73,6 +75,20 @@ export class AuthenticationController {
     const result = plainToInstance(AuthResponse, data, {
       excludeExtraneousValues: true,
     });
+    return new ActionResponse<AuthResponse>(result);
+  }
+
+  @Post(Router.Auth.RequestResetPasswordEmail)
+  async requestResetPassword(@Body() req: RequestResetPassword): Promise<ActionResponse<boolean>> {
+    const result = await this.authService.requestResetPassword(req);
+
+    return new ActionResponse<boolean>(result);
+  }
+
+  @Post(Router.Auth.ResetPassword)
+  async resetPassword(@Param("token") resetToken: string, @Body() req: ResetPasswordRequest): Promise<ActionResponse<AuthResponse>> {
+    const result = await this.authService.resetPassword(resetToken, req);
+
     return new ActionResponse<AuthResponse>(result);
   }
 }

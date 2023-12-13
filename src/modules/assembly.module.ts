@@ -9,6 +9,7 @@ import { ProviderModule } from './provider/provider.module';
 import { AttachedFilesModule } from './attached-files/attached-files.module';
 import { OffersModule } from './offers/offers.module';
 import { DiscussionModule } from './discussion/discussion.module';
+import { SendEmailModule } from './send-email/send-email.module';
 
 @Module({
     imports: [
@@ -20,7 +21,8 @@ import { DiscussionModule } from './discussion/discussion.module';
         ProviderModule,
         AttachedFilesModule,
         OffersModule,
-        DiscussionModule
+        DiscussionModule,
+        SendEmailModule,
     ],
     exports: [
         AddressModule,
