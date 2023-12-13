@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, HttpStatus, Inject, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, HttpStatus, Inject, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
@@ -13,6 +13,7 @@ import { VerifyOtpRequest } from './dto/requests/verify-otp.dto';
 import { AuthResponse } from './dto/responses/auth.response';
 import { RegisterResponse } from './dto/responses/register.response';
 import { RequestResetPassword } from './dto/requests/request-reset-password';
+import { ResetPasswordRequest } from './dto/requests/reset-password';
 
 @ApiTags(Router.Auth.ApiTag)
 @Controller(Router.Auth.Base)
@@ -84,5 +85,10 @@ export class AuthenticationController {
     return new ActionResponse<boolean>(result);
   }
 
+  @Post(Router.Auth.ResetPassword)
+  async resetPassword(@Param("token") resetToken: string, @Body() req: ResetPasswordRequest): Promise<ActionResponse<AuthResponse>> {
+    const result = await this.authService.resetPassword(resetToken, req);
 
+    return new ActionResponse<AuthResponse>(result);
+  }
 }
