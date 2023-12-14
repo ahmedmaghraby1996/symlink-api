@@ -7,8 +7,8 @@ export class SendEmailService {
     private password: string;
 
     constructor() {
-        this.email = "ahmedeid2684@gmail.com";
-        this.password = "sgot zvhr pwss lbej";
+        this.email = "symlink6@gmail.com";
+        this.password = "pbwp zwyp cout kdoa";
 
         this.transporter = nodemailer.createTransport({
             service: "gmail",
