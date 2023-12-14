@@ -43,6 +43,15 @@ export class StorageManager {
     }
   }
 
+  async delete(path: string, disk = DriverType.LOCAL): Promise<boolean> {
+    try {
+      await this.storage.getDisk(disk).delete(path);
+      return true;
+    } catch (error) {
+      throw error.message;
+    }
+  }
+
 }
 
 export interface StoreFileOptions {
