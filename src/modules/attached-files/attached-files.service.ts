@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -25,7 +25,7 @@ export class AttachedFilesService {
     @Inject(ImageManager) private readonly imageManager: ImageManager,
     @Inject(REQUEST) private readonly request: Request,
     @Inject(FileService) private _fileService: FileService,
-  ) {}
+  ) { }
 
   async getAllAttachedFilesForProject(
     id: string,
@@ -80,5 +80,24 @@ export class AttachedFilesService {
     );
     const attachedFileDto = new AttachedFilesResponse(attachedFile);
     return attachedFileDto;
+  }
+
+  async deleteAttachedFile(id: string) {
+    const attachedFile = await this.attachedFilesRepository.findOne({
+      where: { id },
+    });
+    
+    if (!attachedFile) {
+      throw new NotFoundException('This AttachedFile not found');
+    }
+    
+    const multiRFP = await this.multiRFPRepository.findOne({ where: { id: attachedFile.multi_RFP_id } })
+    if (multiRFP.user_id != this.request.user.id) {
+      throw new UnauthorizedException('You are not allowed to delete this AttachedFile');
+    }
+    
+    await this.attachedFilesRepository.delete({ id });
+    await this.storageManager.delete(attachedFile.url);
+    return true;
   }
 }
