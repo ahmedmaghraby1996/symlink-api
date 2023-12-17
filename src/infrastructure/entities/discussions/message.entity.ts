@@ -10,7 +10,7 @@ export class Message extends AuditableEntity {
   @Column('text')
   body_text: string;
 
-  @ManyToOne(() => MultiRFP, (rfp) => rfp.messages)
+  @ManyToOne(() => MultiRFP, (rfp) => rfp.messages, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'multi_rfp_id' })
   multi_RFP: MultiRFP;
 
@@ -24,10 +24,10 @@ export class Message extends AuditableEntity {
   @Column({ nullable: false })
   user_id: string;
 
-  @OneToMany(() => Reply, (reply) => reply.message)
+  @OneToMany(() => Reply, (reply) => reply.message, { cascade: true })
   replies: Reply[];
 
-  @OneToOne(() => DiscussionAttachment, (attachment) => attachment.message)
+  @OneToOne(() => DiscussionAttachment, (attachment) => attachment.message, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'attachment_id' })
   attachment: DiscussionAttachment;
 

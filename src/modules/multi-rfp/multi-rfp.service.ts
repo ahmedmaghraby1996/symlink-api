@@ -206,4 +206,22 @@ export class MultiRfpService extends BaseService<MultiRFP> {
 
     return savedMultiRFP;
   }
+
+  async deleteMultiRFP(id: string) {
+    const multiRFP = await this.multiRFPRepository.findOne(
+      {
+        where: { id },
+        relations: ['request_for_proposal', 'attachedFiles', 'offers', 'messages']
+      });
+
+    if (!multiRFP) {
+      throw new NotFoundException('MultiRFP not found');
+    }
+    // Check if the user is the owner of the MultiRFP
+    if (multiRFP.user_id !== this.request.user.id) {
+      throw new UnauthorizedException('Only the owner of the MultiRFP can delete it');
+    }
+
+    await this.multiRFPRepository.softRemove(multiRFP);
+  }
 }

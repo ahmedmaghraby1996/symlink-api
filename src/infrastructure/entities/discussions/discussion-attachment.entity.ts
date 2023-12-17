@@ -14,10 +14,10 @@ export class DiscussionAttachment extends AuditableEntity {
   @Column()
   file_url: string;
 
-  @OneToOne(() => Message, (message) => message.attachment)
+  @OneToOne(() => Message, (message) => message.attachment, { cascade: true })
   message: Message;
 
-  @OneToOne(() => Reply, (reply) => reply.attachment)
+  @OneToOne(() => Reply, (reply) => reply.attachment, { cascade: true })
   reply: Reply;
 
 }

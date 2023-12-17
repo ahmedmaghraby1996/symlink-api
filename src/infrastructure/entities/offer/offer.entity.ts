@@ -13,9 +13,11 @@ export class Offer extends AuditableEntity {
   @Column()
   user_id: string;
 
-  @ManyToOne(() => MultiRFP, (MultiRFP) => MultiRFP.offers, {
-    onDelete: 'CASCADE',
-  })
+  @ManyToOne(
+    () => MultiRFP,
+    (MultiRFP) => MultiRFP.offers,
+    { onDelete: 'CASCADE' }
+  )
   multi_RFP: MultiRFP;
 
   @Column()
@@ -34,12 +36,12 @@ export class Offer extends AuditableEntity {
   duration_num: number;
 
 
-  @Column({default : false})
+  @Column({ default: false })
   is_accepted: boolean;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   acceptedAt: Date;
 
-  @Column({default : false})
+  @Column({ default: false })
   is_anonymous: boolean;
 }

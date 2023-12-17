@@ -33,7 +33,7 @@ export class Reply extends AuditableEntity {
     @OneToMany(() => Reply, (reply) => reply.parent_reply)
     replies: Reply[];
 
-    @OneToOne(() => DiscussionAttachment, (attachment) => attachment.reply)
+    @OneToOne(() => DiscussionAttachment, (attachment) => attachment.reply, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'attachment_id' })
     attachment: DiscussionAttachment;
 

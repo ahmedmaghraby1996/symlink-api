@@ -13,13 +13,22 @@ export class MultiRFP extends AuditableEntity {
   @OneToMany(
     () => RequestForProposal,
     (requestForProposal) => requestForProposal.multi_RFP,
+    { cascade: true }
   )
   request_for_proposal: RequestForProposal[];
 
-  @OneToMany(() => AttachedFiles, (attachedFiles) => attachedFiles.multi_RFP)
+  @OneToMany(
+    () => AttachedFiles,
+    (attachedFiles) => attachedFiles.multi_RFP,
+    { cascade: true }
+  )
   attachedFiles: AttachedFiles[];
 
-  @OneToMany(() => Offer, (offer) => offer.multi_RFP)
+  @OneToMany(
+    () => Offer,
+    (offer) => offer.multi_RFP,
+    { cascade: true }
+  )
   offers: Offer[];
 
   @Column({
@@ -39,9 +48,9 @@ export class MultiRFP extends AuditableEntity {
   @Column()
   user_id: string;
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   provider_id: string;
-  
+
   //Type of evaluation?
   @ManyToOne(() => MetaData, (metaData) => metaData.time_type_request, {
     onDelete: 'CASCADE',
@@ -73,6 +82,6 @@ export class MultiRFP extends AuditableEntity {
   @Column()
   secondMobile: string;
 
-  @OneToMany(() => Message, (message) => message.multi_RFP, {cascade: true})
+  @OneToMany(() => Message, (message) => message.multi_RFP, { cascade: true })
   messages: Message[];
 }
