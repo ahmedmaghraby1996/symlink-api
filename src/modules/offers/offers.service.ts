@@ -47,7 +47,7 @@ export class OffersService extends BaseService<Offer> {
     .leftJoinAndSelect('offers.user', 'user')
     .orderBy(
       'offers.created_at',
-      sort_by_date.toLocaleLowerCase() === 'desc' ? 'ASC' : 'DESC',
+      sort_by_date.toLowerCase() === 'desc' ? 'ASC' : 'DESC',
       )
     .skip(skip)
     .take(limit);
