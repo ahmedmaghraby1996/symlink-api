@@ -38,16 +38,25 @@ export class OffersService extends BaseService<Offer> {
     multi_RFP_id: string,
     offerFilterRequest: OfferFilterRequest,
   ) {
-    const { page, limit } = offerFilterRequest;
+    const { page, limit ,search_by_name,sort_by_date} = offerFilterRequest;
 
     const skip = (page - 1) * limit;
-    const [offers, count] = await this.offersRepository.findAndCount({
-      skip,
-      take: limit,
-      where: {
-        multi_RFP_id: multi_RFP_id,
-      },
-    });
+    const queryBuilder = this.offersRepository.createQueryBuilder("offers")
+    .where("offers.multi_RFP_id = :multi_RFP_id", { multi_RFP_id })
+    .leftJoinAndSelect('offers.multi_RFP', 'multi_RFP')
+    .leftJoinAndSelect('offers.user', 'user')
+    .orderBy(
+      'offers.created_at',
+      sort_by_date.toLocaleLowerCase() === 'desc' ? 'ASC' : 'DESC',
+      )
+    .skip(skip)
+    .take(limit);
+    if (search_by_name) {
+      queryBuilder.andWhere('multi_RFP.project_name Like :projectName', {
+        projectName: `%${search_by_name}%`,
+      });
+    }
+  const [offers, count] = await queryBuilder.getManyAndCount();
     return { offers, count };
   }
 

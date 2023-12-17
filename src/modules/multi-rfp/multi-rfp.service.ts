@@ -65,53 +65,92 @@ export class MultiRfpService extends BaseService<MultiRFP> {
     return await this.multiRFPRepository.save(multiRFP);
   }
   async clientGetMyAllMultiRFP(multiRFPFilterRequest: MultiRFPFilterRequest) {
-    const { page, limit } = multiRFPFilterRequest;
+    const { page, limit, search_by_name ,sort_by_date} = multiRFPFilterRequest;
 
     const skip = (page - 1) * limit;
-    const [allMultiRFPForUser, count] = await this.multiRFPRepository.findAndCount({
-      skip,
-      take: limit,
-      where: { user_id: this.request.user.id },
-    });
-    const allMultiRFPForUserDto = allMultiRFPForUser.map((item) => new MultiRFPResponse(item));
+    const queryBuilder = this.multiRFPRepository
+      .createQueryBuilder('multiRFP')
+      .leftJoinAndSelect('multiRFP.user', 'user')
+      .where('user.id = :userId', { userId: this.request.user.id })
+      .orderBy(
+        'multiRFP.created_at',
+        sort_by_date.toLocaleLowerCase() === 'desc' ? 'ASC' : 'DESC',
+        )
+      .skip(skip)
+      .take(limit);
+
+    if (search_by_name) {
+      queryBuilder.andWhere('multiRFP.project_name Like :projectName', {
+        projectName: `%${search_by_name}%`,
+      });
+    }
+
+    const [allMultiRFPForUser, count] = await queryBuilder.getManyAndCount();
+
+    const allMultiRFPForUserDto = allMultiRFPForUser.map(
+      (item) => new MultiRFPResponse(item),
+    );
     return { allMultiRFPForUserDto, count };
   }
   async provideGetMyAllMultiRFP(multiRFPFilterRequest: MultiRFPFilterRequest) {
-    const { page, limit } = multiRFPFilterRequest;
+    const { page, limit, search_by_name,sort_by_date } = multiRFPFilterRequest;
 
     const skip = (page - 1) * limit;
-    const [allMultiRFPForUser, count] = await this.multiRFPRepository.findAndCount({
-      skip,
-      take: limit,
-      where: {
-        offers: {
-          user_id: this.request.user.id,
-          is_accepted: true,
-        },
-      },
-      relations: { offers: true },
-    });
-    const allMultiRFPForUserDto = allMultiRFPForUser.map((item) => new MultiRFPResponse(item));
+
+    const queryBuilder = this.multiRFPRepository
+      .createQueryBuilder('multiRFP')
+      .leftJoinAndSelect('multiRFP.offers', 'offers')
+      .where('offers.user_id = :userId', { userId: this.request.user.id })
+      .andWhere('offers.is_accepted = :isAccepted', { isAccepted: true })
+      .orderBy(
+        'multiRFP.created_at',
+        sort_by_date.toLocaleLowerCase() === 'desc' ? 'ASC' : 'DESC',
+        )
+      .skip(skip)
+      .take(limit);
+
+    if (search_by_name) {
+      queryBuilder.andWhere('multiRFP.project_name Like :projectName', {
+        projectName: `%${search_by_name}%`,
+      });
+    }
+    const [allMultiRFPForUser, count] = await queryBuilder.getManyAndCount();
+    const allMultiRFPForUserDto = allMultiRFPForUser.map(
+      (item) => new MultiRFPResponse(item),
+    );
 
     return { allMultiRFPForUserDto, count };
   }
   async providerGetOffers(multiRFPFilterRequest: MultiRFPFilterRequest) {
-    const { page, limit } = multiRFPFilterRequest;
+    const { page, limit, search_by_name ,sort_by_date} = multiRFPFilterRequest;
 
     const skip = (page - 1) * limit;
-    const [projects, count] = await this.multiRFPRepository.findAndCount({
-      skip,
-      take: limit,
-      where: {
-        request_for_proposal_status: RequestForProposalStatus.PENDING,
-      },
-      relations: { offers: true },
-    });
-    for (let index = 0; index < projects.length; index++) {
 
-      projects[index].offers = projects[index].offers.filter((offer) => offer.is_accepted === false);
+    const queryBuilder = this.multiRFPRepository
+      .createQueryBuilder('multiRFP')
+      .leftJoinAndSelect('multiRFP.offers', 'offers')
+      .where('multiRFP.request_for_proposal_status = :status', {
+        status: RequestForProposalStatus.PENDING,
+      })
+      .orderBy(
+        'multiRFP.created_at',
+        sort_by_date.toLocaleLowerCase() === 'desc' ? 'ASC' : 'DESC',
+        )
+      .skip(skip)
+      .take(limit);
+
+    if (search_by_name) {
+      queryBuilder.andWhere('multiRFP.project_name Like :projectName', {
+        projectName: `%${search_by_name}%`,
+      });
     }
+    const [projects, count] = await queryBuilder.getManyAndCount();
 
+    for (let index = 0; index < projects.length; index++) {
+      projects[index].offers = projects[index].offers.filter(
+        (offer) => offer.is_accepted === false,
+      );
+    }
 
     return { projects, count };
   }

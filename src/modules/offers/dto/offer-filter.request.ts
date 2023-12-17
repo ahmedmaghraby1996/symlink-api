@@ -27,5 +27,13 @@ export class OfferFilterRequest {
   @IsNumber()
   limit: number;
 
+  @ApiProperty({ nullable: true, required: false, })
+  @IsOptional()
+  @IsString()
+  search_by_name: string;
 
+  @ApiProperty({  required: false , default: "ASC" })
+  @IsOptional()
+  @IsString()
+  sort_by_date: string;
 }
