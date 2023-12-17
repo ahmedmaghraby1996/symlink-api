@@ -50,6 +50,7 @@
     "joi": "^17.8.3",
     "mysql2": "^3.1.2",
     "nestjs-i18n": "^10.2.6",
+    "nodemailer": "^6.9.7",
     "npm-check-updates": "^16.7.4",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
