@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Inject,
   Param,
@@ -113,5 +114,12 @@ export class MultiRfpController {
       id,
       createMultiRFPRequest,
     );
+  }
+
+  @Roles(Role.CLIENT)
+  @Delete(':id')
+  async deleteMultiRFP(@Param('id') id: string) {
+    const deleted = await this.multiRfpService.deleteMultiRFP(id);
+    return new ActionResponse(deleted);
   }
 }
