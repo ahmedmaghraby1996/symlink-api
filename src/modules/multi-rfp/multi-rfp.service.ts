@@ -74,7 +74,7 @@ export class MultiRfpService extends BaseService<MultiRFP> {
       .where('user.id = :userId', { userId: this.request.user.id })
       .orderBy(
         'multiRFP.created_at',
-        sort_by_date.toLocaleLowerCase() === 'desc' ? 'ASC' : 'DESC',
+        sort_by_date.toLowerCase() === 'desc' ? 'ASC' : 'DESC',
         )
       .skip(skip)
       .take(limit);
@@ -104,7 +104,7 @@ export class MultiRfpService extends BaseService<MultiRFP> {
       .andWhere('offers.is_accepted = :isAccepted', { isAccepted: true })
       .orderBy(
         'multiRFP.created_at',
-        sort_by_date.toLocaleLowerCase() === 'desc' ? 'ASC' : 'DESC',
+        sort_by_date.toLowerCase() === 'desc' ? 'ASC' : 'DESC',
         )
       .skip(skip)
       .take(limit);
@@ -134,7 +134,7 @@ export class MultiRfpService extends BaseService<MultiRFP> {
       })
       .orderBy(
         'multiRFP.created_at',
-        sort_by_date.toLocaleLowerCase() === 'desc' ? 'ASC' : 'DESC',
+        sort_by_date.toLowerCase() === 'desc' ? 'ASC' : 'DESC',
         )
       .skip(skip)
       .take(limit);
