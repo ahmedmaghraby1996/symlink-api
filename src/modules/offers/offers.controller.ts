@@ -17,6 +17,7 @@ import { PageMetaDto } from 'src/core/helpers/pagination/page-meta.dto';
 import { PageDto } from 'src/core/helpers/pagination/page.dto';
 import { Roles } from '../authentication/guards/roles.decorator';
 import { Role } from 'src/infrastructure/data/enums/role.enum';
+import { OfferResponse } from './dto/offer.response';
 @ApiBearerAuth()
 @ApiHeader({
   name: 'Accept-Language',
@@ -38,9 +39,10 @@ export class OffersController {
   ) {
     const {limit,page} = offerFilterRequest;
     const {offers,count}= await this.offersService.getAllOffersForProject(multi_RFP_id,offerFilterRequest);
+    const offersDto =offers.map(item=> new OfferResponse(item));
     const pageMetaDto = new PageMetaDto(page, limit, count);
 
-    return new PageDto(offers, pageMetaDto);
+    return new PageDto(offersDto, pageMetaDto);
   }
   @Roles(Role.PROVIDER)
   @Post('add-offer-to-project')
