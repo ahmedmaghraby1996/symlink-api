@@ -5,6 +5,7 @@ import {
   Inject,
   Param,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -23,6 +24,7 @@ import { PageMetaDto } from 'src/core/helpers/pagination/page-meta.dto';
 import { PageDto } from 'src/core/helpers/pagination/page.dto';
 import { Roles } from '../authentication/guards/roles.decorator';
 import { Role } from 'src/infrastructure/data/enums/role.enum';
+import { UpdateMultiRFPRequest } from './dto/update-multi-RFP.request';
 
 @ApiBearerAuth()
 @ApiHeader({
@@ -37,7 +39,7 @@ export class MultiRfpController {
   constructor(
     private readonly multiRfpService: MultiRfpService,
     @Inject(I18nResponse) private readonly _i18nResponse: I18nResponse,
-  ) {}
+  ) { }
 
   @Roles(Role.CLIENT)
   @Post()
@@ -93,10 +95,23 @@ export class MultiRfpController {
 
     return new PageDto(projects, pageMetaDto);
   }
+
   @Get(':id')
   async getSingleMultiRFP(@Param('id') id: string) {
     const multiRFP = await this.multiRfpService.getSingleMultiRFP(id);
     const data: MultiRFPResponse = this._i18nResponse.entity(multiRFP);
     return new ActionResponse<MultiRFPResponse>(data);
+  }
+
+  @Roles(Role.CLIENT)
+  @Put(':id')
+  async updateMultiRFP(
+    @Param('id') id: string,
+    @Body() createMultiRFPRequest: UpdateMultiRFPRequest,
+  ) {
+    return await this.multiRfpService.updateMultiRFP(
+      id,
+      createMultiRFPRequest,
+    );
   }
 }

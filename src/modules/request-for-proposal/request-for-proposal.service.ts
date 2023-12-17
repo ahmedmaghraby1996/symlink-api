@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RequestForProposal } from 'src/infrastructure/entities/request-for-proposal/request-for-proposal.entity';
 import { Repository } from 'typeorm';
@@ -9,6 +9,7 @@ import { UserInfoResponse } from '../user/dto/response/profile.response';
 import { RequestForProposalResponse } from './dto/request-for-proposal.response';
 import { MetaData } from 'src/infrastructure/entities/meta-data/meta-data.entity';
 import { plainToClass, plainToInstance } from 'class-transformer';
+import { UpdateRequestForProposalRequest } from './dto/update-request-for-propsal.request';
 @Injectable()
 export class RequestForProposalService {
   constructor(
@@ -17,7 +18,7 @@ export class RequestForProposalService {
     @Inject(REQUEST) private readonly request: Request,
     @InjectRepository(MetaData)
     private metaDataRepository: Repository<MetaData>,
-  ) {}
+  ) { }
 
   async createRequestForProposal(
     createRequestForProposalRequest: CreateRequestForProposalRequest,
@@ -30,7 +31,7 @@ export class RequestForProposalService {
 
   async getAllRequestForProposal() {
     const requestForProposal = await this.requestForProposalRepository.find({
-      where: {  },
+      where: {},
       relations: {
         category: true,
         assessments_type_meta_data: true,
@@ -40,8 +41,22 @@ export class RequestForProposalService {
         evaluation_is_internal_or_external_meta_data: true,
       },
     });
-    
+
     const listRequestForProposalDto = requestForProposal.map(item => new RequestForProposalResponse(item))
     return listRequestForProposalDto;
+  }
+
+  async updateRequestForProposal(requestForProposal: UpdateRequestForProposalRequest) {
+    const requestForProposalUpdate = await this.requestForProposalRepository.findOne(
+      { where: { id: requestForProposal.id } }
+    );
+
+    if (!requestForProposalUpdate) {
+      throw new NotFoundException('Not found');
+    }
+
+    Object.assign(requestForProposalUpdate, requestForProposal);
+
+    return await this.requestForProposalRepository.save(requestForProposalUpdate);
   }
 }
