@@ -49,10 +49,7 @@ export class OffersService extends BaseService<Offer> {
 
     if (sort_by == OfferSortyBy.BIDER_NAME) {
       queryBuilder.orderBy(`user.name`, order as 'ASC' | 'DESC')
-    } else if (sort_by == OfferSortyBy.DURATION){
-      // InProgress: sort by duration
-    } 
-    else {
+    } else{
       queryBuilder.orderBy(`offers.${sort_by}`, order as 'ASC' | 'DESC')
     }
 
@@ -66,7 +63,7 @@ export class OffersService extends BaseService<Offer> {
       .skip(skip)
       .take(limit)
       .getManyAndCount();
-      console.log(offers);
+
     return { offers, count };
   }
 
