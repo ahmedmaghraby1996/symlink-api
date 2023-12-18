@@ -38,7 +38,7 @@ export class OfferFilterRequest {
     required: false,
     enum: [
       OfferSortyBy.PRICE,
-      OfferSortyBy.DURATION,
+      OfferSortyBy.NUMBER_OF_HOURS,
       OfferSortyBy.IS_ACCEPTED,
       OfferSortyBy.BIDER_NAME,
     ],
