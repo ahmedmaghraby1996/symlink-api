@@ -67,8 +67,8 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
     return await this.providerCetificateRepository.save(providerCertifacte);
   }
 
-  async getCertificates(userId?: string) {
-    const provider = await this.getProvider(userId);
+  async getCertificates(user_id?: string) {
+    const provider = await this.getProvider(user_id);
     return (
       await this.providerCetificateRepository.find({
         where: { provider_info_id: provider.id },
@@ -79,15 +79,15 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
       return e;
     });
   }
-  async getProjects(userId?: string) {
-    const provider = await this.getProvider(userId);
+  async getProjects(user_id?: string) {
+    const provider = await this.getProvider(user_id);
     return await this.providerProjectRepository.find({
       where: { provider_info_id: provider.id },
       select: ['id', 'name', 'description', 'start_date', 'end_date'],
     });
   }
-  async getEductional(userId?: string) {
-    const provider = await this.getProvider(userId);
+  async getEductional(user_id?: string) {
+    const provider = await this.getProvider(user_id);
     const proivderInfo = await this.providerInfoRepository.findOne({
       where: { id: provider.id },
       select: ['educational_info'],
@@ -96,10 +96,10 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
     return proivderInfo == null ? '' : proivderInfo.educational_info;
   }
 
-  async getProvider(userId?: string) {
-    userId = userId || super.currentUser.id;
+  async getProvider(user_id?: string) {
+    user_id = user_id || super.currentUser.id;
     return await this.providerInfoRepository.findOne({
-      where: { user_id: userId },
+      where: { user_id },
     });
   }
 
@@ -140,11 +140,11 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
     return await this.providerProjectRepository.delete({ id });
   }
 
-  async getUserInfo(userId?: string) {
+  async getUserInfo(user_id?: string) {
     const user = await this.userRepository.findOne({
-      where: { id: userId },
-      relations: ['city','city.country'],
-      select: ['id', 'name', 'phone', 'avatar', 'city', 'linkedin','email']
+      where: { id: user_id },
+      relations: ['city', 'city.country'],
+      select: ['id', 'name', 'phone', 'avatar', 'city', 'linkedin', 'email']
     });
     if (user == null) {
       throw new NotFoundException('user not found');
