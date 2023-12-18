@@ -6,6 +6,7 @@ import {
   OneToMany,
   ManyToMany,
   ManyToOne,
+  OneToOne,
 } from 'typeorm';
 import { Factory } from 'nestjs-seeder';
 import { randNum } from 'src/core/helpers/cast.helper';
@@ -19,6 +20,7 @@ import { MultiRFP } from '../multi-rfp/multi-rfp.entity';
 import { Offer } from '../offer/offer.entity';
 import { Message } from '../discussions/message.entity';
 import { Reply } from '../discussions/reply.entity';
+import { ProviderInfo } from '../provider-info/provider-info.entity';
 
 @Entity()
 export class User extends AuditableEntity {
@@ -102,6 +104,9 @@ export class User extends AuditableEntity {
   @OneToMany(() => Reply, reply => reply.user)
   replies: Reply[]
 
+  @OneToOne(()=> ProviderInfo, providerInfo => providerInfo.user)
+  provider_info: ProviderInfo
+  
   constructor(partial: Partial<User>) {
     super();
     Object.assign(this, partial);
