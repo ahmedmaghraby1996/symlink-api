@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ProviderService } from './provider.service';
 import { ProviderProjectRequest } from './dto/requests/provider-project-request';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiHeader, ApiProperty, ApiTags } from '@nestjs/swagger';
@@ -13,6 +13,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ProviderInfoRequest } from './dto/requests/provider-info-reqest';
 import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
 import { UpdateProvProjectRequest } from './dto/requests/update-provier-project-request';
+import { ExpertDetailsQueryRequest } from './dto/requests/expert-details-query-request';
 
 @ApiBearerAuth()
 @ApiHeader({
@@ -31,14 +32,14 @@ export class ProviderController {
 
 
   @Get('info')
-  async getInfo() {
-    const info = await this.providerService.getEductional();
-    const certifcate = await this.providerService.getCertificates();
-    const projects = await this.providerService.getProjects();
+  async getInfo(@Query() { user_id }: ExpertDetailsQueryRequest) {
+    const info = await this.providerService.getEductional(user_id);
+    const certifcate = await this.providerService.getCertificates(user_id);
+    const projects = await this.providerService.getProjects(user_id);
+    const user = await this.providerService.getUserInfo(user_id);
     return new ActionResponse({
-      info, certifcate, projects
+      info, certifcate, projects, user
     })
-
   }
 
   @Put("/update-eductional-info")
