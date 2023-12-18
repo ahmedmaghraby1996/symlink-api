@@ -15,6 +15,7 @@ import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
 import { toUrl } from 'src/core/helpers/file.helper';
 import { UpdateProvProjectRequest } from './dto/requests/update-provier-project-request';
 import { ActionResponse } from 'src/core/base/responses/action.response';
+import { User } from 'src/infrastructure/entities/user/user.entity';
 
 @Injectable()
 export class ProviderService extends BaseUserService<ProviderInfo> {
@@ -29,6 +30,7 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
 
     @InjectRepository(ProviderProject)
     private readonly providerProjectRepository: Repository<ProviderProject>,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {
     super(providerInfoRepository, request);
   }
@@ -65,8 +67,8 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
     return await this.providerCetificateRepository.save(providerCertifacte);
   }
 
-  async getCertificates() {
-    const provider = await this.getProvider();
+  async getCertificates(userId?: string) {
+    const provider = await this.getProvider(userId);
     return (
       await this.providerCetificateRepository.find({
         where: { provider_info_id: provider.id },
@@ -77,15 +79,15 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
       return e;
     });
   }
-  async getProjects() {
-    const provider = await this.getProvider();
+  async getProjects(userId?: string) {
+    const provider = await this.getProvider(userId);
     return await this.providerProjectRepository.find({
       where: { provider_info_id: provider.id },
       select: ['id', 'name', 'description', 'start_date', 'end_date'],
     });
   }
-  async getEductional() {
-    const provider = await this.getProvider();
+  async getEductional(userId?: string) {
+    const provider = await this.getProvider(userId);
     const proivderInfo = await this.providerInfoRepository.findOne({
       where: { id: provider.id },
       select: ['educational_info'],
@@ -94,9 +96,10 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
     return proivderInfo == null ? '' : proivderInfo.educational_info;
   }
 
-  async getProvider() {
+  async getProvider(userId?: string) {
+    userId = userId || super.currentUser.id;
     return await this.providerInfoRepository.findOne({
-      where: { user_id: super.currentUser.id },
+      where: { user_id: userId },
     });
   }
 
@@ -129,11 +132,23 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
     const project = await this.providerProjectRepository.findOne({
       where: { id, provider_info_id: provider.id },
     });
-    console.log(project)
+
     if (project == null) {
       throw new NotFoundException('project not found');
     }
 
     return await this.providerProjectRepository.delete({ id });
+  }
+
+  async getUserInfo(userId?: string) {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['city','city.country'],
+      select: ['id', 'name', 'phone', 'avatar', 'city', 'linkedin','email']
+    });
+    if (user == null) {
+      throw new NotFoundException('user not found');
+    }
+    return user;
   }
 }
