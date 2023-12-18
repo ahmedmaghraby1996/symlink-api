@@ -47,10 +47,12 @@ export class OffersService extends BaseService<Offer> {
       .leftJoinAndSelect('offers.multi_RFP', 'multi_RFP')
       .leftJoinAndSelect('offers.user', 'user')
 
-    if (sort_by == OfferSortyBy.BIDER_NAME) {
-      queryBuilder.orderBy(`user.name`, order as 'ASC' | 'DESC')
-    } else{
-      queryBuilder.orderBy(`offers.${sort_by}`, order as 'ASC' | 'DESC')
+    if (sort_by) {
+      if (sort_by == OfferSortyBy.BIDER_NAME) {
+        queryBuilder.orderBy(`user.name`, order as 'ASC' | 'DESC')
+      } else {
+        queryBuilder.orderBy(`offers.${sort_by}`, order as 'ASC' | 'DESC')
+      }
     }
 
     if (search_by_name) {
