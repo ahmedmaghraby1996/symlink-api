@@ -17,6 +17,7 @@ import { OfferGateway } from 'src/integration/gateways/offer.gateway';
 import { RequestForProposalStatus } from 'src/infrastructure/data/enums/request-for-proposal.enum';
 import { OfferFilterRequest } from './dto/offer-filter.request';
 import { AcceptOfferTransaction } from './utils/accept-offer.transation';
+import { OfferSortyBy } from 'src/infrastructure/data/enums/offer-sortby.enum';
 
 @Injectable()
 export class OffersService extends BaseService<Offer> {
@@ -38,25 +39,33 @@ export class OffersService extends BaseService<Offer> {
     multi_RFP_id: string,
     offerFilterRequest: OfferFilterRequest,
   ) {
-    const { page, limit ,search_by_name,sort_by_date} = offerFilterRequest;
+    const { page, limit, search_by_name, sort_by, order } = offerFilterRequest;
 
     const skip = (page - 1) * limit;
     const queryBuilder = this.offersRepository.createQueryBuilder("offers")
-    .where("offers.multi_RFP_id = :multi_RFP_id", { multi_RFP_id })
-    .leftJoinAndSelect('offers.multi_RFP', 'multi_RFP')
-    .leftJoinAndSelect('offers.user', 'user')
-    .orderBy(
-      'offers.created_at',
-      sort_by_date.toLowerCase() === 'desc' ? 'ASC' : 'DESC',
-      )
-    .skip(skip)
-    .take(limit);
+      .where("offers.multi_RFP_id = :multi_RFP_id", { multi_RFP_id })
+      .leftJoinAndSelect('offers.multi_RFP', 'multi_RFP')
+      .leftJoinAndSelect('offers.user', 'user')
+
+    if (sort_by) {
+      if (sort_by == OfferSortyBy.BIDER_NAME) {
+        queryBuilder.orderBy(`user.name`, order as 'ASC' | 'DESC')
+      } else {
+        queryBuilder.orderBy(`offers.${sort_by}`, order as 'ASC' | 'DESC')
+      }
+    }
+
     if (search_by_name) {
       queryBuilder.andWhere('multi_RFP.project_name Like :projectName', {
         projectName: `%${search_by_name}%`,
       });
     }
-  const [offers, count] = await queryBuilder.getManyAndCount();
+
+    const [offers, count] = await queryBuilder
+      .skip(skip)
+      .take(limit)
+      .getManyAndCount();
+
     return { offers, count };
   }
 
@@ -95,7 +104,7 @@ export class OffersService extends BaseService<Offer> {
   }
 
   async acceptOffer(offer_id: string, multi_RFP_id: string) {
-    return this.acceptOfferTransaction.run({offer_id,multi_RFP_id});
+    return this.acceptOfferTransaction.run({ offer_id, multi_RFP_id });
   }
 
   async getAcceptedOffer(multi_RFP_id: string) {

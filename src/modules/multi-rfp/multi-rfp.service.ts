@@ -64,23 +64,22 @@ export class MultiRfpService extends BaseService<MultiRFP> {
     }
     return await this.multiRFPRepository.save(multiRFP);
   }
+
   async clientGetMyAllMultiRFP(multiRFPFilterRequest: MultiRFPFilterRequest) {
-    const { page, limit, search_by_name ,sort_by_date} = multiRFPFilterRequest;
+    const { page, limit, search_by_name, sort_by, order } = multiRFPFilterRequest;
 
     const skip = (page - 1) * limit;
+
     const queryBuilder = this.multiRFPRepository
       .createQueryBuilder('multiRFP')
       .leftJoinAndSelect('multiRFP.user', 'user')
+      .orderBy(`multiRFP.${sort_by}`, order as 'ASC' | 'DESC')
       .where('user.id = :userId', { userId: this.request.user.id })
-      .orderBy(
-        'multiRFP.created_at',
-        sort_by_date.toLowerCase() === 'desc' ? 'ASC' : 'DESC',
-        )
       .skip(skip)
       .take(limit);
 
     if (search_by_name) {
-      queryBuilder.andWhere('multiRFP.project_name Like :projectName', {
+      queryBuilder.andWhere('multiRFP.project_name LIKE :projectName', {
         projectName: `%${search_by_name}%`,
       });
     }
@@ -90,10 +89,12 @@ export class MultiRfpService extends BaseService<MultiRFP> {
     const allMultiRFPForUserDto = allMultiRFPForUser.map(
       (item) => new MultiRFPResponse(item),
     );
+
     return { allMultiRFPForUserDto, count };
   }
+
   async provideGetMyAllMultiRFP(multiRFPFilterRequest: MultiRFPFilterRequest) {
-    const { page, limit, search_by_name,sort_by_date } = multiRFPFilterRequest;
+    const { page, limit, search_by_name, sort_by, order } = multiRFPFilterRequest;
 
     const skip = (page - 1) * limit;
 
@@ -102,10 +103,7 @@ export class MultiRfpService extends BaseService<MultiRFP> {
       .leftJoinAndSelect('multiRFP.offers', 'offers')
       .where('offers.user_id = :userId', { userId: this.request.user.id })
       .andWhere('offers.is_accepted = :isAccepted', { isAccepted: true })
-      .orderBy(
-        'multiRFP.created_at',
-        sort_by_date.toLowerCase() === 'desc' ? 'ASC' : 'DESC',
-        )
+      .orderBy(`multiRFP.${sort_by}`, order as 'ASC' | 'DESC')
       .skip(skip)
       .take(limit);
 
@@ -114,6 +112,7 @@ export class MultiRfpService extends BaseService<MultiRFP> {
         projectName: `%${search_by_name}%`,
       });
     }
+
     const [allMultiRFPForUser, count] = await queryBuilder.getManyAndCount();
     const allMultiRFPForUserDto = allMultiRFPForUser.map(
       (item) => new MultiRFPResponse(item),
@@ -121,8 +120,9 @@ export class MultiRfpService extends BaseService<MultiRFP> {
 
     return { allMultiRFPForUserDto, count };
   }
+
   async providerGetOffers(multiRFPFilterRequest: MultiRFPFilterRequest) {
-    const { page, limit, search_by_name ,sort_by_date} = multiRFPFilterRequest;
+    const { page, limit, search_by_name, sort_by, order } = multiRFPFilterRequest;
 
     const skip = (page - 1) * limit;
 
@@ -132,10 +132,7 @@ export class MultiRfpService extends BaseService<MultiRFP> {
       .where('multiRFP.request_for_proposal_status = :status', {
         status: RequestForProposalStatus.PENDING,
       })
-      .orderBy(
-        'multiRFP.created_at',
-        sort_by_date.toLowerCase() === 'desc' ? 'ASC' : 'DESC',
-        )
+      .orderBy(`multiRFP.${sort_by}`, order as 'ASC' | 'DESC')
       .skip(skip)
       .take(limit);
 
@@ -144,6 +141,7 @@ export class MultiRfpService extends BaseService<MultiRFP> {
         projectName: `%${search_by_name}%`,
       });
     }
+
     const [projects, count] = await queryBuilder.getManyAndCount();
 
     for (let index = 0; index < projects.length; index++) {

@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsNotEmpty, IsIn, IsNumber, IsString, IsOptional, IsBoolean } from 'class-validator';
-import { Duration } from 'src/infrastructure/data/enums/duration.enum';
 
 export class CreateOfferRequest {
   @ApiProperty()
@@ -16,19 +15,8 @@ export class CreateOfferRequest {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsIn([
-    Duration.HOUR,
-    Duration.DAY,
-    Duration.WEEK,
-    Duration.MONTH,
-    Duration.YEAR,
-  ])
-  duration: Duration;
-
-  @ApiProperty()
-  @IsNotEmpty()
   @IsNumber()
-  duration_num: number;
+  number_of_hours: number;
   
   @ApiProperty({ nullable: true, required: false, })
   @Transform(({ value }) => {
