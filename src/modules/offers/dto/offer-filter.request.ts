@@ -11,6 +11,7 @@ import {
   isArray,
 } from 'class-validator';
 import { toRightNumber } from 'src/core/helpers/cast.helper';
+import { OfferSortyBy } from 'src/infrastructure/data/enums/offer-sortby.enum';
 
 export class OfferFilterRequest {
   @ApiProperty({ required: false, default: 1 })
@@ -32,8 +33,30 @@ export class OfferFilterRequest {
   @IsString()
   search_by_name: string;
 
-  @ApiProperty({  required: false , default: "ASC" })
+  @ApiPropertyOptional({
+    nullable: true,
+    required: false,
+    enum: [
+      OfferSortyBy.PRICE,
+      OfferSortyBy.DURATION,
+      OfferSortyBy.IS_ACCEPTED,
+      OfferSortyBy.BIDER_NAME,
+    ],
+  })
   @IsOptional()
-  @IsString()
-  sort_by_date: string;
+  @IsEnum(OfferSortyBy)
+  sort_by?: string;
+
+  @ApiPropertyOptional({
+    nullable: true,
+    required: false,
+    enum: [
+      'ASC',
+      'DESC'
+    ],
+    default: 'DESC'
+  })
+  @IsOptional()
+  @IsEnum(['ASC', 'DESC'])
+  order?: string = "DESC";
 }
