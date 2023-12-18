@@ -2,7 +2,6 @@ import { AuditableEntity } from 'src/infrastructure/base/auditable.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { User } from '../user/user.entity';
 import { MultiRFP } from '../multi-rfp/multi-rfp.entity';
-import { Duration } from 'src/infrastructure/data/enums/duration.enum';
 
 @Entity()
 export class Offer extends AuditableEntity {
@@ -26,15 +25,8 @@ export class Offer extends AuditableEntity {
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   price: number;
 
-  @Column({
-    type: 'enum',
-    enum: Duration,
-  })
-  duration: Duration;
-
-  @Column()
-  duration_num: number;
-
+  @Column({ nullable: false })
+  number_of_hours: number;
 
   @Column({ default: false })
   is_accepted: boolean;
