@@ -2,7 +2,7 @@ import { Expose, Type } from "class-transformer";
 import { SupportTicketStatus } from "src/infrastructure/data/enums/support-ticket-status.enum";
 import { TicketAttachmentResponse } from "./ticket-attachment.response";
 
-export class CreateTicketResponse {
+export class SupportTicketResponse {
     @Expose() id: string;
     @Expose() subject: string;
     @Expose() description: string;

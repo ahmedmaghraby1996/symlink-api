@@ -9,6 +9,7 @@ import { CreateTicketRequest } from './dto/request/create-ticket.request';
 import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
 import { FileService } from '../file/file.service';
 import { TicketAttachment } from 'src/infrastructure/entities/support-ticket/ticket-attachment.entity';
+import { PaginatedRequest } from 'src/core/base/requests/paginated.request';
 
 
 @Injectable()
@@ -24,14 +25,14 @@ export class SupportTicketService extends BaseService<SupportTicket> {
     }
 
     async createTicket({ subject, description, file }: CreateTicketRequest) {
-        const user = this.getCurrentUser();
+
         let attachedFile = null;
         if (file) {
             const uploadFileRequest = new UploadFileRequest();
             uploadFileRequest.file = file;
             const tempImage = await this._fileService.upload(
                 uploadFileRequest,
-                `support-tickets/${this.request.user.id}`,
+                `support-tickets/${this.currentUser.id}`,
             );
 
             const createAttachedFile = this.ticketAttachmentRepository.create({
@@ -45,14 +46,22 @@ export class SupportTicketService extends BaseService<SupportTicket> {
         const savedTicket = await this.supportTicketRepository.create({
             subject,
             description,
-            user,
+            user: this.currentUser,
             attachment: attachedFile
         });
 
         return await this.supportTicketRepository.save(savedTicket);
     }
 
-    getCurrentUser() {
+    async getTickets(options?: PaginatedRequest) {
+        if (options.filters)
+            options.filters.push(`user_id=${this.currentUser.id}`);
+        else
+            options.filters = [`user_id=${this.currentUser.id}`]
+        return await this.findAll(options);
+    }
+    
+    get currentUser() {
         return this.request.user;
     }
 }
