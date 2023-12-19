@@ -1,9 +1,10 @@
 import { AuditableEntity } from 'src/infrastructure/base/auditable.entity';
-import { Entity, Column, ManyToOne, JoinColumn, BeforeInsert, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, BeforeInsert, OneToMany, OneToOne } from 'typeorm';
 import { User } from '../user/user.entity';
 import { SupportTicketStatus } from 'src/infrastructure/data/enums/support-ticket-status.enum';
 import { v4 as uuidv4 } from 'uuid';
 import { TicketComment } from './ticket-comment.entity';
+import { TicketAttachment } from './ticket-attachment.entity';
 
 @Entity()
 export class SupportTicket extends AuditableEntity {
@@ -16,6 +17,13 @@ export class SupportTicket extends AuditableEntity {
 
     @OneToMany(() => TicketComment, (comment) => comment.ticket, { cascade: true })
     ticket_comments: TicketComment[];
+
+    @OneToOne(()=>TicketAttachment, (attachment) => attachment.ticket)
+    @JoinColumn({ name: 'attachment_id' })
+    attachment: TicketAttachment;
+
+    @Column({ nullable: true })
+    attachment_id: string;
 
     @Column({ nullable: false })
     subject: string;

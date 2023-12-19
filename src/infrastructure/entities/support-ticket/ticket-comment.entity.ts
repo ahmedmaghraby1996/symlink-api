@@ -1,7 +1,8 @@
 import { AuditableEntity } from 'src/infrastructure/base/auditable.entity';
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, OneToOne } from 'typeorm';
 import { User } from '../user/user.entity';
 import { SupportTicket } from './support-ticket.entity';
+import { TicketAttachment } from './ticket-attachment.entity';
 
 @Entity()
 export class TicketComment extends AuditableEntity {
@@ -18,6 +19,13 @@ export class TicketComment extends AuditableEntity {
 
     @Column({ nullable: false })
     ticket_id: string;
+
+    @OneToOne(() => TicketAttachment, (attachment) => attachment.comment)
+    @JoinColumn({ name: 'attachment_id' })
+    attachment: TicketAttachment;
+
+    @Column({ nullable: true })
+    attachment_id: string;
 
     @Column({ nullable: false })
     comment_text: string;
