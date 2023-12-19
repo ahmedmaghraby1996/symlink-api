@@ -2,7 +2,9 @@ import {
     Body,
     ClassSerializerInterceptor,
     Controller,
+    Get,
     Post,
+    Query,
     UploadedFile,
     UseGuards,
     UseInterceptors,
@@ -15,8 +17,9 @@ import { CreateTicketRequest } from './dto/request/create-ticket.request';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadValidator } from 'src/core/validators/upload.validator';
 import { ActionResponse } from 'src/core/base/responses/action.response';
-import { CreateTicketResponse } from './dto/response/create-ticket.response';
+import { SupportTicketResponse } from './dto/response/support-ticket.response';
 import { plainToInstance } from 'class-transformer';
+import { PaginatedRequest } from 'src/core/base/requests/paginated.request';
 
 @ApiBearerAuth()
 @ApiHeader({
@@ -36,12 +39,21 @@ export class SupportTicketController {
     async createTicket(
         @Body() createTicketRequest: CreateTicketRequest,
         @UploadedFile(new UploadValidator().build()) file: Express.Multer.File,
-    ): Promise<ActionResponse<CreateTicketResponse>> {
+    ): Promise<ActionResponse<SupportTicketResponse>> {
         createTicketRequest.file = file;
         const createdTicket = await this.supportTicketService.createTicket(createTicketRequest);
-        const result = plainToInstance(CreateTicketResponse, createdTicket, {
+        const result = plainToInstance(SupportTicketResponse, createdTicket, {
             excludeExtraneousValues: true,
         });
-        return new ActionResponse<CreateTicketResponse>(result);
+        return new ActionResponse<SupportTicketResponse>(result);
+    }
+
+    @Get()
+    async getTickets(@Query() query: PaginatedRequest): Promise<ActionResponse<SupportTicketResponse[]>> {
+        const tickets = await this.supportTicketService.getTickets(query);
+        const result = plainToInstance(SupportTicketResponse, tickets, {
+            excludeExtraneousValues: true,
+        });
+        return new ActionResponse<SupportTicketResponse[]>(result);
     }
 }
