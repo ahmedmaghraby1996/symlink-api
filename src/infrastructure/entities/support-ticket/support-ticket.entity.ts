@@ -1,8 +1,9 @@
 import { AuditableEntity } from 'src/infrastructure/base/auditable.entity';
-import { Entity, Column, ManyToOne, JoinColumn, BeforeInsert } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, BeforeInsert, OneToMany } from 'typeorm';
 import { User } from '../user/user.entity';
 import { SupportTicketStatus } from 'src/infrastructure/data/enums/support-ticket-status.enum';
 import { v4 as uuidv4 } from 'uuid';
+import { TicketComment } from './ticket-comment.entity';
 
 @Entity()
 export class SupportTicket extends AuditableEntity {
@@ -11,7 +12,10 @@ export class SupportTicket extends AuditableEntity {
     user: User;
 
     @Column({ nullable: false })
-    user_id: number;
+    user_id: string;
+
+    @OneToMany(() => TicketComment, (comment) => comment.ticket, { cascade: true })
+    ticket_comments: TicketComment[];
 
     @Column({ nullable: false })
     subject: string;
