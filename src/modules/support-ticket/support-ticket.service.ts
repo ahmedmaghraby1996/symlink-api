@@ -54,13 +54,16 @@ export class SupportTicketService extends BaseService<SupportTicket> {
     }
 
     async getTickets(options?: PaginatedRequest) {
-        if (options.filters)
-            options.filters.push(`user_id=${this.currentUser.id}`);
-        else
-            options.filters = [`user_id=${this.currentUser.id}`]
+        if (!options.filters) {
+            options.filters = [];
+        } else if (typeof options.filters === 'string') {
+            options.filters = [options.filters];
+        }
+
+        options.filters.push(`user_id=${this.currentUser.id}`);
         return await this.findAll(options);
     }
-    
+
     get currentUser() {
         return this.request.user;
     }
