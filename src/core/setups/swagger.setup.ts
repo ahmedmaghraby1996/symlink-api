@@ -12,6 +12,7 @@ import { MultiRfpModule } from 'src/modules/multi-rfp/multi-rfp.module';
 import { OffersModule } from 'src/modules/offers/offers.module';
 import { ProviderModule } from 'src/modules/provider/provider.module';
 import { RequestForProposalModule } from 'src/modules/request-for-proposal/request-for-proposal.module';
+import { SupportTicketModule } from 'src/modules/support-ticket/support-ticket.module';
 import { UserModule } from 'src/modules/user/user.module';
 
 export default (app: INestApplication, config: ConfigService) => {
@@ -40,7 +41,8 @@ export default (app: INestApplication, config: ConfigService) => {
       MultiRfpModule,
       AttachedFilesModule,
       OffersModule,
-      DiscussionModule
+      DiscussionModule,
+      SupportTicketModule
      // RequestForProposalModule,
      
     ],
