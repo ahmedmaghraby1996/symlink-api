@@ -15,6 +15,7 @@ import { Offer } from "../entities/offer/offer.entity";
 import { Message } from "../entities/discussions/message.entity";
 import { DiscussionAttachment } from "../entities/discussions/discussion-attachment.entity";
 import { Reply } from "../entities/discussions/reply.entity";
+import { SupportTicket } from "../entities/support-ticket/support-ticket.entity";
 
 export const DB_ENTITIES = [
   User,
@@ -34,6 +35,7 @@ export const DB_ENTITIES = [
   Message,
   Reply,
   DiscussionAttachment,
+  SupportTicket
 ];
 
 export const DB_VIEWS = [];

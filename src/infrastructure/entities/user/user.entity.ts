@@ -21,6 +21,7 @@ import { Offer } from '../offer/offer.entity';
 import { Message } from '../discussions/message.entity';
 import { Reply } from '../discussions/reply.entity';
 import { ProviderInfo } from '../provider-info/provider-info.entity';
+import { SupportTicket } from '../support-ticket/support-ticket.entity';
 
 @Entity()
 export class User extends AuditableEntity {
@@ -112,6 +113,9 @@ export class User extends AuditableEntity {
     Object.assign(this, partial);
   }
 
+  @OneToMany(()=>SupportTicket, supportTicket => supportTicket.user)
+  support_tickets: SupportTicket[]
+  
   // generate unique id in this pattern: ######
   private uniqueIdGenerator(): string {
     return randNum(8);
