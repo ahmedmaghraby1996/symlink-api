@@ -34,7 +34,7 @@ export class SupportTicketGateway {
         const connectedSocket = Object.values(this.server.sockets.sockets)
 
         connectedSocket.forEach(socket => {
-            if (socket.user && socket.user.id === ticketOwnerId) {
+            if (socket.user && (socket.user.id === ticketOwnerId || socket.user.roles.includes('ADMIN'))) {
                 socket.emit(`support_ticket_${payload.supportTicket.id}`, payload);
             }
         });
