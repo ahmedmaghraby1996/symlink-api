@@ -48,7 +48,7 @@ export class TicketCommentService extends BaseService<TicketComment> {
         const ticket = await this.supportTicketRepository.findOne({ where: { id: ticketId } })
         if (!ticket) throw new BadRequestException('Ticket not found');
 
-        if (ticket.user_id !== this.currentUser.id)
+        if (!this.currentUser.roles.includes(Role.ADMIN) && ticket.user_id !== this.currentUser.id)
             throw new UnauthorizedException('You are not allowed to add comment to this ticket')
 
         const savedComment = await this.ticketCommentRepository.create({
