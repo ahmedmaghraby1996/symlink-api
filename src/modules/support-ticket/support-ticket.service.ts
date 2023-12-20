@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SupportTicket } from 'src/infrastructure/entities/support-ticket/support-ticket.entity';
@@ -10,6 +10,7 @@ import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
 import { FileService } from '../file/file.service';
 import { TicketAttachment } from 'src/infrastructure/entities/support-ticket/ticket-attachment.entity';
 import { PaginatedRequest } from 'src/core/base/requests/paginated.request';
+import { SupportTicketStatus } from 'src/infrastructure/data/enums/support-ticket-status.enum';
 
 
 @Injectable()
@@ -62,6 +63,14 @@ export class SupportTicketService extends BaseService<SupportTicket> {
 
         options.filters.push(`user_id=${this.currentUser.id}`);
         return await this.findAll(options);
+    }
+
+    async chnageTicketStatus(ticketId:string, status: SupportTicketStatus){
+        const ticket = await this.supportTicketRepository.findOne({where:{id:ticketId}});
+        if(!ticket) throw new BadRequestException('Ticket not found');
+        
+        ticket.status = status;
+        return await this.supportTicketRepository.save(ticket);
     }
 
     get currentUser() {
