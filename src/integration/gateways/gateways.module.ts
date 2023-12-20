@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { OfferGateway } from './offer.gateway';
 import { DiscussionGateway } from './discussion.gateway';
+import { SupportTicketGateway } from './support-ticket.gateway';
 
 @Module({
     imports: [],
@@ -10,7 +11,8 @@ import { DiscussionGateway } from './discussion.gateway';
     ],
     exports: [
         OfferGateway,
-        DiscussionGateway
+        DiscussionGateway,
+        SupportTicketGateway
     ],
 })
 export class GatewaysModule { }
