@@ -3,6 +3,7 @@ import {
     ClassSerializerInterceptor,
     Controller,
     Get,
+    Param,
     Post,
     Query,
     UploadedFile,
@@ -20,6 +21,9 @@ import { ActionResponse } from 'src/core/base/responses/action.response';
 import { SupportTicketResponse } from './dto/response/support-ticket.response';
 import { plainToInstance } from 'class-transformer';
 import { PaginatedRequest } from 'src/core/base/requests/paginated.request';
+import { TicketCommentService } from './ticket-comment.service';
+import { AddTicketCommentRequest } from './dto/request/add-ticket-comment.request';
+import { TicketCommentResponse } from './dto/response/ticket-comment.response';
 
 @ApiBearerAuth()
 @ApiHeader({
@@ -31,7 +35,10 @@ import { PaginatedRequest } from 'src/core/base/requests/paginated.request';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('support-ticket')
 export class SupportTicketController {
-    constructor(private readonly supportTicketService: SupportTicketService) { }
+    constructor(
+        private readonly supportTicketService: SupportTicketService,
+        private readonly ticketCommentService: TicketCommentService
+    ) { }
 
     @Post()
     @UseInterceptors(ClassSerializerInterceptor, FileInterceptor('file'))
@@ -55,5 +62,21 @@ export class SupportTicketController {
             excludeExtraneousValues: true,
         });
         return new ActionResponse<SupportTicketResponse[]>(result);
+    }
+
+    @Post('/comment/:ticketId')
+    @UseInterceptors(ClassSerializerInterceptor, FileInterceptor('file'))
+    @ApiConsumes('multipart/form-data')
+    async addComment(
+        @Param('ticketId') ticketId: string,
+        @Body() addTicketCommentRequest: AddTicketCommentRequest,
+        @UploadedFile(new UploadValidator().build()) file: Express.Multer.File,
+    ): Promise<ActionResponse<TicketCommentResponse>> {
+        addTicketCommentRequest.file = file;
+        const createdComment = await this.ticketCommentService.addComment(ticketId, addTicketCommentRequest);
+        const result = plainToInstance(TicketCommentResponse, createdComment, {
+            excludeExtraneousValues: true,
+        });
+        return new ActionResponse<TicketCommentResponse>(result);
     }
 }
