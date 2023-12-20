@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { REQUEST } from '@nestjs/core';
@@ -53,6 +53,24 @@ export class TicketCommentService extends BaseService<TicketComment> {
         });
 
         return await this.ticketCommentRepository.save(savedComment);
+    }
+
+    async getCommentsByChunk(ticketId: string, offset: number, limit: number): Promise<TicketComment[]> {
+        console.log(ticketId);
+        const supportTicket = await this.supportTicketRepository.findOne({ where: { id: ticketId } })
+        if (!supportTicket)
+            throw new BadRequestException('Ticket not found');
+
+        if (supportTicket.user_id !== this.currentUser.id)
+            throw new UnauthorizedException('You are not allowed to view this ticket')
+
+        return await this.ticketCommentRepository.find({
+            where: { ticket_id: ticketId },
+            relations: ['user', 'attachment'],
+            order: { created_at: 'DESC' },
+            skip: offset,
+            take: limit,
+        });
     }
 
     get currentUser() {
