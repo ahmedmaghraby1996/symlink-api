@@ -5,6 +5,7 @@ import {
     Get,
     Param,
     Post,
+    Put,
     Query,
     UploadedFile,
     UseGuards,
@@ -24,6 +25,10 @@ import { PaginatedRequest } from 'src/core/base/requests/paginated.request';
 import { TicketCommentService } from './ticket-comment.service';
 import { AddTicketCommentRequest } from './dto/request/add-ticket-comment.request';
 import { TicketCommentResponse } from './dto/response/ticket-comment.response';
+import { ChangeTicketStatusRequest } from './dto/request/change-ticket-status.request';
+import { SupportTicketStatus } from 'src/infrastructure/data/enums/support-ticket-status.enum';
+import { Roles } from '../authentication/guards/roles.decorator';
+import { Role } from 'src/infrastructure/data/enums/role.enum';
 
 @ApiBearerAuth()
 @ApiHeader({
@@ -91,5 +96,18 @@ export class SupportTicketController {
             excludeExtraneousValues: true,
         });
         return new ActionResponse<TicketCommentResponse[]>(result);
+    }
+
+    @Roles(Role.ADMIN)
+    @Put('/ticket-status/:ticketId')
+    async changeTicketStatus(
+        @Param('ticketId') ticketId: string,
+        @Body() chnageticketTicketStatusRequest: ChangeTicketStatusRequest
+    ): Promise<ActionResponse<SupportTicketResponse>> {
+        const ticket = await this.supportTicketService.chnageTicketStatus(ticketId, chnageticketTicketStatusRequest.status as SupportTicketStatus);
+        const result = plainToInstance(SupportTicketResponse, ticket, {
+            excludeExtraneousValues: true,
+        });
+        return new ActionResponse<SupportTicketResponse>(result);
     }
 }
