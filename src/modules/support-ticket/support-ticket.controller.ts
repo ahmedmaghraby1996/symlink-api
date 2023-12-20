@@ -79,4 +79,17 @@ export class SupportTicketController {
         });
         return new ActionResponse<TicketCommentResponse>(result);
     }
+
+    @Get('/comments/:ticketId/:offset/:limit')
+    async getComments(
+        @Param('ticketId') ticketId: string,
+        @Param("offset") offset: number,
+        @Param("limit") limit: number
+    ): Promise<ActionResponse<TicketCommentResponse[]>> {
+        const comments = await this.ticketCommentService.getCommentsByChunk(ticketId, offset, limit);
+        const result = plainToInstance(TicketCommentResponse, comments, {
+            excludeExtraneousValues: true,
+        });
+        return new ActionResponse<TicketCommentResponse[]>(result);
+    }
 }
