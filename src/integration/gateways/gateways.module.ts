@@ -7,7 +7,8 @@ import { SupportTicketGateway } from './support-ticket.gateway';
     imports: [],
     providers: [
         OfferGateway,
-        DiscussionGateway
+        DiscussionGateway,
+        SupportTicketGateway
     ],
     exports: [
         OfferGateway,
