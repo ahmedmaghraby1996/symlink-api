@@ -11,6 +11,7 @@ import { SupportTicket } from 'src/infrastructure/entities/support-ticket/suppor
 import { TicketAttachment } from 'src/infrastructure/entities/support-ticket/ticket-attachment.entity';
 import { AddTicketCommentRequest } from './dto/request/add-ticket-comment.request';
 import { SupportTicketGateway } from 'src/integration/gateways/support-ticket.gateway';
+import { Role } from 'src/infrastructure/data/enums/role.enum';
 
 
 @Injectable()
@@ -62,13 +63,13 @@ export class TicketCommentService extends BaseService<TicketComment> {
     }
 
     async getCommentsByChunk(ticketId: string, offset: number, limit: number): Promise<TicketComment[]> {
-        console.log(ticketId);
         const supportTicket = await this.supportTicketRepository.findOne({ where: { id: ticketId } })
         if (!supportTicket)
             throw new BadRequestException('Ticket not found');
 
-        if (supportTicket.user_id !== this.currentUser.id)
-            throw new UnauthorizedException('You are not allowed to view this ticket')
+        if (this.currentUser.roles[0] !== Role.ADMIN && supportTicket.user_id !== this.currentUser.id) {
+            throw new UnauthorizedException('You are not allowed to view this ticket');
+        }
 
         return await this.ticketCommentRepository.find({
             where: { ticket_id: ticketId },
