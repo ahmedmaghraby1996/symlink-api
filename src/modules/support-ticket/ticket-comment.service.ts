@@ -67,7 +67,7 @@ export class TicketCommentService extends BaseService<TicketComment> {
         if (!supportTicket)
             throw new BadRequestException('Ticket not found');
 
-        if (this.currentUser.roles[0] !== Role.ADMIN && supportTicket.user_id !== this.currentUser.id) {
+        if (!this.currentUser.roles.includes(Role.ADMIN) && supportTicket.user_id !== this.currentUser.id) {
             throw new UnauthorizedException('You are not allowed to view this ticket');
         }
 
