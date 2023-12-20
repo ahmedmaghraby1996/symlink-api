@@ -10,6 +10,7 @@ import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
 import { SupportTicket } from 'src/infrastructure/entities/support-ticket/support-ticket.entity';
 import { TicketAttachment } from 'src/infrastructure/entities/support-ticket/ticket-attachment.entity';
 import { AddTicketCommentRequest } from './dto/request/add-ticket-comment.request';
+import { SupportTicketGateway } from 'src/integration/gateways/support-ticket.gateway';
 
 
 @Injectable()
@@ -20,6 +21,7 @@ export class TicketCommentService extends BaseService<TicketComment> {
         @InjectRepository(SupportTicket) private readonly supportTicketRepository: Repository<SupportTicket>,
         @Inject(REQUEST) private readonly request: Request,
         @Inject(FileService) private _fileService: FileService,
+        private readonly supportTicketGateway: SupportTicketGateway,
     ) {
         super(ticketCommentRepository);
     }
@@ -45,6 +47,9 @@ export class TicketCommentService extends BaseService<TicketComment> {
         const ticket = await this.supportTicketRepository.findOne({ where: { id: ticketId } })
         if (!ticket) throw new BadRequestException('Ticket not found');
 
+        if (ticket.user_id !== this.currentUser.id)
+            throw new UnauthorizedException('You are not allowed to add comment to this ticket')
+
         const savedComment = await this.ticketCommentRepository.create({
             comment_text,
             user: this.currentUser,
@@ -52,6 +57,7 @@ export class TicketCommentService extends BaseService<TicketComment> {
             attachment: attachedFile
         });
 
+        this.supportTicketGateway.handleSendMessage({ supportTicket: ticket, ticketComment: savedComment, action: 'add_comment' });
         return await this.ticketCommentRepository.save(savedComment);
     }
 
