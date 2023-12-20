@@ -31,9 +31,9 @@ export class SupportTicketGateway {
 
     handleSendMessage(payload: { supportTicket: SupportTicket, ticketComment: TicketComment, action: string }) {
         const ticketOwnerId = payload.supportTicket.user_id;
-        const connectedSocket = Object.values(this.server.sockets.sockets)
-
-        connectedSocket.forEach(socket => {
+        const connectedSockets: any = this.server.sockets
+       
+        connectedSockets.forEach(socket => {
             if (socket.user && (socket.user.id === ticketOwnerId || socket.user.roles.includes('ADMIN'))) {
                 socket.emit(`support_ticket_${payload.supportTicket.id}`, payload);
             }
