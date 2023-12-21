@@ -48,4 +48,9 @@ export abstract class Gateways {
     /** discussion */
     static Namespace = 'discussion';
   }
+
+  static SupportTicket = class {
+    /** support-ticket */
+    static Namespace = 'support-ticket';
+  }
 }

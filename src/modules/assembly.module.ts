@@ -10,6 +10,7 @@ import { AttachedFilesModule } from './attached-files/attached-files.module';
 import { OffersModule } from './offers/offers.module';
 import { DiscussionModule } from './discussion/discussion.module';
 import { SendEmailModule } from './send-email/send-email.module';
+import { SupportTicketModule } from './support-ticket/support-ticket.module';
 
 @Module({
     imports: [
@@ -23,6 +24,7 @@ import { SendEmailModule } from './send-email/send-email.module';
         OffersModule,
         DiscussionModule,
         SendEmailModule,
+        SupportTicketModule,
     ],
     exports: [
         AddressModule,

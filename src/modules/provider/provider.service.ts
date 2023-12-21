@@ -149,6 +149,7 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
     if (user == null) {
       throw new NotFoundException('user not found');
     }
+    user.avatar = toUrl(user.avatar);
     return user;
   }
 }
