@@ -11,6 +11,7 @@ import { UploadValidator } from 'src/core/validators/upload.validator';
 import { ActionResponse } from 'src/core/base/responses/action.response';
 import { MessageResponse } from './dto/response/message.response';
 import { plainToClass, plainToInstance } from 'class-transformer';
+import { MessagesListResponse } from './dto/response/messages-list.response';
 
 @ApiBearerAuth()
 @ApiHeader({
@@ -51,10 +52,10 @@ export class DiscussionController {
         @Param("limit") limit: number
     ) {
         const fetchedMessages = await this.discussionService.getItemsByChunk(multi_RFP_id, query, offset, limit);
-        const result = fetchedMessages.map(message =>
-            plainToClass(MessageResponse, message, { excludeExtraneousValues: true })
-        );
-    
-        return new ActionResponse<MessageResponse[]>(result);
+        const result = plainToInstance(MessagesListResponse, fetchedMessages, {
+            excludeExtraneousValues: true,
+        });
+
+        return new ActionResponse<MessagesListResponse>(result);
     }
 }
