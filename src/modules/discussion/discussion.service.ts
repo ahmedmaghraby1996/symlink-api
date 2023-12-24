@@ -15,6 +15,8 @@ import { MultiRFP } from 'src/infrastructure/entities/multi-rfp/multi-rfp.entity
 import { FileService } from '../file/file.service';
 import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
 import { DiscussionAttachment } from 'src/infrastructure/entities/discussions/discussion-attachment.entity';
+import { plainToInstance } from 'class-transformer';
+import { MessageResponse } from './dto/response/message.response';
 
 @Injectable()
 export class DiscussionService {
@@ -159,11 +161,15 @@ export class DiscussionService {
     }
 
     private notifyAction(multi_RFP: MultiRFP, entity: Message | Reply) {
+        const responseMessage = plainToInstance(MessageResponse, entity, {
+            excludeExtraneousValues: true,
+        });
+
         this.discussionGateway.handleSendMessage({
             multi_RFP,
             action: 'CREATED',
             entity_type: entity instanceof Message ? 'Message' : 'Reply',
-            entity
+            entity: responseMessage
         });
     }
 }
