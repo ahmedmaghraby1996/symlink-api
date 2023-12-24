@@ -104,6 +104,7 @@ export class DiscussionService {
 
     private async fetchRepliesByChunk(message_id: string, offset: number, limit: number) {
         return this.replyRepository.createQueryBuilder('reply')
+            .leftJoinAndSelect('reply.user', 'user')
             .leftJoinAndSelect('reply.attachment', 'attachment')
             .where('reply.message_id = :message_id OR reply.parent_reply_id = :message_id', { message_id })
             .orderBy('reply.created_at', 'DESC')
