@@ -93,24 +93,42 @@ export class DiscussionService {
     }
 
     private async fetchMessagesByChunk(multi_rfp_id: string, offset: number, limit: number) {
-        return await this.messageRepository.find({
+        const [messages, total] = await this.messageRepository.findAndCount({
             where: { multi_rfp_id: multi_rfp_id },
             relations: ['user', 'attachment'],
             order: { created_at: 'DESC' },
             skip: offset,
             take: limit,
         });
+
+        const totalPages = Math.ceil(total / limit);
+        const currentPage = Math.floor(offset / limit) + 1;
+
+        return {
+            messages,
+            totalPages,
+            currentPage,
+        };
     }
 
     private async fetchRepliesByChunk(message_id: string, offset: number, limit: number) {
-        return this.replyRepository.createQueryBuilder('reply')
+        const [replies, total] = await this.replyRepository.createQueryBuilder('reply')
             .leftJoinAndSelect('reply.user', 'user')
             .leftJoinAndSelect('reply.attachment', 'attachment')
             .where('reply.message_id = :message_id OR reply.parent_reply_id = :message_id', { message_id })
             .orderBy('reply.created_at', 'DESC')
             .take(limit)
             .skip(offset)
-            .getMany();
+            .getManyAndCount();
+
+        const totalPages = Math.ceil(total / limit);
+        const currentPage = Math.floor(offset / limit) + 1;
+
+        return {
+            replies,
+            totalPages,
+            currentPage,
+        };
     }
 
     private async findEntityByIdOrFail(entityId: string): Promise<Message | Reply> {
