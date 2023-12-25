@@ -23,7 +23,7 @@ export class MultiRfpService extends BaseService<MultiRFP> {
     @InjectRepository(MultiRFP)
     private multiRFPRepository: Repository<MultiRFP>,
     @Inject(REQUEST) private readonly request: Request,
-    @Inject(RequestForProposalService) private readonly requestforPrposal: RequestForProposalService,
+    // @Inject(RequestForProposalService) private readonly requestforPrposal: RequestForProposalService,
   ) {
     super(multiRFPRepository);
   }
@@ -31,7 +31,6 @@ export class MultiRfpService extends BaseService<MultiRFP> {
     const {
       projects,
       project_name,
-      time_type_id,
       expiration_date,
       firstFullName,
       firstEmail,
@@ -39,12 +38,12 @@ export class MultiRfpService extends BaseService<MultiRFP> {
       secondEmail,
       secondFullName,
       secondMobile,
+      preferred_testing_time,
     } = createMultiRFPRequest;
 
-    const multiRFP = this.multiRFPRepository.create({
+    const newMultiRFP = this.multiRFPRepository.create({
       user_id: this.request.user.id,
       project_name,
-      time_type_id,
       expiration_date,
       firstFullName,
       firstEmail,
@@ -52,17 +51,48 @@ export class MultiRfpService extends BaseService<MultiRFP> {
       secondEmail,
       secondFullName,
       secondMobile,
+      preferred_testing_time,
+      request_for_proposal: [],
     });
-    await this.multiRFPRepository.save(multiRFP);
-    console.log('multiRFP', multiRFP);
 
-    for (let index = 0; index < projects.length; index++) {
-      const requestForProposalCreate = this.requestForProposalRepository.create(
-        { ...projects[index], multi_RFP: multiRFP },
-      );
-      await this.requestForProposalRepository.save(requestForProposalCreate);
+    const savedMultiRFP = await this.multiRFPRepository.save(newMultiRFP);
+    for (const project of projects) {
+      const {
+        category_id,
+        target_ip_address,
+        approach_of_assessment,
+        notes,
+        is_active_directory,
+        target_mobile_application_url,
+        how_many_custom_lines_of_code,
+        what_is_programming_language,
+        how_many_server_to_review,
+        how_many_network_devices_to_review,
+        how_many_workstation_to_review,
+        is_hld_lld_available,
+      } = project;
+
+      const requestForProposal = this.requestForProposalRepository.create({
+        multi_RFP: savedMultiRFP,
+        category_id,
+        target_ip_address,
+        approach_of_assessment,
+        notes,
+        is_active_directory,
+        target_mobile_application_url,
+        how_many_custom_lines_of_code,
+        what_is_programming_language,
+        how_many_server_to_review,
+        how_many_network_devices_to_review,
+        how_many_workstation_to_review,
+        is_hld_lld_available,
+      });
+
+      await this.requestForProposalRepository.save(requestForProposal);
+      savedMultiRFP.request_for_proposal.push(requestForProposal); // Push the created request_for_proposal
+
     }
-    return await this.multiRFPRepository.save(multiRFP);
+    return await this.multiRFPRepository.save(savedMultiRFP);
   }
 
   async clientGetMyAllMultiRFP(multiRFPFilterRequest: MultiRFPFilterRequest) {
@@ -157,14 +187,8 @@ export class MultiRfpService extends BaseService<MultiRFP> {
       where: { id },
       relations: {
         user: true,
-        time_type_meta_data: true,
         request_for_proposal: {
           category: true,
-          assessments_type_meta_data: true,
-          apis_size_meta_data: true,
-          color_mobile_meta_data: true,
-          average_applications_meta_data: true,
-          evaluation_is_internal_or_external_meta_data: true,
         },
       },
     });
@@ -193,7 +217,7 @@ export class MultiRfpService extends BaseService<MultiRFP> {
     // Update individual RFPs within the MultiRFP based on the provided request data.
     if (updateMultiRFPRequest.projects) {
       updateMultiRFPRequest.projects.forEach(async (request_for_proposal) => {
-        await this.requestforPrposal.updateRequestForProposal(request_for_proposal);
+        // await this.requestforPrposal.updateRequestForProposal(request_for_proposal);
       });
     }
 
