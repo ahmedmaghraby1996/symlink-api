@@ -20,39 +20,39 @@ export class CreateMultiRFPRequest {
   expiration_date: Date;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   firstFullName: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   firstEmail: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   firstMobile: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   secondFullName: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   secondEmail: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   secondMobile: string;
   
-  @ApiProperty({ nullable: true, required: false })
-  @IsOptional()
-  @IsString()
-  time_type_id: string;
+  @ApiProperty({ type: [String] })
+  @IsArray()
+  @IsString({ each: true })
+  preferred_testing_time: string[];
 
   @ApiProperty({ type: [CreateRequestForProposalRequest] })
   @IsArray()
