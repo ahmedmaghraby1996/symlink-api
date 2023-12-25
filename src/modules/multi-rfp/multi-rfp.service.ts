@@ -10,8 +10,6 @@ import { plainToInstance } from 'class-transformer';
 import { RequestForProposalService } from '../request-for-proposal/request-for-proposal.service';
 import { MultiRFPResponse } from './dto/multi-rfp.response';
 import { BaseService } from 'src/core/base/service/service.base';
-import { PaginatedRequest } from 'src/core/base/requests/paginated.request';
-import { applyQueryFilters } from 'src/core/helpers/service-related.helper';
 import { MultiRFPFilterRequest } from './dto/multiRFP-filter.request';
 import { RequestForProposalStatus } from 'src/infrastructure/data/enums/request-for-proposal.enum';
 import { UpdateMultiRFPRequest } from './dto/update-multi-RFP.request';
@@ -23,7 +21,7 @@ export class MultiRfpService extends BaseService<MultiRFP> {
     @InjectRepository(MultiRFP)
     private multiRFPRepository: Repository<MultiRFP>,
     @Inject(REQUEST) private readonly request: Request,
-    // @Inject(RequestForProposalService) private readonly requestforPrposal: RequestForProposalService,
+    @Inject(RequestForProposalService) private readonly requestforPrposal: RequestForProposalService,
   ) {
     super(multiRFPRepository);
   }
@@ -217,7 +215,7 @@ export class MultiRfpService extends BaseService<MultiRFP> {
     // Update individual RFPs within the MultiRFP based on the provided request data.
     if (updateMultiRFPRequest.projects) {
       updateMultiRFPRequest.projects.forEach(async (request_for_proposal) => {
-        // await this.requestforPrposal.updateRequestForProposal(request_for_proposal);
+        await this.requestforPrposal.updateRequestForProposal(request_for_proposal);
       });
     }
 

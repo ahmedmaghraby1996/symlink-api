@@ -31,7 +31,7 @@ export class UpdateMultiRFPRequest extends CreateMultiRFPRequest {
   secondMobile: string;
 
   @IsOptional()
-  time_type_id: string;
+  preferred_testing_time: string[];
 
   @ApiProperty({ type: [UpdateRequestForProposalRequest] })
   @IsArray()
