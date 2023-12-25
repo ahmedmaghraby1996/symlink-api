@@ -2,7 +2,6 @@ import { th } from '@faker-js/faker';
 import { Exclude, Expose, Type } from 'class-transformer';
 import { RequestForProposalStatus } from 'src/infrastructure/data/enums/request-for-proposal.enum';
 import { Category } from 'src/infrastructure/entities/category/category.entity';
-import { MetaData } from 'src/infrastructure/entities/meta-data/meta-data.entity';
 import { User } from 'src/infrastructure/entities/user/user.entity';
 import { UserInfoResponse } from 'src/modules/user/dto/response/profile.response';
 
@@ -12,15 +11,15 @@ export class RequestForProposalResponse {
 
 
 
-  @Expose() assessments_type_meta_data: MetaData;
+  // @Expose() assessments_type_meta_data: MetaData;
 
-  @Expose() apis_size_meta_data: MetaData;
+  // @Expose() apis_size_meta_data: MetaData;
 
-  @Expose() average_applications_meta_data: MetaData;
+  // @Expose() average_applications_meta_data: MetaData;
 
-  @Expose() color_mobile_meta_data: MetaData;
+  // @Expose() color_mobile_meta_data: MetaData;
 
-  @Expose() evaluation_is_internal_or_external_meta_data: MetaData;
+  // @Expose() evaluation_is_internal_or_external_meta_data: MetaData;
 
   @Expose() internal_applications_num: number;
 

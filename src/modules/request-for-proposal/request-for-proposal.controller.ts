@@ -25,24 +25,24 @@ export class RequestForProposalController {
     @Inject(I18nResponse) private readonly _i18nResponse: I18nResponse,
 
   ) {}
-  @Roles(Role.CLIENT)
-  @Post()
-  async createRequestForProposal(
-    @Body() createRequestForProposalRequest: CreateRequestForProposalRequest,
-  ) {
-    const requestForProposal =
-      await this.requestForProposalService.createRequestForProposal(
-        createRequestForProposalRequest,
-      );
-    return new ActionResponse<RequestForProposal>(requestForProposal);
-  }
+  // @Roles(Role.CLIENT)
+  // @Post()
+  // async createRequestForProposal(
+  //   @Body() createRequestForProposalRequest: CreateRequestForProposalRequest,
+  // ) {
+  //   const requestForProposal =
+  //     await this.requestForProposalService.createRequestForProposal(
+  //       createRequestForProposalRequest,
+  //     );
+  //   return new ActionResponse<RequestForProposal>(requestForProposal);
+  // }
 
-  @Get()
-  async getAllRequestForProposal(){
-    const requestForProposal = await this.requestForProposalService.getAllRequestForProposal();
-    const data: RequestForProposalResponse[] = this._i18nResponse.entity(requestForProposal);
+  // @Get()
+  // async getAllRequestForProposal(){
+  //   const requestForProposal = await this.requestForProposalService.getAllRequestForProposal();
+  //   const data: RequestForProposalResponse[] = this._i18nResponse.entity(requestForProposal);
 
-    return new ActionResponse<RequestForProposalResponse[]>(data);
+  //   return new ActionResponse<RequestForProposalResponse[]>(data);
 
-  }
+  // }
 }
