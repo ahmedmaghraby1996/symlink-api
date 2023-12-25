@@ -45,11 +45,10 @@ export class MultiRfpController {
   @Roles(Role.CLIENT)
   @Post()
   async createMultiRFP(@Body() createMultiRFPRequest: CreateMultiRFPRequest) {
-    console.log('createMultiRFPRequest', createMultiRFPRequest);
     return await this.multiRfpService.createMultiRFP(createMultiRFPRequest);
   }
-  @Roles(Role.CLIENT)
 
+  @Roles(Role.CLIENT)
   @Get('client-All-MultiRFP')
   async clientGetMyAllMultiRFP(
     @Query() multiRFPFilterRequest: MultiRFPFilterRequest,
@@ -65,8 +64,8 @@ export class MultiRfpController {
 
     return new PageDto(data, pageMetaDto);
   }
-  @Roles(Role.PROVIDER)
 
+  @Roles(Role.PROVIDER)
   @Get('provider-All-MultiRFP')
   async providerGetMyAllMultiRFP(
     @Query() multiRFPFilterRequest: MultiRFPFilterRequest,
@@ -81,8 +80,8 @@ export class MultiRfpController {
 
     return new PageDto(data, pageMetaDto);
   }
+  
   @Roles(Role.PROVIDER)
-
   @Get('provider-all-offers')
   async getProjectsSubmittedOffer(
     @Query() multiRFPFilterRequest: MultiRFPFilterRequest,
