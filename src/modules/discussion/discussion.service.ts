@@ -39,7 +39,7 @@ export class DiscussionService {
             uploadFileRequest.file = file;
             const tempImage = await this._fileService.upload(
                 uploadFileRequest,
-                `discussion/${multi_rfp_id}`,
+                `discussion`,
             );
 
             const createAttachedFile = this.discussionAttachmentRepository.create({
@@ -76,7 +76,6 @@ export class DiscussionService {
     }
 
     private async createAndSaveNewMessage(message: { body_text: string, attachment: DiscussionAttachment }, user: any, multiRFP: any) {
-        console.log(message.attachment)
         const newMessage = this.messageRepository.create({
             body_text: message.body_text,
             attachment: message.attachment,
