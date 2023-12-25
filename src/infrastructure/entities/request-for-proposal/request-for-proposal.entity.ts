@@ -7,17 +7,15 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { MetaData } from '../meta-data/meta-data.entity';
-import { MetaDataType } from 'src/infrastructure/data/enums/meta-data-type.enum';
 import { Category } from '../category/category.entity';
 import { User } from '../user/user.entity';
 import { RequestForProposalStatus } from 'src/infrastructure/data/enums/request-for-proposal.enum';
 import { AuditableEntity } from 'src/infrastructure/base/auditable.entity';
 import { MultiRFP } from '../multi-rfp/multi-rfp.entity';
 @Entity()
-export class RequestForProposal extends  AuditableEntity {
+export class RequestForProposal extends AuditableEntity {
 
-  @ManyToOne(() => MultiRFP, (multiRfp) => multiRfp.request_for_proposal,{onDelete: 'CASCADE'})
+  @ManyToOne(() => MultiRFP, (multiRfp) => multiRfp.request_for_proposal, { onDelete: 'CASCADE' })
   @JoinColumn()
   multi_RFP: MultiRFP;
 
@@ -25,122 +23,59 @@ export class RequestForProposal extends  AuditableEntity {
   multi_RFP_id: string;
 
 
-  @ManyToOne(() => Category, (category) => category.request_for_proposal,{onDelete: 'CASCADE'})
+  @ManyToOne(() => Category, (category) => category.request_for_proposal, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'category_id' })
   category: Category;
 
   @Column()
   category_id: string;
 
-
-  //Type of evaluation?
-  @ManyToOne(() => MetaData, (metaData) => metaData.assessments_type_request,{onDelete: 'CASCADE'})
-  @JoinColumn({ name: 'assessments_type_id' })
-  assessments_type_meta_data: MetaData;
-
+  // Target URL/IP address
   @Column({ nullable: true })
-  assessments_type_id: string;
-  //How many API functions do you have in the application? (Example: register, log in, create ticket, close ticket, etc.)
-  @ManyToOne(() => MetaData, (metaData) => metaData.apis_size_request,{onDelete: 'CASCADE'})
-  @JoinColumn({ name: 'apis_size_id' })
-  apis_size_meta_data: MetaData;
+  target_ip_address: string;
 
-  @Column({ nullable: true })
-  apis_size_id: string;
-  //What is the average size of these applications?
-  @ManyToOne(
-    () => MetaData,
-    (metaData) => metaData.average_applications_request,{onDelete: 'CASCADE'}
-  )
-  @JoinColumn({ name: 'average_applications_id' })
-  average_applications_meta_data: MetaData;
+  // The approach of the assessment:
+  @Column({
+    type: 'enum',
+    default: null,
+    enum: ['WHITE', 'BLACK'],
+    nullable: true,
+  })
+  approach_of_assessment: string;
 
-  @Column({ nullable: true })
-  average_applications_id: string;
-  //What is the color in the mobile project?
-  @ManyToOne(() => MetaData, (metaData) => metaData.color_mobile_request,{onDelete: 'CASCADE'})
-  @JoinColumn({ name: 'color_mobile_id' })
-  color_mobile_meta_data: MetaData;
-
-  @Column({ nullable: true })
-  color_mobile_id: string;
-  //Is the evaluation internal/external?
-  @ManyToOne(
-    () => MetaData,
-    (metaData) => metaData.evaluation_is_internal_or_external_request,{onDelete: 'CASCADE'}
-  )
-  @JoinColumn({ name: 'evaluation_is_internal_or_external_id' })
-  evaluation_is_internal_or_external_meta_data: MetaData;
-
-  @Column({ nullable: true })
-  evaluation_is_internal_or_external_id: string;
-
-  //Internal applications
-  @Column({ nullable: true })
-  internal_applications_num: number;
-  //External applications
-
-  @Column({ nullable: true })
-  external_applications_num: number;
-
-  //List applications with domain:(i.e.domain.com)
+  // Notes
   @Column({ type: 'longtext', nullable: true })
-  list_applications_with_scope: string;
+  notes: string;
 
-  //Is verification required to evaluate whether reported vulnerabilities have been fixed?
+  // Is Active Directory part of the assessment
   @Column({ nullable: true })
-  Verify_that_vulnerabilities_are_fixed: boolean;
+  is_active_directory: boolean;
 
-  //Is it necessary for the resident to be on site?
+  // Target mobile application URL
   @Column({ nullable: true })
-  necessary_resident_be_on_site: boolean;
+  target_mobile_application_url: string;
 
-  //How many times on site
+  // How many custom lines of code want to assess
   @Column({ nullable: true })
-  how_many_times_on_site: number;
+  how_many_custom_lines_of_code: string;
 
-  //How many user roles do you have in this application? i.e. normal user, admin, admin etc
+  // What is the programming language of the code or frameworks
   @Column({ nullable: true })
-  How_many_user_roles: number;
+  what_is_programming_language: string;
 
-  //How to access the app: (i.e. Apple/Google stores link)
-  @Column({ type: 'longtext', nullable: true })
-  how_to_access_the_application: string;
-
-  @Column({ type: 'longtext', nullable: true })
-  how_can_the_assessor_access_it: string;
-
-  //How many IPS should be servers?
+  // How many servers, network devices, and workstations do you want to review - Servers
   @Column({ nullable: true })
-  how_many_IPS_should_be_tested_in_servers: number;
+  how_many_server_to_review: string;
 
-  //How many IPS should be workstations?
+  // How many servers, network devices, and workstations do you want to review - Network
   @Column({ nullable: true })
-  how_many_IPS_should_be_tested_in_workstations: number;
+  how_many_network_devices_to_review: string;
 
-  //How many IPS should be network devices?
+  // How many servers, network devices, and workstations do you want to review - Workstations
   @Column({ nullable: true })
-  how_many_IPS_should_be_tested_in_network_devices: number;
+  how_many_workstation_to_review: string;
 
-  //For internal testing, will you provide VPN access to the resident?
+  // Is the High-Level Diagram (HLD)/Low-Level Diagram (LLD) available and updated?
   @Column({ nullable: true })
-  vpn_access_to_the_resident: boolean;
-
-  //Evaluation approach (white/gray/black)
-  @Column({ nullable: true })
-  evaluation_approach: string;
-
-  //If you want to be more specific, please comment in the text box below
-  @Column({ type: 'longtext', nullable: true })
-  details_evaluation_approach: string;
-
-  //Is Active Directory part of the assessment?
-  @Column({ nullable: true })
-  active_directory: boolean;
-
-  //IPS Scoped List: (i.e. 1.1.1.1)
-  @Column({ type: 'longtext', nullable: true })
-  details_ips_scoped: string;
-
-
+  is_hld_lld_available: boolean;
 }
