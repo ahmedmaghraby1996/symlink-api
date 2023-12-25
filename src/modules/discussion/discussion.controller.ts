@@ -9,6 +9,9 @@ import { LockDiscussionGuard } from './guards/lock-discussion.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadValidator } from 'src/core/validators/upload.validator';
 import { ActionResponse } from 'src/core/base/responses/action.response';
+import { MessageResponse } from './dto/response/message.response';
+import { plainToClass, plainToInstance } from 'class-transformer';
+import { MessagesListResponse } from './dto/response/messages-list.response';
 
 @ApiBearerAuth()
 @ApiHeader({
@@ -34,7 +37,11 @@ export class DiscussionController {
         @UploadedFile(new UploadValidator().build()) file: Express.Multer.File,
     ) {
         message.file = file;
-        return new ActionResponse(await this.discussionService.createMessage(multi_RFP_id, query, message));
+        const createdMessage = await this.discussionService.createMessage(multi_RFP_id, query, message)
+        const result = plainToInstance(MessageResponse, createdMessage, {
+            excludeExtraneousValues: true,
+        });
+        return new ActionResponse<MessageResponse>(result);
     }
 
     @Get(':multi_RFP_id/messages/:offset/:limit')
@@ -44,6 +51,11 @@ export class DiscussionController {
         @Param("offset") offset: number,
         @Param("limit") limit: number
     ) {
-        return await this.discussionService.getItemsByChunk(multi_RFP_id, query, offset, limit);
+        const fetchedMessages = await this.discussionService.getItemsByChunk(multi_RFP_id, query, offset, limit);
+        const result = plainToInstance(MessagesListResponse, fetchedMessages, {
+            excludeExtraneousValues: true,
+        });
+
+        return new ActionResponse<MessagesListResponse>(result);
     }
 }

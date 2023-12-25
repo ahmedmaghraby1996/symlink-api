@@ -13,6 +13,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MultiRFP } from 'src/infrastructure/entities/multi-rfp/multi-rfp.entity';
 import { Repository } from 'typeorm';
 import { Offer } from 'src/infrastructure/entities/offer/offer.entity';
+import { MessageResponse } from 'src/modules/discussion/dto/response/message.response';
 
 @WebSocketGateway({ namespace: Gateways.Discussion.Namespace, cors: { origin: '*' } })
 @UseGuards(WsJwtAuthGuard)
@@ -32,7 +33,7 @@ export class DiscussionGateway {
         client.use(RfpDiscussionPrivacyMiddleware(this.multiRFPRepository, this.offersRepository) as any);
     }
 
-    handleSendMessage(payload: { multi_RFP: MultiRFP, action: string, entity_type: string, entity: Message | Reply }) {
+    handleSendMessage(payload: { multi_RFP: MultiRFP, action: string, entity_type: string, entity: MessageResponse}) {
         this.server.emit(`discussion_${payload.multi_RFP.id}`, payload);
     }
 }
