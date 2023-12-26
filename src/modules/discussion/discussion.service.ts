@@ -98,12 +98,12 @@ export class DiscussionService {
             where: { multi_rfp_id: multi_rfp_id },
             relations: ['user', 'attachment'],
             order: { created_at: 'DESC' },
-            skip: offset,
+            skip: offset * limit,
             take: limit,
         });
 
         const totalPages = Math.ceil(total / limit);
-        const currentPage = Math.floor(offset / limit) + 1;
+        const currentPage = offset;
 
         return {
             messages,
@@ -118,12 +118,12 @@ export class DiscussionService {
             .leftJoinAndSelect('reply.attachment', 'attachment')
             .where('reply.message_id = :message_id OR reply.parent_reply_id = :message_id', { message_id })
             .orderBy('reply.created_at', 'DESC')
+            .skip(offset * limit)
             .take(limit)
-            .skip(offset)
             .getManyAndCount();
 
         const totalPages = Math.ceil(total / limit);
-        const currentPage = Math.floor(offset / limit) + 1;
+        const currentPage = offset;
 
         return {
             replies,
