@@ -33,7 +33,13 @@ export class DiscussionGateway {
         client.use(RfpDiscussionPrivacyMiddleware(this.multiRFPRepository, this.offersRepository) as any);
     }
 
-    handleSendMessage(payload: { multi_RFP: MultiRFP, action: string, entity_type: string, entity: MessageResponse}) {
+    handleSendMessage(payload: { multi_RFP: MultiRFP, action: string, entity_type: string, entity: MessageResponse }) {
         this.server.emit(`discussion_${payload.multi_RFP.id}`, payload);
     }
+
+    handleSendReply(payload: { multi_RFP: MultiRFP, action: string, entity_type: string, entity: MessageResponse }) {
+        const message_id = payload.entity.message_id || payload.entity.parent_reply_id;
+        this.server.emit(`message_${message_id}`, payload);
+    }
+
 }
