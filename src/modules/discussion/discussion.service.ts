@@ -163,12 +163,20 @@ export class DiscussionService {
         const responseMessage = plainToInstance(MessageResponse, entity, {
             excludeExtraneousValues: true,
         });
-
-        this.discussionGateway.handleSendMessage({
-            multi_RFP,
-            action: 'CREATED',
-            entity_type: entity instanceof Message ? 'Message' : 'Reply',
-            entity: responseMessage
-        });
+        if (entity instanceof Message) {
+            this.discussionGateway.handleSendMessage({
+                multi_RFP,
+                action: 'CREATED',
+                entity_type: entity instanceof Message ? 'Message' : 'Reply',
+                entity: responseMessage
+            });
+        } else if (entity instanceof Reply) {
+            this.discussionGateway.handleSendReply({
+                multi_RFP,
+                action: 'CREATED',
+                entity_type: entity instanceof Message ? 'Message' : 'Reply',
+                entity: responseMessage
+            });
+        }
     }
 }
