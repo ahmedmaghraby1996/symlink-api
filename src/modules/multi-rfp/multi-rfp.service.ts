@@ -23,7 +23,7 @@ export class MultiRfpService extends BaseService<MultiRFP> {
     @InjectRepository(MultiRFP)
     private multiRFPRepository: Repository<MultiRFP>,
     @Inject(REQUEST) private readonly request: Request,
-    @Inject(RequestForProposalService) private readonly requestforPrposal: RequestForProposalService,
+    @Inject(RequestForProposalService) private readonly requestforPrposalService: RequestForProposalService,
   ) {
     super(multiRFPRepository);
   }
@@ -192,9 +192,16 @@ export class MultiRfpService extends BaseService<MultiRFP> {
 
     // Update individual RFPs within the MultiRFP based on the provided request data.
     if (updateMultiRFPRequest.projects) {
-      updateMultiRFPRequest.projects.forEach(async (request_for_proposal) => {
-        await this.requestforPrposal.updateRequestForProposal(request_for_proposal);
-      });
+      for (const request_for_proposal of updateMultiRFPRequest.projects) {
+        if (request_for_proposal.id !== undefined) {
+          await this.requestforPrposalService.updateRequestForProposal(request_for_proposal);
+        } else {
+          const requestForProposalCreate = this.requestForProposalRepository.create(
+            { ...request_for_proposal, multi_RFP: multiRFP },
+          );
+          await this.requestForProposalRepository.save(requestForProposalCreate);
+        }
+      }
     }
 
     const updatedMultiRFP = plainToInstance(MultiRFP, updateMultiRFPRequest);
