@@ -1,14 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, ValidateIf } from 'class-validator';
 import { CreateRequestForProposalRequest } from './create-request-for-proposal.request';
 
 export class UpdateRequestForProposalRequest extends CreateRequestForProposalRequest {
-    @IsOptional()
+    @ValidateIf((object, value) => !object.id) // Only validate if `id` doesn't exist
+    @IsNotEmpty()
     category_id: string;
 
     @ApiProperty({ nullable: false, required: true })
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     id: string;
 }
