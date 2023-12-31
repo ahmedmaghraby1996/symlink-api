@@ -27,9 +27,9 @@ export class MultiRfpService extends BaseService<MultiRFP> {
     @InjectRepository(AttachmentRequestForProposal)
     private readonly attachmentRequestForProposal: Repository<AttachmentRequestForProposal>,
     @Inject(REQUEST) private readonly request: Request,
-    @Inject(RequestForProposalService) private readonly requestforPrposal: RequestForProposalService,
+    @Inject(RequestForProposalService) private readonly requestforPrposalService: RequestForProposalService,
     @Inject(FileService) private _fileService: FileService
-  ) {
+  ) { 
     super(multiRFPRepository);
   }
   async createMultiRFP(createMultiRFPRequest: CreateMultiRFPRequest) {
