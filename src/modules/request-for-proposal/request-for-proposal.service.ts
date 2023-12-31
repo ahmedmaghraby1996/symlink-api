@@ -44,7 +44,7 @@ export class RequestForProposalService {
     );
 
     if (!requestForProposalUpdate) {
-      throw new NotFoundException('Not found');
+      throw new NotFoundException('Assesment Not found');
     }
 
     Object.assign(requestForProposalUpdate, requestForProposal);

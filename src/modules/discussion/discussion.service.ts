@@ -39,7 +39,7 @@ export class DiscussionService {
             uploadFileRequest.file = file;
             const tempImage = await this._fileService.upload(
                 uploadFileRequest,
-                `discussion/${multi_rfp_id}`,
+                `discussion`,
             );
 
             const createAttachedFile = this.discussionAttachmentRepository.create({
@@ -76,7 +76,6 @@ export class DiscussionService {
     }
 
     private async createAndSaveNewMessage(message: { body_text: string, attachment: DiscussionAttachment }, user: any, multiRFP: any) {
-        console.log(message.attachment)
         const newMessage = this.messageRepository.create({
             body_text: message.body_text,
             attachment: message.attachment,
@@ -99,12 +98,12 @@ export class DiscussionService {
             where: { multi_rfp_id: multi_rfp_id },
             relations: ['user', 'attachment'],
             order: { created_at: 'DESC' },
-            skip: offset,
+            skip: offset * limit,
             take: limit,
         });
 
         const totalPages = Math.ceil(total / limit);
-        const currentPage = Math.floor(offset / limit) + 1;
+        const currentPage = offset;
 
         return {
             messages,
@@ -119,12 +118,12 @@ export class DiscussionService {
             .leftJoinAndSelect('reply.attachment', 'attachment')
             .where('reply.message_id = :message_id OR reply.parent_reply_id = :message_id', { message_id })
             .orderBy('reply.created_at', 'DESC')
+            .skip(offset * limit)
             .take(limit)
-            .skip(offset)
             .getManyAndCount();
 
         const totalPages = Math.ceil(total / limit);
-        const currentPage = Math.floor(offset / limit) + 1;
+        const currentPage = offset;
 
         return {
             replies,
@@ -164,12 +163,20 @@ export class DiscussionService {
         const responseMessage = plainToInstance(MessageResponse, entity, {
             excludeExtraneousValues: true,
         });
-
-        this.discussionGateway.handleSendMessage({
-            multi_RFP,
-            action: 'CREATED',
-            entity_type: entity instanceof Message ? 'Message' : 'Reply',
-            entity: responseMessage
-        });
+        if (entity instanceof Message) {
+            this.discussionGateway.handleSendMessage({
+                multi_RFP,
+                action: 'CREATED',
+                entity_type: entity instanceof Message ? 'Message' : 'Reply',
+                entity: responseMessage
+            });
+        } else if (entity instanceof Reply) {
+            this.discussionGateway.handleSendReply({
+                multi_RFP,
+                action: 'CREATED',
+                entity_type: entity instanceof Message ? 'Message' : 'Reply',
+                entity: responseMessage
+            });
+        }
     }
 }
