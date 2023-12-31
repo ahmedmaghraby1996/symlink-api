@@ -6,12 +6,14 @@ import {
   OneToMany,
   ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 import { Category } from '../category/category.entity';
 import { User } from '../user/user.entity';
 import { RequestForProposalStatus } from 'src/infrastructure/data/enums/request-for-proposal.enum';
 import { AuditableEntity } from 'src/infrastructure/base/auditable.entity';
 import { MultiRFP } from '../multi-rfp/multi-rfp.entity';
+import { AttachmentRequestForProposal } from './attachment-request-for-propsal.entity';
 @Entity()
 export class RequestForProposal extends AuditableEntity {
 
@@ -78,4 +80,13 @@ export class RequestForProposal extends AuditableEntity {
   // Is the High-Level Diagram (HLD)/Low-Level Diagram (LLD) available and updated?
   @Column({ nullable: true })
   is_hld_lld_available: boolean;
+
+
+  @OneToOne(() => AttachmentRequestForProposal, (attachment) => attachment.request_for_proposal, { onDelete: 'CASCADE', nullable: true })
+  @JoinColumn({ name: 'apk_attachment_id' })
+  apk_attachment: AttachmentRequestForProposal;
+
+  // Upload mobile application file
+  @Column({ nullable: true })
+  apk_attachment_id: string;
 }
