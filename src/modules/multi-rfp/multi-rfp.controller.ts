@@ -1,5 +1,6 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -8,9 +9,12 @@ import {
   Post,
   Put,
   Query,
+  UploadedFile,
+  UploadedFiles,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiConsumes, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { RolesGuard } from '../authentication/guards/roles.guard';
 import { MultiRfpService } from './multi-rfp.service';
@@ -26,6 +30,10 @@ import { PageDto } from 'src/core/helpers/pagination/page.dto';
 import { Roles } from '../authentication/guards/roles.decorator';
 import { Role } from 'src/infrastructure/data/enums/role.enum';
 import { UpdateMultiRFPRequest } from './dto/update-multi-RFP.request';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { UploadValidator } from 'src/core/validators/upload.validator';
+import { AttachRequestForProposalRequest } from './dto/attach-request-for-propsal.request';
+import { plainToInstance } from 'class-transformer';
 
 @ApiBearerAuth()
 @ApiHeader({
@@ -44,9 +52,24 @@ export class MultiRfpController {
 
   @Roles(Role.CLIENT)
   @Post()
-  async createMultiRFP(@Body() createMultiRFPRequest: CreateMultiRFPRequest) {
+  async createMultiRFP(
+    @Body() createMultiRFPRequest: CreateMultiRFPRequest,
+  ) {
     return await this.multiRfpService.createMultiRFP(createMultiRFPRequest);
   }
+
+  @Roles(Role.CLIENT)
+  @Post("/attach-request-for-proposal")
+  @UseInterceptors(ClassSerializerInterceptor, FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  async attachRequestForProposal(
+    @Body() attachRequestForProposalRequest: AttachRequestForProposalRequest,
+    @UploadedFile(new UploadValidator().build()) file: Express.Multer.File,
+  ) {
+    attachRequestForProposalRequest.file = file;
+    return await this.multiRfpService.attachRequestForProposal(attachRequestForProposalRequest);
+  }
+
 
   @Roles(Role.CLIENT)
   @Get('client-All-MultiRFP')
@@ -80,7 +103,7 @@ export class MultiRfpController {
 
     return new PageDto(data, pageMetaDto);
   }
-  
+
   @Roles(Role.PROVIDER)
   @Get('provider-all-offers')
   async getProjectsSubmittedOffer(

@@ -13,6 +13,10 @@ import { BaseService } from 'src/core/base/service/service.base';
 import { MultiRFPFilterRequest } from './dto/multiRFP-filter.request';
 import { RequestForProposalStatus } from 'src/infrastructure/data/enums/request-for-proposal.enum';
 import { UpdateMultiRFPRequest } from './dto/update-multi-RFP.request';
+import { AttachRequestForProposalRequest } from './dto/attach-request-for-propsal.request';
+import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
+import { FileService } from '../file/file.service';
+import { AttachmentRequestForProposal } from 'src/infrastructure/entities/request-for-proposal/attachment-request-for-propsal.entity';
 @Injectable()
 export class MultiRfpService extends BaseService<MultiRFP> {
   constructor(
@@ -20,8 +24,11 @@ export class MultiRfpService extends BaseService<MultiRFP> {
     private requestForProposalRepository: Repository<RequestForProposal>,
     @InjectRepository(MultiRFP)
     private multiRFPRepository: Repository<MultiRFP>,
+    @InjectRepository(AttachmentRequestForProposal)
+    private readonly attachmentRequestForProposal: Repository<AttachmentRequestForProposal>,
     @Inject(REQUEST) private readonly request: Request,
     @Inject(RequestForProposalService) private readonly requestforPrposal: RequestForProposalService,
+    @Inject(FileService) private _fileService: FileService
   ) {
     super(multiRFPRepository);
   }
@@ -68,6 +75,7 @@ export class MultiRfpService extends BaseService<MultiRFP> {
         how_many_network_devices_to_review,
         how_many_workstation_to_review,
         is_hld_lld_available,
+        apk_attachment_id,
       } = project;
 
       const requestForProposal = this.requestForProposalRepository.create({
@@ -84,13 +92,33 @@ export class MultiRfpService extends BaseService<MultiRFP> {
         how_many_network_devices_to_review,
         how_many_workstation_to_review,
         is_hld_lld_available,
+        apk_attachment_id,
       });
 
-      await this.requestForProposalRepository.save(requestForProposal);
+      const savedRequestForPropsal = await this.requestForProposalRepository.save(requestForProposal);
+      await this.attachmentRequestForProposal.update({ id: apk_attachment_id }, { request_for_proposal_id: savedRequestForPropsal.id });
       savedMultiRFP.request_for_proposal.push(requestForProposal); // Push the created request_for_proposal
 
     }
     return await this.multiRFPRepository.save(savedMultiRFP);
+  }
+
+  async attachRequestForProposal({ file }: AttachRequestForProposalRequest) {
+    let attachedFile = null;
+    const uploadFileRequest = new UploadFileRequest();
+    uploadFileRequest.file = file;
+    const tempImage = await this._fileService.upload(
+      uploadFileRequest,
+      `request_for_propsal/`,
+    );
+
+    const createAttachedFile = this.attachmentRequestForProposal.create({
+      file_url: tempImage,
+      file_name: file.originalname,
+      file_type: file.mimetype,
+    })
+
+    return await this.attachmentRequestForProposal.save(createAttachedFile);
   }
 
   async clientGetMyAllMultiRFP(multiRFPFilterRequest: MultiRFPFilterRequest) {
@@ -187,12 +215,14 @@ export class MultiRfpService extends BaseService<MultiRFP> {
         user: true,
         request_for_proposal: {
           category: true,
+          apk_attachment:true
         },
       },
     });
     if (!multiRFP) {
       throw new NotFoundException('This Project not found');
     }
+    console.log(multiRFP);
     return new MultiRFPResponse(multiRFP);
   }
 
