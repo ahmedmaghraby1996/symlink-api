@@ -95,4 +95,11 @@ export class CreateRequestForProposalRequest {
   @IsBoolean()
   @ValidateIf((object) => object.category_name === 'Architecture Configuration ')
   is_hld_lld_available: boolean;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @ValidateIf((object) =>
+    object.category_name === 'Mobile Application'
+  )
+  apk_attachment_id?: string;
 }

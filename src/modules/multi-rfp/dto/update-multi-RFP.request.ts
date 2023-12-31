@@ -4,6 +4,7 @@ import { CreateRequestForProposalRequest } from 'src/modules/request-for-proposa
 import { UpdateRequestForProposalRequest } from 'src/modules/request-for-proposal/dto/update-request-for-propsal.request';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
+import { PreferredTestingTime } from 'src/infrastructure/data/enums/prefered-testing-times.types';
 
 export class UpdateMultiRFPRequest extends CreateMultiRFPRequest {
   @IsOptional()
@@ -31,7 +32,7 @@ export class UpdateMultiRFPRequest extends CreateMultiRFPRequest {
   secondMobile: string;
 
   @IsOptional()
-  preferred_testing_time: string[];
+  preferred_testing_time: PreferredTestingTime[];
 
   @ApiProperty({ type: [UpdateRequestForProposalRequest] })
   @IsArray()
