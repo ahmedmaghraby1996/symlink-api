@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Validate, ValidateIf } from 'class-validator';
 
 export class CreateRequestForProposalRequest {
   @ApiProperty()
@@ -8,129 +8,98 @@ export class CreateRequestForProposalRequest {
   @IsString()
   category_id: string;
 
-  
+  @ApiProperty({ nullable: false, required: true, enum: ["Web", "Network", "Code Source", "Mobile Application", "Architecture Configuration"] })
+  @IsNotEmpty()
+  @IsEnum(["Web", "Network", "Code Source", "Mobile Application", "Architecture Configuration"])
+  category_name: string;
+
+  // Target URL/IP address
+  @ApiProperty({ nullable: true, required: false })
+  @IsNotEmpty()
+  @IsString()
+  @ValidateIf((object) =>
+    object.category_name === 'Web' ||
+    object.category_name === 'Network'
+  )
+  target_ip_address: string;
+
+  // The approach of the assessment:
+  @ApiProperty({ nullable: true, required: false, enum: ['WHITE', 'BLACK'] })
+  @IsEnum(['WHITE', 'BLACK'])
+  @IsNotEmpty()
+  @ValidateIf((object) =>
+    object.category_name === 'Web' ||
+    object.category_name === 'Network' ||
+    object.category_name === 'Mobile Application'
+  )
+  approach_of_assessment: string;
+
+  // Notes
   @ApiProperty({ nullable: true, required: false })
   @IsOptional()
   @IsString()
-  assessments_type_id: string;
+  notes: string;
 
+  // Is Active Directory part of the assessment
   @ApiProperty({ nullable: true, required: false })
-  @IsOptional()
-  @IsString()
-  apis_size_id: string;
-
-  @ApiProperty({ nullable: true, required: false })
-  @IsOptional()
-  @IsString()
-  average_applications_id: string;
-
-  @ApiProperty({ nullable: true, required: false })
-  @IsOptional()
-  @IsString()
-  color_mobile_id: string;
-
-  @ApiProperty({ nullable: true, required: false })
-  @IsOptional()
-  @IsString()
-  evaluation_is_internal_or_external_id: string;
-
-  @ApiProperty({ nullable: true, required: false })
-  @IsOptional()
-  @IsNumber()
-  internal_applications_num: number;
-
-  @ApiProperty({ nullable: true, required: false })
-  @IsOptional()
-  @IsNumber()
-  external_applications_num: number;
-
-  @ApiProperty({ nullable: true, required: false })
-  @IsOptional()
-  @IsString()
-  list_applications_with_scope: string;
-
-  @ApiProperty({ nullable: true, required: false })
-  @Transform(({ value }) => {
-    return value === 'true';
-  })
-  @IsOptional()
+  @IsNotEmpty()
   @IsBoolean()
-  Verify_that_vulnerabilities_are_fixed: boolean;
+  @ValidateIf((object) => object.category_name === 'Network')
+  is_active_directory: boolean;
 
+  // Target mobile application URL
   @ApiProperty({ nullable: true, required: false })
-  @Transform(({ value }) => {
-    return value === 'true';
-  })
-  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
+  @ValidateIf((object) => object.category_name === 'Mobile Application')
+  target_mobile_application_url: string;
+
+  // How many custom lines of code want to assess
+  @ApiProperty({ nullable: true, required: false })
+  @IsNotEmpty()
+  @IsString()
+  @ValidateIf((object) => object.category_name === 'Code Source ')
+  how_many_custom_lines_of_code: string;
+
+  // What is the programming language of the code or frameworks
+  @ApiProperty({ nullable: true, required: false })
+  @IsNotEmpty()
+  @IsString()
+  @ValidateIf((object) => object.category_name === 'Code Source ')
+  what_is_programming_language: string;
+
+  // How many servers, network devices, and workstations do you want to review - Servers
+  @ApiProperty({ nullable: true, required: false })
+  @IsNotEmpty()
+  @IsString()
+  @ValidateIf((object) => object.category_name === 'Architecture Configuration ')
+  how_many_server_to_review: string;
+
+  // How many servers, network devices, and workstations do you want to review - Network
+  @ApiProperty({ nullable: true, required: false })
+  @IsNotEmpty()
+  @IsString()
+  @ValidateIf((object) => object.category_name === 'Architecture Configuration ')
+  how_many_network_devices_to_review: string;
+
+  // How many servers, network devices, and workstations do you want to review - Workstations
+  @ApiProperty({ nullable: true, required: false })
+  @IsNotEmpty()
+  @IsString()
+  @ValidateIf((object) => object.category_name === 'Architecture Configuration ')
+  how_many_workstation_to_review: string;
+
+  // Is the High-Level Diagram (HLD)/Low-Level Diagram (LLD) available and updated?
+  @ApiProperty({ nullable: true, required: false })
+  @IsNotEmpty()
   @IsBoolean()
-  necessary_resident_be_on_site: boolean;
+  @ValidateIf((object) => object.category_name === 'Architecture Configuration ')
+  is_hld_lld_available: boolean;
 
-
-  @ApiProperty({ nullable: true, required: false })
+  @ApiProperty({ required: false })
   @IsOptional()
-  @IsNumber()
-  how_many_times_on_site: number;
-
-
-  @ApiProperty({ nullable: true, required: false })
-  @IsOptional()
-  @IsNumber()
-  How_many_user_roles: number;
-
-
-  @ApiProperty({ nullable: true, required: false })
-  @IsOptional()
-  @IsString()
-  how_to_access_the_application: string;
-
-  @ApiProperty({ nullable: true, required: false })
-  @IsOptional()
-  @IsString()
-  how_can_the_assessor_access_it: string;
-  
-  @ApiProperty({ nullable: true, required: false })
-  @IsOptional()
-  @IsNumber()
-  how_many_IPS_should_be_tested_in_servers: number;
-
-  @ApiProperty({ nullable: true, required: false })
-  @IsOptional()
-  @IsNumber()
-  how_many_IPS_should_be_tested_in_workstations: number;
-
-  @ApiProperty({ nullable: true, required: false })
-  @IsOptional()
-  @IsNumber()
-  how_many_IPS_should_be_tested_in_network_devices: number;
-
-  @ApiProperty({ nullable: true, required: false })
-  @Transform(({ value }) => {
-    return value === 'true';
-  })
-  @IsOptional()
-  @IsBoolean()
-  vpn_access_to_the_resident: boolean;
-
-  @ApiProperty({ nullable: true, required: false })
-  @IsOptional()
-  @IsString()
-  evaluation_approach: string;
-
-  @ApiProperty({ nullable: true, required: false })
-  @IsOptional()
-  @IsString()
-  details_evaluation_approach: string;
-
-  @ApiProperty({ nullable: true, required: false })
-  @Transform(({ value }) => {
-    return value === 'true';
-  })
-  @IsOptional()
-  @IsBoolean()
-  active_directory: boolean;
-
-  @ApiProperty({ nullable: true, required: false })
-  @IsOptional()
-  @IsString()
-  details_ips_scoped: string;
+  @ValidateIf((object) =>
+    object.category_name === 'Mobile Application'
+  )
+  apk_attachment_id?: string;
 }

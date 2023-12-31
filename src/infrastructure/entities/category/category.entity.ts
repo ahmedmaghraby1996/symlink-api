@@ -5,7 +5,7 @@ import {
     CreateDateColumn,
     OneToMany,
 } from 'typeorm';
-import { MetaData } from '../meta-data/meta-data.entity';
+// import { MetaData } from '../meta-data/meta-data.entity';
 import { RequestForProposal } from '../request-for-proposal/request-for-proposal.entity';
 
 @Entity()

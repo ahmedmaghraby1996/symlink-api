@@ -1,12 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   IsArray,
+  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
+  Validate,
   ValidateNested,
 } from 'class-validator';
+import { IsEnumArray } from 'src/core/validators/is-enum-array-validator';
+import { PreferredTestingTime } from 'src/infrastructure/data/enums/prefered-testing-times.types';
 import { CreateRequestForProposalRequest } from 'src/modules/request-for-proposal/dto/create-request-for-proposal.request';
 
 export class CreateMultiRFPRequest {
@@ -20,39 +24,43 @@ export class CreateMultiRFPRequest {
   expiration_date: Date;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   firstFullName: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   firstEmail: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   firstMobile: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   secondFullName: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   secondEmail: string;
 
   @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  secondMobile: string;
-  
-  @ApiProperty({ nullable: true, required: false })
   @IsOptional()
   @IsString()
-  time_type_id: string;
+  secondMobile: string;
+
+  @ApiProperty({ enum: PreferredTestingTime, isArray: true })
+  @IsArray()
+  @Type(() => String)
+  @IsEnumArray(Object.values(PreferredTestingTime), {
+    message: `preferred_testing_time must be an array of valid enum values ${Object.values(PreferredTestingTime)}`,
+  })
+  preferred_testing_time: PreferredTestingTime[];
+
 
   @ApiProperty({ type: [CreateRequestForProposalRequest] })
   @IsArray()

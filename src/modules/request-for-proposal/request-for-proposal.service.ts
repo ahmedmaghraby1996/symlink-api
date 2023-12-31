@@ -7,7 +7,6 @@ import { Request } from 'express';
 import { REQUEST } from '@nestjs/core';
 import { UserInfoResponse } from '../user/dto/response/profile.response';
 import { RequestForProposalResponse } from './dto/request-for-proposal.response';
-import { MetaData } from 'src/infrastructure/entities/meta-data/meta-data.entity';
 import { plainToClass, plainToInstance } from 'class-transformer';
 import { UpdateRequestForProposalRequest } from './dto/update-request-for-propsal.request';
 @Injectable()
@@ -16,8 +15,6 @@ export class RequestForProposalService {
     @InjectRepository(RequestForProposal)
     private requestForProposalRepository: Repository<RequestForProposal>,
     @Inject(REQUEST) private readonly request: Request,
-    @InjectRepository(MetaData)
-    private metaDataRepository: Repository<MetaData>,
   ) { }
 
   async createRequestForProposal(
@@ -34,11 +31,6 @@ export class RequestForProposalService {
       where: {},
       relations: {
         category: true,
-        assessments_type_meta_data: true,
-        apis_size_meta_data: true,
-        color_mobile_meta_data: true,
-        average_applications_meta_data: true,
-        evaluation_is_internal_or_external_meta_data: true,
       },
     });
 

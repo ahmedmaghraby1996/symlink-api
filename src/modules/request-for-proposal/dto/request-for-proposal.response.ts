@@ -2,58 +2,41 @@ import { th } from '@faker-js/faker';
 import { Exclude, Expose, Type } from 'class-transformer';
 import { RequestForProposalStatus } from 'src/infrastructure/data/enums/request-for-proposal.enum';
 import { Category } from 'src/infrastructure/entities/category/category.entity';
-import { MetaData } from 'src/infrastructure/entities/meta-data/meta-data.entity';
 import { User } from 'src/infrastructure/entities/user/user.entity';
+import { TicketAttachmentResponse } from 'src/modules/support-ticket/dto/response/ticket-attachment.response';
 import { UserInfoResponse } from 'src/modules/user/dto/response/profile.response';
 
 @Exclude()
 export class RequestForProposalResponse {
   @Expose() category: Category;
 
+  @Expose() multi_RFP_id: string;
 
+  @Expose() target_ip_address: string;
 
-  @Expose() assessments_type_meta_data: MetaData;
+  @Expose() approach_of_assessment: string | null;
 
-  @Expose() apis_size_meta_data: MetaData;
+  @Expose() notes: string | null;
 
-  @Expose() average_applications_meta_data: MetaData;
+  @Expose() is_active_directory: boolean | null;
 
-  @Expose() color_mobile_meta_data: MetaData;
+  @Expose() target_mobile_application_url: string | null;
 
-  @Expose() evaluation_is_internal_or_external_meta_data: MetaData;
+  @Expose() how_many_custom_lines_of_code: string | null;
 
-  @Expose() internal_applications_num: number;
+  @Expose() what_is_programming_language: string | null;
 
-  @Expose() external_applications_num: number;
+  @Expose() how_many_server_to_review: string | null;
 
-  @Expose() list_applications_with_scope: string;
+  @Expose() how_many_network_devices_to_review: string | null;
 
-  @Expose() Verify_that_vulnerabilities_are_fixed: boolean;
+  @Expose() how_many_workstation_to_review: string | null;
 
-  @Expose() necessary_resident_be_on_site: boolean;
+  @Expose() is_hld_lld_available: boolean | null;
 
-  @Expose() how_many_times_on_site: number;
+  @Expose() apk_attachment_id: string | null;
 
-  @Expose() How_many_user_roles: number;
-
-  @Expose() how_to_access_the_application: string;
-
-  @Expose() how_many_IPS_should_be_tested_in_servers: number;
-
-  @Expose() how_many_IPS_should_be_tested_in_workstations: number;
-
-  @Expose() how_many_IPS_should_be_tested_in_network_devices: number;
-
-  @Expose() vpn_access_to_the_resident: boolean;
-
-  @Expose() evaluation_approach: string;
-
-  @Expose() details_evaluation_approach: string;
-
-  @Expose() active_directory: boolean;
-
-  @Expose() details_ips_scoped: string;
-
+  @Expose() @Type(() => TicketAttachmentResponse) apk_attachment: TicketAttachmentResponse;
 
   @Expose() created_at: Date;
 
@@ -61,6 +44,6 @@ export class RequestForProposalResponse {
 
   constructor(data: Partial<RequestForProposalResponse>) {
     Object.assign(this, data);
-    
+
   }
 }

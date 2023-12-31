@@ -3,10 +3,10 @@ import { RequestForProposal } from '../request-for-proposal/request-for-proposal
 import { AuditableEntity } from 'src/infrastructure/base/auditable.entity';
 import { User } from '../user/user.entity';
 import { RequestForProposalStatus } from 'src/infrastructure/data/enums/request-for-proposal.enum';
-import { MetaData } from '../meta-data/meta-data.entity';
 import { AttachedFiles } from '../attached-files/attached-files.entity';
 import { Offer } from '../offer/offer.entity';
 import { Message } from '../discussions/message.entity';
+import { PreferredTestingTime } from 'src/infrastructure/data/enums/prefered-testing-times.types';
 
 @Entity()
 export class MultiRFP extends AuditableEntity {
@@ -51,35 +51,33 @@ export class MultiRFP extends AuditableEntity {
   @Column({ nullable: true })
   provider_id: string;
 
-  //Type of evaluation?
-  @ManyToOne(() => MetaData, (metaData) => metaData.time_type_request, {
-    onDelete: 'CASCADE',
+  // What is the preferred testing time
+  @Column({
+    type: 'simple-array',
+    enum: PreferredTestingTime,
+    array: true,
   })
-  @JoinColumn({ name: 'time_type_id' })
-  time_type_meta_data: MetaData;
-
-  @Column({ nullable: true })
-  time_type_id: string;
+  preferred_testing_time: PreferredTestingTime[];
 
   @Column()
   expiration_date: Date;
 
-  @Column()
+  @Column({ nullable: true})
   firstFullName: string;
 
-  @Column()
+  @Column({ nullable: true})
   firstEmail: string;
 
-  @Column()
+  @Column({ nullable: true})
   firstMobile: string;
 
-  @Column()
+  @Column({ nullable: true})
   secondFullName: string;
 
-  @Column()
+  @Column({ nullable: true})
   secondEmail: string;
 
-  @Column()
+  @Column({ nullable: true})
   secondMobile: string;
 
   @OneToMany(() => Message, (message) => message.multi_RFP, { cascade: true })

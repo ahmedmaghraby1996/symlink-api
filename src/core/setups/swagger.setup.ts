@@ -7,7 +7,6 @@ import { AuthenticationModule } from 'src/modules/authentication/authentication.
 import { CategoryModule } from 'src/modules/category/category.module';
 import { DiscussionModule } from 'src/modules/discussion/discussion.module';
 import { FileModule } from 'src/modules/file/file.module';
-import { MetaDataModule } from 'src/modules/meta-data/meta-data.module';
 import { MultiRfpModule } from 'src/modules/multi-rfp/multi-rfp.module';
 import { OffersModule } from 'src/modules/offers/offers.module';
 import { ProviderModule } from 'src/modules/provider/provider.module';
@@ -36,7 +35,6 @@ export default (app: INestApplication, config: ConfigService) => {
       AddressModule,
       FileModule,
       CategoryModule,
-      MetaDataModule,
       ProviderModule,
       MultiRfpModule,
       AttachedFilesModule,
