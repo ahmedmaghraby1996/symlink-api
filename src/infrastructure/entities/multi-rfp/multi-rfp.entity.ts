@@ -52,11 +52,7 @@ export class MultiRFP extends AuditableEntity {
   provider_id: string;
 
   // What is the preferred testing time
-  @Column({
-    type: 'simple-array',
-    enum: PreferredTestingTime,
-    array: true,
-  })
+  @Column({ type: 'set', enum: PreferredTestingTime, default: [PreferredTestingTime.NOT_PREFFERED] })
   preferred_testing_time: PreferredTestingTime[];
 
   @Column()

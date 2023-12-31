@@ -80,7 +80,7 @@ export class AuthenticationService {
     }
 
     const token = this.jwtService.sign({ username: user.username }, { secret: this._config.get<string>('app.key'), expiresIn: '1h' })
-    const resetPasswordUrl = readEnv('APP_HOST') + '/v1/auth/reset-password/' + token;
+    const resetPasswordUrl = 'https://symlink.live/auth/reset-password/' + token;
 
     await this.sendEmailService.sendResetPasswordEmail(user.email, resetPasswordUrl);
 
