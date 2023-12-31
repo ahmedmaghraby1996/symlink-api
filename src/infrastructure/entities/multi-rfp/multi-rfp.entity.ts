@@ -6,6 +6,7 @@ import { RequestForProposalStatus } from 'src/infrastructure/data/enums/request-
 import { AttachedFiles } from '../attached-files/attached-files.entity';
 import { Offer } from '../offer/offer.entity';
 import { Message } from '../discussions/message.entity';
+import { PreferredTestingTime } from 'src/infrastructure/data/enums/prefered-testing-times.types';
 
 @Entity()
 export class MultiRFP extends AuditableEntity {
@@ -51,8 +52,12 @@ export class MultiRFP extends AuditableEntity {
   provider_id: string;
 
   // What is the preferred testing time
-  @Column('simple-array')
-  preferred_testing_time: string[];
+  @Column({
+    type: 'simple-array',
+    enum: PreferredTestingTime,
+    array: true,
+  })
+  preferred_testing_time: PreferredTestingTime[];
 
   @Column()
   expiration_date: Date;
