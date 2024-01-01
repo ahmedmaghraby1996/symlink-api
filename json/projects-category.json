@@ -1,26 +1,22 @@
 [
     {
-        "name_ar": "الويب",
-        "name_en": "Web"
+        "name_ar": "اختبار اختراق تطبيقات الويب",
+        "name_en": "Web Application Penetration Testing"
     },
     {
-        "name_ar": "مراجعة تكوين الهندسة المعمارية",
-        "name_en": "Architecture composition review"
+        "name_ar": "اختبار اختراق الشبكة",
+        "name_en": "Network Penetration Testing"
     },
     {
-        "name_ar": "مصدر الرمز",
-        "name_en": "Code source"
+        "name_ar": "اختبار اختراق تطبيقات الهاتف المحمول",
+        "name_en": "Mobile Application Penetration Testing"
     },
     {
-        "name_ar": "الهاتف",
-        "name_en": "Mobile Application"
+        "name_ar": "مراجعة كود مصدر الأمان",
+        "name_en": "Security Source Code Review"
     },
     {
-        "name_ar": "الشبكة",
-        "name_en": "Network"
-    },
-    {
-        "name_ar": "صيد التهديد",
-        "name_en": "Threat hunting"
+        "name_ar": "مراجعة التكوين المعماري",
+        "name_en": "Architecture Configuration Review"
     }
 ]

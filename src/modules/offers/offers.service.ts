@@ -65,8 +65,22 @@ export class OffersService extends BaseService<Offer> {
       .skip(skip)
       .take(limit)
       .getManyAndCount();
+    if (offers[0].multi_RFP.user_id !== this.request.user.id) {
+      throw new NotFoundException('You are not allowed to see this bids');
+    }
+    
+    const filteredOffers = offers.map((offer) => {
+      if (offer.is_anonymous) {
+        return {
+          ...offer,
+          user: null,
+        };
+      } else {
+        return offer;
+      }
+    });
 
-    return { offers, count };
+    return { offers: filteredOffers, count };
   }
 
   async addOfferToProject(createOfferRequest: CreateOfferRequest) {

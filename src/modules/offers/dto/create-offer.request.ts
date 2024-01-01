@@ -20,7 +20,7 @@ export class CreateOfferRequest {
   
   @ApiProperty({ nullable: true, required: false, })
   @Transform(({ value }) => {
-    return value === 'true';
+    return value === true;
   })
   @IsOptional()
   @IsBoolean()
