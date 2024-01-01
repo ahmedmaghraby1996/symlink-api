@@ -9,9 +9,9 @@ export class CreateRequestForProposalRequest {
   @IsString()
   category_id: string;
 
-  @ApiProperty({ nullable: false, required: true, enum: [AssessmentCategory] })
+  @ApiProperty({ nullable: false, required: true, enum: AssessmentCategory })
   @IsNotEmpty()
-  @IsEnum([AssessmentCategory])
+  @IsEnum(AssessmentCategory)
   category_name: string;
 
   // Target URL/IP address
