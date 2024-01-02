@@ -1,7 +1,7 @@
 export enum AssessmentCategory {
-    WebApplicationPenetrationTesting = "Web Application Penetration Testing",
-    NetworkPenetrationTesting = "Network Penetration Testing",
-    SecuritySourceCodeReview = "Security Source Code Review",
-    MobileApplicationPenetrationTesting = "Mobile Application Penetration Testing",
-    ArchitectureConfigurationReview = "Architecture Configuration Review",
+    WebApplication= "Web Application",
+    Network= "Network",
+    SecuritySourceCode = "Security Source Code",
+    MobileApplication= "Mobile Application",
+    ArchitectureConfiguration = "Architecture Configuration",
 }
