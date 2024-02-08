@@ -30,7 +30,10 @@ export class DiscussionService {
         @Inject(FileService) private _fileService: FileService,
     ) { }
 
-    async createMessage(multi_rfp_id: string, { message_id }: OptionalMessageQueryDTO, { body_text, file }: CreateDiscussionObjectDTO) {
+    async createMessage(multi_rfp_id: string,
+        { message_id }: OptionalMessageQueryDTO,
+        { body_text, is_anynmous, file }: CreateDiscussionObjectDTO
+    ) {
         const user = this.getCurrentUser();
         const multiRFP = await this.findMultiRFPOrFail(multi_rfp_id);
         let attachedFile = null;
@@ -52,12 +55,16 @@ export class DiscussionService {
 
         if (message_id) {
             const existingEntity = await this.findEntityByIdOrFail(message_id);
-            const newReply = await this.createAndSaveReply({ body_text, attachment: attachedFile }, user, existingEntity);
+            const newReply = await this.createAndSaveReply(
+                { body_text, is_anynmous, attachment: attachedFile },
+                user,
+                existingEntity
+            );
             this.notifyAction(multiRFP, newReply);
             this.updateRepliesCount(existingEntity)
             return newReply;
         } else {
-            const newMessage = await this.createAndSaveNewMessage({ body_text, attachment: attachedFile }, user, multiRFP);
+            const newMessage = await this.createAndSaveNewMessage({ body_text, is_anynmous, attachment: attachedFile }, user, multiRFP);
             this.notifyAction(multiRFP, newMessage);
             return newMessage;
         }
@@ -75,12 +82,13 @@ export class DiscussionService {
         return this.request.user;
     }
 
-    private async createAndSaveNewMessage(message: { body_text: string, attachment: DiscussionAttachment }, user: any, multiRFP: any) {
+    private async createAndSaveNewMessage(message: { body_text: string, is_anynmous: boolean, attachment: DiscussionAttachment }, user: any, multiRFP: any) {
         const newMessage = this.messageRepository.create({
             body_text: message.body_text,
             attachment: message.attachment,
             user: user,
             multi_RFP: multiRFP,
+            is_anynmous: message.is_anynmous
         });
 
         const savedMessage = await this.messageRepository.save(newMessage);
@@ -92,10 +100,10 @@ export class DiscussionService {
         return responseMessage;
     }
 
-    private async createAndSaveReply(reply: { body_text: string, attachment: DiscussionAttachment }, user: User, parentEntity: Message | Reply): Promise<MessageResponse> {
+    private async createAndSaveReply(reply: { body_text: string, is_anynmous: boolean, attachment: DiscussionAttachment }, user: User, parentEntity: Message | Reply): Promise<MessageResponse> {
         const newReply = parentEntity instanceof Message
-            ? this.replyRepository.create({ body_text: reply.body_text, user, message: parentEntity, attachment: reply.attachment })
-            : this.replyRepository.create({ body_text: reply.body_text, user, parent_reply: parentEntity, attachment: reply.attachment });
+            ? this.replyRepository.create({ body_text: reply.body_text, is_anynmous: reply.is_anynmous, user, message: parentEntity, attachment: reply.attachment })
+            : this.replyRepository.create({ body_text: reply.body_text, is_anynmous: reply.is_anynmous, user, parent_reply: parentEntity, attachment: reply.attachment });
 
         const savedReply = await this.replyRepository.save(newReply);
 
@@ -118,6 +126,13 @@ export class DiscussionService {
         const totalPages = Math.ceil(total / limit);
         const currentPage = offset;
 
+        for (let message of messages) {
+            if (message.is_anynmous && message.user_id !== this.getCurrentUser().id) {
+                delete message.user;
+                delete message.user_id;
+            }
+        }
+
         return {
             messages,
             totalPages,
@@ -134,6 +149,13 @@ export class DiscussionService {
             .skip(offset * limit)
             .take(limit)
             .getManyAndCount();
+
+        for (let reply of replies) {
+            if (reply.is_anynmous && reply.user_id !== this.getCurrentUser().id) {
+                delete reply.user;
+                delete reply.user_id;
+            }
+        }
 
         const totalPages = Math.ceil(total / limit);
         const currentPage = offset;

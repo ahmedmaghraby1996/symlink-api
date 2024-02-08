@@ -17,4 +17,5 @@ export class MessageResponse {
     @Expose() updated_at: Date;
     @Expose() user_id: string;
     @Expose() message_id: string;
+    @Expose() is_anynmous: boolean;
 }

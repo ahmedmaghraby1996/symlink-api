@@ -43,4 +43,6 @@ export class Reply extends AuditableEntity {
     @Column({ default: 0 })
     replies_count: number;
 
+    @Column({ default: true })
+    is_anynmous: boolean;
 }
