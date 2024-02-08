@@ -15,7 +15,7 @@ import { MultiRFP } from 'src/infrastructure/entities/multi-rfp/multi-rfp.entity
 import { FileService } from '../file/file.service';
 import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
 import { DiscussionAttachment } from 'src/infrastructure/entities/discussions/discussion-attachment.entity';
-import { plainToInstance } from 'class-transformer';
+import { plainToClass, plainToInstance } from 'class-transformer';
 import { MessageResponse } from './dto/response/message.response';
 
 @Injectable()
@@ -82,15 +82,28 @@ export class DiscussionService {
             user: user,
             multi_RFP: multiRFP,
         });
-        return await this.messageRepository.save(newMessage);
+
+        const savedMessage = await this.messageRepository.save(newMessage);
+
+        const responseMessage = plainToInstance(MessageResponse, savedMessage, {
+            excludeExtraneousValues: true,
+        });
+
+        return responseMessage;
     }
 
-    private async createAndSaveReply(reply: { body_text: string, attachment: DiscussionAttachment }, user: User, parentEntity: Message | Reply): Promise<Reply> {
+    private async createAndSaveReply(reply: { body_text: string, attachment: DiscussionAttachment }, user: User, parentEntity: Message | Reply): Promise<MessageResponse> {
         const newReply = parentEntity instanceof Message
             ? this.replyRepository.create({ body_text: reply.body_text, user, message: parentEntity, attachment: reply.attachment })
             : this.replyRepository.create({ body_text: reply.body_text, user, parent_reply: parentEntity, attachment: reply.attachment });
 
-        return await this.replyRepository.save(newReply);
+        const savedReply = await this.replyRepository.save(newReply);
+
+        const responseReply = plainToInstance(MessageResponse, savedReply, {
+            excludeExtraneousValues: true,
+        });
+
+        return responseReply;
     }
 
     private async fetchMessagesByChunk(multi_rfp_id: string, offset: number, limit: number) {
@@ -159,23 +172,20 @@ export class DiscussionService {
         await entity.save();
     }
 
-    private notifyAction(multi_RFP: MultiRFP, entity: Message | Reply) {
-        const responseMessage = plainToInstance(MessageResponse, entity, {
-            excludeExtraneousValues: true,
-        });
-        if (entity instanceof Message) {
+    private notifyAction(multi_RFP: MultiRFP, entity: MessageResponse) {
+        if (!entity.message_id) {
             this.discussionGateway.handleSendMessage({
                 multi_RFP,
                 action: 'CREATED',
-                entity_type: entity instanceof Message ? 'Message' : 'Reply',
-                entity: responseMessage
+                entity_type: 'Message',
+                entity
             });
-        } else if (entity instanceof Reply) {
+        } else if (entity.message_id) {
             this.discussionGateway.handleSendReply({
                 multi_RFP,
                 action: 'CREATED',
-                entity_type: entity instanceof Message ? 'Message' : 'Reply',
-                entity: responseMessage
+                entity_type: 'Reply',
+                entity
             });
         }
     }
