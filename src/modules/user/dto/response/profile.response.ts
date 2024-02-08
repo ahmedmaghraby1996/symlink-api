@@ -3,6 +3,7 @@ import { toUrl } from 'src/core/helpers/file.helper';
 
 import { User } from 'src/infrastructure/entities/user/user.entity';
 import { Double } from 'typeorm';
+import { City } from 'src/infrastructure/entities/country/city.entity';
 
 export class UserInfoResponse {
   id: string;
@@ -25,5 +26,16 @@ export class UserInfoResponse {
         this.avatar = toUrl(this.avatar);
       }
     }
+  }
+}
+
+export class ProfileResponse extends UserInfoResponse {
+  city: City;
+  linkedin: string;
+
+  constructor(partial: Partial<ProfileResponse>) {
+    super(partial);
+    this.city = plainToInstance(City, partial.city);
+    this.linkedin = partial.linkedin;
   }
 }
