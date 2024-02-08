@@ -55,19 +55,23 @@ export class DiscussionGateway {
     }
 
     async handleSendMessage(payload: { multi_RFP: MultiRFP, action: string, entity_type: string, entity: MessageResponse }) {
+        const { multi_RFP, ...payloadWithoutMultiRFP } = payload;
+
         if (payload.multi_RFP.request_for_proposal_status === RequestForProposalStatus.APPROVED) {
-            await this.emitToAuthorizedSockets(`discussion_${payload.multi_RFP.id}`, payload);
+            await this.emitToAuthorizedSockets(`discussion_${payload.multi_RFP.id}`, payloadWithoutMultiRFP);
         } else {
-            await this.sendEventToRoom(`discussion_${payload.multi_RFP.id}`, payload);
+            await this.sendEventToRoom(`discussion_${payload.multi_RFP.id}`, payloadWithoutMultiRFP);
         }
     }
 
     async handleSendReply(payload: { multi_RFP: MultiRFP, action: string, entity_type: string, entity: MessageResponse }) {
         const message_id = payload.entity.message_id || payload.entity.parent_reply_id;
+        const { multi_RFP, ...payloadWithoutMultiRFP } = payload;
+        
         if (payload.multi_RFP.request_for_proposal_status === RequestForProposalStatus.APPROVED) {
-            await this.emitToAuthorizedSockets(`message_${message_id}`, payload);
+            await this.emitToAuthorizedSockets(`message_${message_id}`, payloadWithoutMultiRFP);
         } else {
-            await this.sendEventToRoom(`message_${message_id}`, payload);
+            await this.sendEventToRoom(`message_${message_id}`, payloadWithoutMultiRFP);
         }
     }
 }
