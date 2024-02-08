@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { BadGatewayException, BadRequestException, UseGuards } from '@nestjs/common';
 import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { Gateways } from 'src/core/base/gateways';
@@ -15,6 +15,7 @@ import { Repository } from 'typeorm';
 import { Offer } from 'src/infrastructure/entities/offer/offer.entity';
 import { MessageResponse } from 'src/modules/discussion/dto/response/message.response';
 import { RequestForProposalStatus } from 'src/infrastructure/data/enums/request-for-proposal.enum';
+import { DiscussionPayload } from './interface/discussion-payload.interface';
 
 @WebSocketGateway({ namespace: Gateways.Discussion.Namespace, cors: { origin: '*' } })
 @UseGuards(WsJwtAuthGuard)
@@ -34,10 +35,19 @@ export class DiscussionGateway {
         client.use(RfpDiscussionPrivacyMiddleware(this.multiRFPRepository, this.offersRepository) as any);
     }
 
-    private async emitToAuthorizedSockets(room: string, payload: any) {
+    private async emitToAuthorizedSockets(room: string, payload: DiscussionPayload) {
         const connectedSockets: any = this.server.sockets;
+
         connectedSockets.forEach(socket => {
+            if (payload.entity.is_anynmous === true && socket.user.id !== payload.entity.user_id) {
+                if (socket.user.id !== payload.entity.user_id) {
+                    delete payload.entity.user_id;
+                    delete payload.entity.user;
+                }
+            }
+
             if (
+                payload.multi_RFP.request_for_proposal_status === RequestForProposalStatus.APPROVED &&
                 socket.user &&
                 (
                     socket.user.id === payload.multi_RFP.user_id ||
@@ -46,32 +56,25 @@ export class DiscussionGateway {
                 )
             ) {
                 socket.emit(room, payload);
-            }
+            } else if (
+                payload.multi_RFP.request_for_proposal_status !== RequestForProposalStatus.APPROVED
+            ) {
+                socket.emit(room, payload);
+            } 
         });
     }
 
-    private async sendEventToRoom(room: string, payload: any) {
-        this.server.emit(room, payload);
-    }
+    async handleSendMessage(payload: DiscussionPayload) {
+        const { entity, multi_RFP, entity_type } = payload;
+        let room: string;
 
-    async handleSendMessage(payload: { multi_RFP: MultiRFP, action: string, entity_type: string, entity: MessageResponse }) {
-        const { multi_RFP, ...payloadWithoutMultiRFP } = payload;
-
-        if (payload.multi_RFP.request_for_proposal_status === RequestForProposalStatus.APPROVED) {
-            await this.emitToAuthorizedSockets(`discussion_${payload.multi_RFP.id}`, payloadWithoutMultiRFP);
-        } else {
-            await this.sendEventToRoom(`discussion_${payload.multi_RFP.id}`, payloadWithoutMultiRFP);
+        if (entity_type === 'Reply') {
+            const message_id = entity.message_id || entity.parent_reply_id;
+            room = `message_${message_id}`;
+        } else if (entity_type === 'Message') {
+            room = `discussion_${multi_RFP.id}`;
         }
-    }
 
-    async handleSendReply(payload: { multi_RFP: MultiRFP, action: string, entity_type: string, entity: MessageResponse }) {
-        const message_id = payload.entity.message_id || payload.entity.parent_reply_id;
-        const { multi_RFP, ...payloadWithoutMultiRFP } = payload;
-        
-        if (payload.multi_RFP.request_for_proposal_status === RequestForProposalStatus.APPROVED) {
-            await this.emitToAuthorizedSockets(`message_${message_id}`, payloadWithoutMultiRFP);
-        } else {
-            await this.sendEventToRoom(`message_${message_id}`, payloadWithoutMultiRFP);
-        }
+        await this.emitToAuthorizedSockets(room, payload);
     }
 }

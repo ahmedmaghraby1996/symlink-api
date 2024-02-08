@@ -60,12 +60,12 @@ export class DiscussionService {
                 user,
                 existingEntity
             );
-            this.notifyAction(multiRFP, newReply);
-            this.updateRepliesCount(existingEntity)
+            await this.notifyAction(multiRFP, newReply);
+            await this.updateRepliesCount(existingEntity)
             return newReply;
         } else {
             const newMessage = await this.createAndSaveNewMessage({ body_text, is_anynmous, attachment: attachedFile }, user, multiRFP);
-            this.notifyAction(multiRFP, newMessage);
+            await this.notifyAction(multiRFP, newMessage);
             return newMessage;
         }
     }
@@ -194,21 +194,13 @@ export class DiscussionService {
         await entity.save();
     }
 
-    private notifyAction(multi_RFP: MultiRFP, entity: MessageResponse) {
-        if (!entity.message_id) {
-            this.discussionGateway.handleSendMessage({
-                multi_RFP,
-                action: 'CREATED',
-                entity_type: 'Message',
-                entity
-            });
-        } else if (entity.message_id) {
-            this.discussionGateway.handleSendReply({
-                multi_RFP,
-                action: 'CREATED',
-                entity_type: 'Reply',
-                entity
-            });
-        }
+    private async notifyAction(multi_RFP: MultiRFP, entity: MessageResponse) {
+        const entity_type = entity.message_id || entity.parent_reply_id ? 'Reply' : 'Message';
+        await this.discussionGateway.handleSendMessage({
+            multi_RFP,
+            action: 'CREATED',
+            entity_type,
+            entity
+        });
     }
 }
