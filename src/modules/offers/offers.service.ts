@@ -118,9 +118,11 @@ export class OffersService extends BaseService<Offer> {
         is_accepted: true
       },
     });
+
     if (!offer) {
       throw new NotFoundException('No offer founds or not accepted yet');
     }
+    
     return offer;
   }
 }
