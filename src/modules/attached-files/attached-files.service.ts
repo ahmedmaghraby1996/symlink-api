@@ -63,6 +63,10 @@ export class AttachedFilesService {
       throw new NotFoundException('This Project not found');
     }
 
+    if(multiRFP.user_id != this.request.user.id) {
+      throw new UnauthorizedException('You are not allowed to add attached file to this project');
+    }
+
     const uploadFileRequest = new UploadFileRequest();
     uploadFileRequest.file = file;
     const tempImage = await this._fileService.upload(
@@ -90,6 +94,7 @@ export class AttachedFilesService {
     if (!attachedFile) {
       throw new NotFoundException('This AttachedFile not found');
     }
+
     
     const multiRFP = await this.multiRFPRepository.findOne({ where: { id: attachedFile.multi_RFP_id } })
     if (multiRFP.user_id != this.request.user.id) {
