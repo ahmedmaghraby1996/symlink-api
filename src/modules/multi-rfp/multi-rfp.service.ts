@@ -29,7 +29,7 @@ export class MultiRfpService extends BaseService<MultiRFP> {
     @Inject(REQUEST) private readonly request: Request,
     @Inject(RequestForProposalService) private readonly requestforPrposalService: RequestForProposalService,
     @Inject(FileService) private _fileService: FileService
-  ) { 
+  ) {
     super(multiRFPRepository);
   }
   async createMultiRFP(createMultiRFPRequest: CreateMultiRFPRequest) {
@@ -208,6 +208,7 @@ export class MultiRfpService extends BaseService<MultiRFP> {
 
     return { projects, count };
   }
+  
   async getSingleMultiRFP(id: string) {
     const multiRFP = await this.multiRFPRepository.findOne({
       where: { id },
@@ -215,14 +216,22 @@ export class MultiRfpService extends BaseService<MultiRFP> {
         user: true,
         request_for_proposal: {
           category: true,
-          apk_attachment:true
+          apk_attachment: true
         },
       },
     });
+
     if (!multiRFP) {
       throw new NotFoundException('This Project not found');
     }
-    console.log(multiRFP);
+
+    if (multiRFP.request_for_proposal_status === RequestForProposalStatus.APPROVED &&
+      multiRFP.provider_id != this.request.user.id &&
+      multiRFP.user_id != this.request.user.id
+    ) {
+      throw new UnauthorizedException('You are not allowed to see this project');
+    }
+
     return new MultiRFPResponse(multiRFP);
   }
 

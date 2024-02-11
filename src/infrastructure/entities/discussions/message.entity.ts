@@ -36,4 +36,7 @@ export class Message extends AuditableEntity {
 
   @Column({ default: 0 })
   replies_count: number;
+
+  @Column({ default: false })
+  is_anynmous: boolean;
 }

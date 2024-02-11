@@ -13,6 +13,7 @@ import { MultiRFP } from 'src/infrastructure/entities/multi-rfp/multi-rfp.entity
 import { AttachedFilesFilterRequest } from './dto/attached-files-filter.request';
 import { FileService } from '../file/file.service';
 import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
+import { RequestForProposalStatus } from 'src/infrastructure/data/enums/request-for-proposal.enum';
 
 @Injectable()
 export class AttachedFilesService {
@@ -40,6 +41,14 @@ export class AttachedFilesService {
     if (!multiRFP) {
       throw new NotFoundException('This Project not found');
     }
+
+    if (multiRFP.request_for_proposal_status === RequestForProposalStatus.APPROVED &&
+      multiRFP.provider_id != this.request.user.id &&
+      multiRFP.user_id != this.request.user.id
+    ) {
+      throw new UnauthorizedException('You are not allowed to see this project');
+    }
+
     const [attachedFiles, count] =
       await this.attachedFilesRepository.findAndCount({
         skip,
@@ -51,6 +60,7 @@ export class AttachedFilesService {
     );
     return { attachedFilesDto, count };
   }
+
   async addAttachedFileToProject(
     createAttachedFilesRequest: CreateAttachedFilesRequest,
   ) {
@@ -61,6 +71,10 @@ export class AttachedFilesService {
     });
     if (!multiRFP) {
       throw new NotFoundException('This Project not found');
+    }
+
+    if (multiRFP.user_id != this.request.user.id) {
+      throw new UnauthorizedException('You are not allowed to add attached file to this project');
     }
 
     const uploadFileRequest = new UploadFileRequest();
@@ -86,16 +100,21 @@ export class AttachedFilesService {
     const attachedFile = await this.attachedFilesRepository.findOne({
       where: { id },
     });
-    
+
     if (!attachedFile) {
       throw new NotFoundException('This AttachedFile not found');
     }
-    
+
+
     const multiRFP = await this.multiRFPRepository.findOne({ where: { id: attachedFile.multi_RFP_id } })
     if (multiRFP.user_id != this.request.user.id) {
       throw new UnauthorizedException('You are not allowed to delete this AttachedFile');
     }
-    
+
+    if (multiRFP.request_for_proposal_status === RequestForProposalStatus.APPROVED) {
+      throw new UnauthorizedException('You are not allowed to delete this AttachedFile because the project is approved');
+    }
+
     await this.attachedFilesRepository.delete({ id });
     await this.storageManager.delete(attachedFile.url);
     return true;

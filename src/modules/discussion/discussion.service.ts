@@ -15,7 +15,7 @@ import { MultiRFP } from 'src/infrastructure/entities/multi-rfp/multi-rfp.entity
 import { FileService } from '../file/file.service';
 import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
 import { DiscussionAttachment } from 'src/infrastructure/entities/discussions/discussion-attachment.entity';
-import { plainToInstance } from 'class-transformer';
+import { plainToClass, plainToInstance } from 'class-transformer';
 import { MessageResponse } from './dto/response/message.response';
 
 @Injectable()
@@ -30,7 +30,10 @@ export class DiscussionService {
         @Inject(FileService) private _fileService: FileService,
     ) { }
 
-    async createMessage(multi_rfp_id: string, { message_id }: OptionalMessageQueryDTO, { body_text, file }: CreateDiscussionObjectDTO) {
+    async createMessage(multi_rfp_id: string,
+        { message_id }: OptionalMessageQueryDTO,
+        { body_text, is_anynmous, file }: CreateDiscussionObjectDTO
+    ) {
         const user = this.getCurrentUser();
         const multiRFP = await this.findMultiRFPOrFail(multi_rfp_id);
         let attachedFile = null;
@@ -52,13 +55,17 @@ export class DiscussionService {
 
         if (message_id) {
             const existingEntity = await this.findEntityByIdOrFail(message_id);
-            const newReply = await this.createAndSaveReply({ body_text, attachment: attachedFile }, user, existingEntity);
-            this.notifyAction(multiRFP, newReply);
-            this.updateRepliesCount(existingEntity)
+            const newReply = await this.createAndSaveReply(
+                { body_text, is_anynmous, attachment: attachedFile },
+                user,
+                existingEntity
+            );
+            await this.notifyAction(multiRFP, newReply);
+            await this.updateRepliesCount(existingEntity)
             return newReply;
         } else {
-            const newMessage = await this.createAndSaveNewMessage({ body_text, attachment: attachedFile }, user, multiRFP);
-            this.notifyAction(multiRFP, newMessage);
+            const newMessage = await this.createAndSaveNewMessage({ body_text, is_anynmous, attachment: attachedFile }, user, multiRFP);
+            await this.notifyAction(multiRFP, newMessage);
             return newMessage;
         }
     }
@@ -75,22 +82,36 @@ export class DiscussionService {
         return this.request.user;
     }
 
-    private async createAndSaveNewMessage(message: { body_text: string, attachment: DiscussionAttachment }, user: any, multiRFP: any) {
+    private async createAndSaveNewMessage(message: { body_text: string, is_anynmous: boolean, attachment: DiscussionAttachment }, user: any, multiRFP: any) {
         const newMessage = this.messageRepository.create({
             body_text: message.body_text,
             attachment: message.attachment,
             user: user,
             multi_RFP: multiRFP,
+            is_anynmous: message.is_anynmous
         });
-        return await this.messageRepository.save(newMessage);
+
+        const savedMessage = await this.messageRepository.save(newMessage);
+
+        const responseMessage = plainToInstance(MessageResponse, savedMessage, {
+            excludeExtraneousValues: true,
+        });
+
+        return responseMessage;
     }
 
-    private async createAndSaveReply(reply: { body_text: string, attachment: DiscussionAttachment }, user: User, parentEntity: Message | Reply): Promise<Reply> {
+    private async createAndSaveReply(reply: { body_text: string, is_anynmous: boolean, attachment: DiscussionAttachment }, user: User, parentEntity: Message | Reply): Promise<MessageResponse> {
         const newReply = parentEntity instanceof Message
-            ? this.replyRepository.create({ body_text: reply.body_text, user, message: parentEntity, attachment: reply.attachment })
-            : this.replyRepository.create({ body_text: reply.body_text, user, parent_reply: parentEntity, attachment: reply.attachment });
+            ? this.replyRepository.create({ body_text: reply.body_text, is_anynmous: reply.is_anynmous, user, message: parentEntity, attachment: reply.attachment })
+            : this.replyRepository.create({ body_text: reply.body_text, is_anynmous: reply.is_anynmous, user, parent_reply: parentEntity, attachment: reply.attachment });
 
-        return await this.replyRepository.save(newReply);
+        const savedReply = await this.replyRepository.save(newReply);
+
+        const responseReply = plainToInstance(MessageResponse, savedReply, {
+            excludeExtraneousValues: true,
+        });
+
+        return responseReply;
     }
 
     private async fetchMessagesByChunk(multi_rfp_id: string, offset: number, limit: number) {
@@ -104,6 +125,13 @@ export class DiscussionService {
 
         const totalPages = Math.ceil(total / limit);
         const currentPage = offset;
+
+        for (let message of messages) {
+            if (message.is_anynmous && message.user_id !== this.getCurrentUser().id) {
+                delete message.user;
+                delete message.user_id;
+            }
+        }
 
         return {
             messages,
@@ -121,6 +149,13 @@ export class DiscussionService {
             .skip(offset * limit)
             .take(limit)
             .getManyAndCount();
+
+        for (let reply of replies) {
+            if (reply.is_anynmous && reply.user_id !== this.getCurrentUser().id) {
+                delete reply.user;
+                delete reply.user_id;
+            }
+        }
 
         const totalPages = Math.ceil(total / limit);
         const currentPage = offset;
@@ -159,24 +194,13 @@ export class DiscussionService {
         await entity.save();
     }
 
-    private notifyAction(multi_RFP: MultiRFP, entity: Message | Reply) {
-        const responseMessage = plainToInstance(MessageResponse, entity, {
-            excludeExtraneousValues: true,
+    private async notifyAction(multi_RFP: MultiRFP, entity: MessageResponse) {
+        const entity_type = entity.message_id || entity.parent_reply_id ? 'Reply' : 'Message';
+        await this.discussionGateway.handleSendMessage({
+            multi_RFP,
+            action: 'CREATED',
+            entity_type,
+            entity
         });
-        if (entity instanceof Message) {
-            this.discussionGateway.handleSendMessage({
-                multi_RFP,
-                action: 'CREATED',
-                entity_type: entity instanceof Message ? 'Message' : 'Reply',
-                entity: responseMessage
-            });
-        } else if (entity instanceof Reply) {
-            this.discussionGateway.handleSendReply({
-                multi_RFP,
-                action: 'CREATED',
-                entity_type: entity instanceof Message ? 'Message' : 'Reply',
-                entity: responseMessage
-            });
-        }
     }
 }

@@ -65,22 +65,12 @@ export class OffersService extends BaseService<Offer> {
       .skip(skip)
       .take(limit)
       .getManyAndCount();
+
     if (offers[0].multi_RFP.user_id !== this.request.user.id) {
       throw new NotFoundException('You are not allowed to see this bids');
     }
-    
-    const filteredOffers = offers.map((offer) => {
-      if (offer.is_anonymous) {
-        return {
-          ...offer,
-          user: null,
-        };
-      } else {
-        return offer;
-      }
-    });
 
-    return { offers: filteredOffers, count };
+    return { offers, count };
   }
 
   async addOfferToProject(createOfferRequest: CreateOfferRequest) {
@@ -128,9 +118,11 @@ export class OffersService extends BaseService<Offer> {
         is_accepted: true
       },
     });
+
     if (!offer) {
       throw new NotFoundException('No offer founds or not accepted yet');
     }
+    
     return offer;
   }
 }

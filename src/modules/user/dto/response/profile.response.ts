@@ -1,8 +1,9 @@
-import { plainToInstance } from 'class-transformer';
+import { Expose, plainToInstance } from 'class-transformer';
 import { toUrl } from 'src/core/helpers/file.helper';
 
 import { User } from 'src/infrastructure/entities/user/user.entity';
 import { Double } from 'typeorm';
+import { City } from 'src/infrastructure/entities/country/city.entity';
 
 export class UserInfoResponse {
   id: string;
@@ -25,5 +26,24 @@ export class UserInfoResponse {
         this.avatar = toUrl(this.avatar);
       }
     }
+  }
+}
+
+export class UserInfoExpose {
+  @Expose() id: string;
+  @Expose() name: string;
+  @Expose() avatar: string;
+  @Expose() phone: string;
+  @Expose() email: string;
+}
+
+export class ProfileResponse extends UserInfoResponse {
+  city: City;
+  linkedin: string;
+
+  constructor(partial: Partial<ProfileResponse>) {
+    super(partial);
+    this.city = plainToInstance(City, partial.city);
+    this.linkedin = partial.linkedin;
   }
 }

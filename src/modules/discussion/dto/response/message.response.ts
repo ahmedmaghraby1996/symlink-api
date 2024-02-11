@@ -1,7 +1,6 @@
 import { Expose, Type } from "class-transformer";
-import { SupportTicketStatus } from "src/infrastructure/data/enums/support-ticket-status.enum";
-import { RegisterResponse } from "src/modules/authentication/dto/responses/register.response";
 import { TicketAttachmentResponse } from "src/modules/support-ticket/dto/response/ticket-attachment.response";
+import { UserInfoExpose } from "src/modules/user/dto/response/profile.response";
 
 export class MessageResponse {
     @Expose() id: string;
@@ -10,7 +9,7 @@ export class MessageResponse {
     @Expose() attachment_id: string;
     @Expose() parent_reply_id: string;
     @Expose() @Type(() => TicketAttachmentResponse) attachment: TicketAttachmentResponse;
-    @Expose() @Type(() => RegisterResponse) user: RegisterResponse;
+    @Expose() @Type(() => UserInfoExpose) user: UserInfoExpose;
     @Expose() @Type(() => MessageResponse) message: MessageResponse;
     @Expose() multi_rfp_id: string;
     @Expose() deleted_at: string;
@@ -18,4 +17,5 @@ export class MessageResponse {
     @Expose() updated_at: Date;
     @Expose() user_id: string;
     @Expose() message_id: string;
+    @Expose() is_anynmous: boolean;
 }
