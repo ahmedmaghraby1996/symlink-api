@@ -55,10 +55,12 @@ export class DiscussionGateway {
                     socket.user.roles.includes('ADMIN')
                 )
             ) {
+                delete payload.multi_RFP;
                 socket.emit(room, payload);
             } else if (
                 payload.multi_RFP.request_for_proposal_status !== RequestForProposalStatus.APPROVED
             ) {
+                delete payload.multi_RFP;
                 socket.emit(room, payload);
             } 
         });

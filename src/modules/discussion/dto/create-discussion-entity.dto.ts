@@ -10,7 +10,7 @@ export class CreateDiscussionObjectDTO {
 
     @ApiProperty({ nullable: true, required: false, })
     @Transform(({ value }) => {
-        return value === true;
+        return value === true || value === 'true';
     })
     @IsOptional()
     @IsBoolean()
