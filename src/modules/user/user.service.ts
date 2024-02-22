@@ -18,32 +18,32 @@ export class UserService extends BaseService<User> {
 
 
   }
-  async getProfile() {
+  async getProfile(user_id?: string) {
     //retrieve user by find with reviews as relation
     const user = await this._repo.findOne({
-        where: { id: this.request.user.id },relations:{city:{country:true}}
-       
+      where: { id: user_id ?? this.request.user.id }, relations: { city: { country: true } }
+
     })
     return user;
-}
-async updateImage(req: UploadFileRequest) {
-  const user = this.request.user;
+  }
+  async updateImage(req: UploadFileRequest) {
+    const user = this.request.user;
 
-  if (req.file) {
-    const tempImage = await this._fileService.upload(req, 'avatars');
-    if (tempImage) {
-      if (user.avatar) await this._fileService.delete(user.avatar);
-      user.avatar = tempImage;
-      await super.update(user);
-    }
-  } else
-    try {
-      await this._fileService.delete(user.avatar);
-      user.avatar = null;
-      await super.update(user);
-    } catch (e) {}
-  return user;
-}
+    if (req.file) {
+      const tempImage = await this._fileService.upload(req, 'avatars');
+      if (tempImage) {
+        if (user.avatar) await this._fileService.delete(user.avatar);
+        user.avatar = tempImage;
+        await super.update(user);
+      }
+    } else
+      try {
+        await this._fileService.delete(user.avatar);
+        user.avatar = null;
+        await super.update(user);
+      } catch (e) { }
+    return user;
+  }
 
 
 

@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Inject, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ProviderService } from './provider.service';
 import { ProviderProjectRequest } from './dto/requests/provider-project-request';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiHeader, ApiProperty, ApiTags } from '@nestjs/swagger';
@@ -14,6 +14,10 @@ import { ProviderInfoRequest } from './dto/requests/provider-info-reqest';
 import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
 import { UpdateProvProjectRequest } from './dto/requests/update-provier-project-request';
 import { ExpertDetailsQueryRequest } from './dto/requests/expert-details-query-request';
+import { UserService } from '../user/user.service';
+import { plainToInstance } from 'class-transformer';
+import { ProfileResponse } from '../user/dto/response/profile.response';
+import { I18nResponse } from 'src/core/helpers/i18n.helper';
 
 @ApiBearerAuth()
 @ApiHeader({
@@ -27,7 +31,9 @@ import { ExpertDetailsQueryRequest } from './dto/requests/expert-details-query-r
 @Controller('provider')
 export class ProviderController {
   constructor(
-    private readonly providerService: ProviderService
+    private readonly providerService: ProviderService,
+    private readonly userService: UserService,
+    @Inject(I18nResponse) private readonly _i18nResponse: I18nResponse,
   ) { }
 
 
@@ -36,9 +42,10 @@ export class ProviderController {
     const info = await this.providerService.getEductional(user_id);
     const certifcate = await this.providerService.getCertificates(user_id);
     const projects = await this.providerService.getProjects(user_id);
-    const user = await this.providerService.getUserInfo(user_id);
+    const user = await this.userService.getProfile(user_id);
+    const userResponse = plainToInstance
     return new ActionResponse({
-      info, certifcate, projects, user
+      info, certifcate, projects, user: this._i18nResponse.entity(new ProfileResponse(user))
     })
   }
 
@@ -60,7 +67,6 @@ export class ProviderController {
     return new ActionResponse(await this.providerService.addProivderProject(req));
 
   }
-
 
   @Post("/add-certificate")
   @UseInterceptors(ClassSerializerInterceptor, FileInterceptor('file'))
@@ -86,6 +92,5 @@ export class ProviderController {
   @Delete("certificate/:id")
   async deleteCertificateProject(@Param("id") id: string) {
     return new ActionResponse(await this.providerService.deleteCertifcate(id));
-
   }
 }

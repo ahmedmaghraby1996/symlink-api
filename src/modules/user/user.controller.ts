@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Get, Inject, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Get, Inject, Put, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 
 
 import { UserService } from './user.service';
@@ -16,6 +16,7 @@ import { ActionResponse } from 'src/core/base/responses/action.response';
 import { plainToInstance } from 'class-transformer';
 import { toUrl } from 'src/core/helpers/file.helper';
 import { I18nResponse } from 'src/core/helpers/i18n.helper';
+import { OptionalUseridRequest } from './dto/requests/optional-userid-request';
 
 
 
@@ -59,8 +60,10 @@ export class UserController {
   }
 
   @Get('/profile')
-  async getProfile() {
-    const profile = await this.userService.getProfile();
+  async getProfile(
+    @Query() query: OptionalUseridRequest,
+  ) {
+    const profile = await this.userService.getProfile(query.user_id);
     profile.avatar = toUrl(profile.avatar)
     return new ActionResponse(this._i18nResponse.entity(new ProfileResponse(profile)))
   }
