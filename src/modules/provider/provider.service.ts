@@ -98,9 +98,14 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
 
   async getProvider(user_id?: string) {
     user_id = user_id || super.currentUser.id;
-    return await this.providerInfoRepository.findOne({
+    const provier = await this.providerInfoRepository.findOne({
       where: { user_id },
     });
+
+    if (provier == null) {
+      throw new NotFoundException('provider not found');
+    }
+    return provier;
   }
 
   async updateProject(project_id: string, req: UpdateProvProjectRequest) {
@@ -138,18 +143,5 @@ export class ProviderService extends BaseUserService<ProviderInfo> {
     }
 
     return await this.providerProjectRepository.delete({ id });
-  }
-
-  async getUserInfo(user_id?: string) {
-    const user = await this.userRepository.findOne({
-      where: { id: user_id },
-      relations: ['city', 'city.country'],
-      select: ['id', 'name', 'phone', 'avatar', 'city', 'linkedin', 'email']
-    });
-    if (user == null) {
-      throw new NotFoundException('user not found');
-    }
-    user.avatar = toUrl(user.avatar);
-    return user;
   }
 }
