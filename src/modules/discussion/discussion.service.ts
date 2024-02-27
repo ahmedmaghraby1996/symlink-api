@@ -45,7 +45,7 @@ export class DiscussionService {
                 `discussion`,
             );
 
-            const createAttachedFile = this.discussionAttachmentRepository.create({
+            const createAttachedFile = await this.discussionAttachmentRepository.create({
                 file_url: tempImage,
                 file_name: file.originalname,
                 file_type: file.mimetype,
@@ -83,7 +83,7 @@ export class DiscussionService {
     }
 
     private async createAndSaveNewMessage(message: { body_text: string, is_anynmous: boolean, attachment: DiscussionAttachment }, user: any, multiRFP: any) {
-        const newMessage = this.messageRepository.create({
+        const newMessage = await this.messageRepository.create({
             body_text: message.body_text,
             attachment: message.attachment,
             user: user,
@@ -102,8 +102,8 @@ export class DiscussionService {
 
     private async createAndSaveReply(reply: { body_text: string, is_anynmous: boolean, attachment: DiscussionAttachment }, user: User, parentEntity: Message | Reply): Promise<MessageResponse> {
         const newReply = parentEntity instanceof Message
-            ? this.replyRepository.create({ body_text: reply.body_text, is_anynmous: reply.is_anynmous, user, message: parentEntity, attachment: reply.attachment })
-            : this.replyRepository.create({ body_text: reply.body_text, is_anynmous: reply.is_anynmous, user, parent_reply: parentEntity, attachment: reply.attachment });
+            ? await this.replyRepository.create({ body_text: reply.body_text, is_anynmous: reply.is_anynmous, user, message: parentEntity, attachment: reply.attachment })
+            : await this.replyRepository.create({ body_text: reply.body_text, is_anynmous: reply.is_anynmous, user, parent_reply: parentEntity, attachment: reply.attachment });
 
         const savedReply = await this.replyRepository.save(newReply);
 
