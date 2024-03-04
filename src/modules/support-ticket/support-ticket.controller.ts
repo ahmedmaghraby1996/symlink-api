@@ -29,6 +29,7 @@ import { ChangeTicketStatusRequest } from './dto/request/change-ticket-status.re
 import { SupportTicketStatus } from 'src/infrastructure/data/enums/support-ticket-status.enum';
 import { Roles } from '../authentication/guards/roles.decorator';
 import { Role } from 'src/infrastructure/data/enums/role.enum';
+import { PaginatedResponse } from 'src/core/base/responses/paginated.response';
 
 @ApiBearerAuth()
 @ApiHeader({
@@ -63,10 +64,19 @@ export class SupportTicketController {
     @Get()
     async getTickets(@Query() query: PaginatedRequest): Promise<ActionResponse<SupportTicketResponse[]>> {
         const tickets = await this.supportTicketService.getTickets(query);
+        const total = await this.supportTicketService.count();
+
         const result = plainToInstance(SupportTicketResponse, tickets, {
             excludeExtraneousValues: true,
         });
-        return new ActionResponse<SupportTicketResponse[]>(result);
+        return new PaginatedResponse<SupportTicketResponse[]>(result, {
+            meta: {
+                total,
+                totalPage: Math.ceil(total / query.limit),
+                limit: query.limit,
+                page: query.page
+            }
+        });
     }
 
     @Post('/comment/:ticketId')
