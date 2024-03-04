@@ -47,7 +47,7 @@ export class DiscussionGateway {
             }
 
             if (
-                payload.multi_RFP.request_for_proposal_status === RequestForProposalStatus.APPROVED &&
+                payload.multi_RFP?.request_for_proposal_status === RequestForProposalStatus.APPROVED &&
                 socket.user &&
                 (
                     socket.user.id === payload.multi_RFP.user_id ||
@@ -58,7 +58,7 @@ export class DiscussionGateway {
                 delete payload.multi_RFP;
                 socket.emit(room, payload);
             } else if (
-                payload.multi_RFP.request_for_proposal_status !== RequestForProposalStatus.APPROVED
+                payload.multi_RFP?.request_for_proposal_status !== RequestForProposalStatus.APPROVED
             ) {
                 delete payload.multi_RFP;
                 socket.emit(room, payload);

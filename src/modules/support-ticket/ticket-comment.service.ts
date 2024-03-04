@@ -34,7 +34,7 @@ export class TicketCommentService extends BaseService<TicketComment> {
             uploadFileRequest.file = file;
             const tempImage = await this._fileService.upload(
                 uploadFileRequest,
-                `support-tickets/${this.currentUser.id}`,
+                `support-tickets`,
             );
 
             const createAttachedFile = this.ticketAttachmentRepository.create({
