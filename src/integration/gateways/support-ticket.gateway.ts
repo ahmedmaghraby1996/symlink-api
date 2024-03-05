@@ -11,6 +11,7 @@ import { Repository } from 'typeorm';
 import { SupportTicketPrivacyMiddleware } from './middleware/ws-support-ticket-privacy';
 import { SupportTicket } from 'src/infrastructure/entities/support-ticket/support-ticket.entity';
 import { TicketComment } from 'src/infrastructure/entities/support-ticket/ticket-comment.entity';
+import { TicketCommentResponse } from 'src/modules/support-ticket/dto/response/ticket-comment.response';
 
 @WebSocketGateway({ namespace: Gateways.SupportTicket.Namespace, cors: { origin: '*' } })
 @UseGuards(WsJwtAuthGuard)
@@ -29,7 +30,7 @@ export class SupportTicketGateway {
         client.use(SupportTicketPrivacyMiddleware(this.supportTicketRepository) as any);
     }
 
-    handleSendMessage(payload: { supportTicket: SupportTicket, ticketComment: TicketComment, action: string }) {
+    handleSendMessage(payload: { supportTicket: SupportTicket, ticketComment: TicketCommentResponse, action: string }) {
         const ticketOwnerId = payload.supportTicket.user_id;
         const connectedSockets: any = this.server.sockets
        
