@@ -63,16 +63,15 @@ export class SupportTicketController {
 
     @Get()
     async getTickets(@Query() query: PaginatedRequest): Promise<ActionResponse<SupportTicketResponse[]>> {
-        const tickets = await this.supportTicketService.getTickets(query);
-        const total = await this.supportTicketService.count();
+        const { tickets, count } = await this.supportTicketService.getTickets(query);
 
         const result = plainToInstance(SupportTicketResponse, tickets, {
             excludeExtraneousValues: true,
         });
         return new PaginatedResponse<SupportTicketResponse[]>(result, {
             meta: {
-                total,
-                totalPage: Math.ceil(total / query.limit),
+                total: count,
+                totalPage: Math.ceil(count / query.limit),
                 limit: query.limit,
                 page: query.page
             }
