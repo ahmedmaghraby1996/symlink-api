@@ -95,17 +95,24 @@ export class SupportTicketController {
         return new ActionResponse<TicketCommentResponse>(result);
     }
 
-    @Get('/comments/:ticketId/:offset/:limit')
+    @Get('/comments/:ticketId')
     async getComments(
         @Param('ticketId') ticketId: string,
-        @Param("offset") offset: number,
-        @Param("limit") limit: number
+        @Query() query: PaginatedRequest
     ): Promise<ActionResponse<TicketCommentResponse[]>> {
-        const comments = await this.ticketCommentService.getCommentsByChunk(ticketId, offset, limit);
+        const { comments, count } = await this.ticketCommentService.getCommentsByChunk(ticketId, query);
         const result = plainToInstance(TicketCommentResponse, comments, {
             excludeExtraneousValues: true,
         });
-        return new ActionResponse<TicketCommentResponse[]>(result);
+
+        return new PaginatedResponse<TicketCommentResponse[]>(result, {
+            meta: {
+                total: count,
+                totalPage: Math.ceil(count / query.limit),
+                limit: query.limit,
+                page: query.page
+            }
+        });
     }
 
     @Roles(Role.ADMIN)
