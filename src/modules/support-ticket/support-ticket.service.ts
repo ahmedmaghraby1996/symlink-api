@@ -62,13 +62,15 @@ export class SupportTicketService extends BaseService<SupportTicket> {
         }
 
         options.filters.push(`user_id=${this.currentUser.id}`);
-        return await this.findAll(options);
+        const tickets = await this.findAll(options);
+        const count = await this.supportTicketRepository.count({ where: { user_id: this.currentUser.id } });
+        return { tickets, count };
     }
 
-    async chnageTicketStatus(ticketId:string, status: SupportTicketStatus){
-        const ticket = await this.supportTicketRepository.findOne({where:{id:ticketId}});
-        if(!ticket) throw new BadRequestException('Ticket not found');
-        
+    async chnageTicketStatus(ticketId: string, status: SupportTicketStatus) {
+        const ticket = await this.supportTicketRepository.findOne({ where: { id: ticketId } });
+        if (!ticket) throw new BadRequestException('Ticket not found');
+
         ticket.status = status;
         return await this.supportTicketRepository.save(ticket);
     }
