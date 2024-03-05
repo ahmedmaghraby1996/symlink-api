@@ -1,7 +1,7 @@
 import { Expose, Type } from "class-transformer";
 import { TicketAttachmentResponse } from "./ticket-attachment.response";
 import { SupportTicketResponse } from "./support-ticket.response";
-import { RegisterResponse } from "src/modules/authentication/dto/responses/register.response";
+import { UserInfoExpose } from "src/modules/user/dto/response/profile.response";
 
 export class TicketCommentResponse {
     @Expose() id: string;
@@ -12,5 +12,5 @@ export class TicketCommentResponse {
     @Expose() user_id: string;
     @Expose() @Type(() => SupportTicketResponse) ticket: SupportTicketResponse;
     @Expose() ticket_id: string;
-    @Expose() @Type(() => RegisterResponse) user: RegisterResponse;
+    @Expose() @Type(() => UserInfoExpose) user: UserInfoExpose;
 }

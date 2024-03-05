@@ -88,10 +88,7 @@ export class SupportTicketController {
     ): Promise<ActionResponse<TicketCommentResponse>> {
         addTicketCommentRequest.file = file;
         const createdComment = await this.ticketCommentService.addComment(ticketId, addTicketCommentRequest);
-        const result = plainToInstance(TicketCommentResponse, createdComment, {
-            excludeExtraneousValues: true,
-        });
-        return new ActionResponse<TicketCommentResponse>(result);
+        return new ActionResponse<TicketCommentResponse>(createdComment);
     }
 
     @Get('/comments/:ticketId')

@@ -13,6 +13,8 @@ import { AddTicketCommentRequest } from './dto/request/add-ticket-comment.reques
 import { SupportTicketGateway } from 'src/integration/gateways/support-ticket.gateway';
 import { Role } from 'src/infrastructure/data/enums/role.enum';
 import { PaginatedRequest } from 'src/core/base/requests/paginated.request';
+import { plainToInstance } from 'class-transformer';
+import { TicketCommentResponse } from './dto/response/ticket-comment.response';
 
 
 @Injectable()
@@ -28,7 +30,7 @@ export class TicketCommentService extends BaseService<TicketComment> {
         super(ticketCommentRepository);
     }
 
-    async addComment(ticketId: string, { file, comment_text }: AddTicketCommentRequest): Promise<TicketComment> {
+    async addComment(ticketId: string, { file, comment_text }: AddTicketCommentRequest): Promise<TicketCommentResponse> {
         let attachedFile = null;
         if (file) {
             const uploadFileRequest = new UploadFileRequest();
@@ -52,15 +54,21 @@ export class TicketCommentService extends BaseService<TicketComment> {
         if (!this.currentUser.roles.includes(Role.ADMIN) && ticket.user_id !== this.currentUser.id)
             throw new UnauthorizedException('You are not allowed to add comment to this ticket')
 
-        const savedComment = await this.ticketCommentRepository.create({
+        const createdComment = await this.ticketCommentRepository.create({
             comment_text,
             user: this.currentUser,
             ticket,
             attachment: attachedFile
         });
 
-        this.supportTicketGateway.handleSendMessage({ supportTicket: ticket, ticketComment: savedComment, action: 'add_comment' });
-        return await this.ticketCommentRepository.save(savedComment);
+        const savedComment = await this.ticketCommentRepository.save(createdComment);
+
+        const transformedComment = plainToInstance(TicketCommentResponse, savedComment, {
+            excludeExtraneousValues: true,
+        });
+
+        await this.supportTicketGateway.handleSendMessage({ supportTicket: ticket, ticketComment: transformedComment, action: 'add_comment' });
+        return transformedComment;
     }
 
     async getCommentsByChunk(ticketId: string, query: PaginatedRequest) {
