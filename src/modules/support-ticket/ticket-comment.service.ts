@@ -12,6 +12,7 @@ import { TicketAttachment } from 'src/infrastructure/entities/support-ticket/tic
 import { AddTicketCommentRequest } from './dto/request/add-ticket-comment.request';
 import { SupportTicketGateway } from 'src/integration/gateways/support-ticket.gateway';
 import { Role } from 'src/infrastructure/data/enums/role.enum';
+import { PaginatedRequest } from 'src/core/base/requests/paginated.request';
 
 
 @Injectable()
@@ -62,7 +63,11 @@ export class TicketCommentService extends BaseService<TicketComment> {
         return await this.ticketCommentRepository.save(savedComment);
     }
 
-    async getCommentsByChunk(ticketId: string, offset: number, limit: number): Promise<TicketComment[]> {
+    async getCommentsByChunk(ticketId: string, query: PaginatedRequest) {
+        query.filters ??= [];
+        query.includes ??= [];
+        query.sortBy ??= [];
+
         const supportTicket = await this.supportTicketRepository.findOne({ where: { id: ticketId } })
         if (!supportTicket)
             throw new BadRequestException('Ticket not found');
@@ -71,13 +76,17 @@ export class TicketCommentService extends BaseService<TicketComment> {
             throw new UnauthorizedException('You are not allowed to view this ticket');
         }
 
-        return await this.ticketCommentRepository.find({
-            where: { ticket_id: ticketId },
-            relations: ['user', 'attachment'],
-            order: { created_at: 'DESC' },
-            skip: offset,
-            take: limit,
-        });
+        query.filters.push(`ticket_id=${ticketId}`);
+        query.includes.push('user');
+        query.includes.push('attachment');
+        query.sortBy.push('created_at=DESC');
+
+        const count = await this.ticketCommentRepository.count({ where: { ticket_id: ticketId } });
+        const comments = await this.findAll(query);
+        return {
+            comments,
+            count
+        }
     }
 
     get currentUser() {
