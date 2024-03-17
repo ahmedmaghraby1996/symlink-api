@@ -7,13 +7,13 @@ import { User } from 'src/infrastructure/entities/user/user.entity';
 import { ApiBearerAuth, ApiConsumes, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadValidator } from 'src/core/validators/upload.validator';
-import { PublicProfileResponse, PrivateProfileResponse, UserInfoResponse } from './dto/response/profile.response';
+import { PublicProfileResponse, PrivateProfileResponse, UserInfoResponse, PrivateProfileExpose } from './dto/response/profile.response';
 import { Request } from 'express';
 import { REQUEST } from '@nestjs/core';
 import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { RolesGuard } from '../authentication/guards/roles.guard';
 import { ActionResponse } from 'src/core/base/responses/action.response';
-import { plainToInstance } from 'class-transformer';
+import { plainToClass, plainToInstance } from 'class-transformer';
 import { toUrl } from 'src/core/helpers/file.helper';
 import { I18nResponse } from 'src/core/helpers/i18n.helper';
 import { OptionalUseridRequest } from './dto/requests/optional-userid-request';
@@ -69,7 +69,7 @@ export class UserController {
   ) {
     const profile = await this.userService.getProfile(query.user_id);
     profile.avatar = toUrl(profile.avatar)
-    
+
     return new ActionResponse(
       this._i18nResponse.entity(
         query?.user_id ?
@@ -77,6 +77,26 @@ export class UserController {
           new PrivateProfileResponse(profile)
       )
     )
+  }
+
+  @Roles(Role.ADMIN)
+  @Get('/users')
+  async getUsers(
+    @Query() query: PaginatedRequest,
+  ) {
+    const count = await this.userService.count();
+    const users = await this.userService.findAll(query);
+    const result = plainToInstance(PrivateProfileExpose, users, {
+      excludeExtraneousValues: true,
+    });
+    return new PaginatedResponse<PrivateProfileExpose[]>(result, {
+      meta: {
+        total: count,
+        totalPage: Math.ceil(count / query.limit),
+        limit: query.limit,
+        page: query.page
+      }
+    });
   }
 }
 
