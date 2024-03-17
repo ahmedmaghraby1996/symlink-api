@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Get, Inject, Put, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Get, Inject, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 
 
 import { UserService } from './user.service';
@@ -7,7 +7,7 @@ import { User } from 'src/infrastructure/entities/user/user.entity';
 import { ApiBearerAuth, ApiConsumes, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadValidator } from 'src/core/validators/upload.validator';
-import { ProfileResponse, UserInfoResponse } from './dto/response/profile.response';
+import { PublicProfileResponse, PrivateProfileResponse, UserInfoResponse } from './dto/response/profile.response';
 import { Request } from 'express';
 import { REQUEST } from '@nestjs/core';
 import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
@@ -17,6 +17,10 @@ import { plainToInstance } from 'class-transformer';
 import { toUrl } from 'src/core/helpers/file.helper';
 import { I18nResponse } from 'src/core/helpers/i18n.helper';
 import { OptionalUseridRequest } from './dto/requests/optional-userid-request';
+import { Roles } from '../authentication/guards/roles.decorator';
+import { Role } from 'src/infrastructure/data/enums/role.enum';
+import { PaginatedRequest } from 'src/core/base/requests/paginated.request';
+import { PaginatedResponse } from 'src/core/base/responses/paginated.response';
 
 
 
@@ -65,9 +69,15 @@ export class UserController {
   ) {
     const profile = await this.userService.getProfile(query.user_id);
     profile.avatar = toUrl(profile.avatar)
-    return new ActionResponse(this._i18nResponse.entity(new ProfileResponse(profile)))
+    
+    return new ActionResponse(
+      this._i18nResponse.entity(
+        query?.user_id ?
+          new PublicProfileResponse(profile) :
+          new PrivateProfileResponse(profile)
+      )
+    )
   }
-
 }
 
 
