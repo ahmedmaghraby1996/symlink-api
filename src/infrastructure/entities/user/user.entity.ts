@@ -84,6 +84,9 @@ export class User extends AuditableEntity {
   @Column({ nullable: true })
   city_id: string
 
+  @Column({ default: 0, type: 'double' })
+  balance: number;
+
   @Factory((faker) => faker.helpers.arrayElement([Role.CLIENT, Role.PROVIDER]))
   @Column({ type: 'set', enum: Role, default: [Role.CLIENT] })
   roles: Role[];
@@ -106,20 +109,20 @@ export class User extends AuditableEntity {
   @OneToMany(() => Reply, reply => reply.user)
   replies: Reply[]
 
-  @OneToOne(()=> ProviderInfo, providerInfo => providerInfo.user)
+  @OneToOne(() => ProviderInfo, providerInfo => providerInfo.user)
   provider_info: ProviderInfo
-  
+
   constructor(partial: Partial<User>) {
     super();
     Object.assign(this, partial);
   }
 
-  @OneToMany(()=>SupportTicket, supportTicket => supportTicket.user)
+  @OneToMany(() => SupportTicket, supportTicket => supportTicket.user)
   support_tickets: SupportTicket[]
 
-  @OneToMany(()=> TicketComment, ticketComment => ticketComment.user)
+  @OneToMany(() => TicketComment, ticketComment => ticketComment.user)
   ticket_comments: TicketComment[]
-  
+
   // generate unique id in this pattern: ######
   private uniqueIdGenerator(): string {
     return randNum(8);

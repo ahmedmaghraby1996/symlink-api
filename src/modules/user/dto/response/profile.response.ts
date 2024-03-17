@@ -2,7 +2,6 @@ import { Expose, plainToInstance } from 'class-transformer';
 import { toUrl } from 'src/core/helpers/file.helper';
 
 import { User } from 'src/infrastructure/entities/user/user.entity';
-import { Double } from 'typeorm';
 import { City } from 'src/infrastructure/entities/country/city.entity';
 
 export class UserInfoResponse {
@@ -37,13 +36,22 @@ export class UserInfoExpose {
   @Expose() email: string;
 }
 
-export class ProfileResponse extends UserInfoResponse {
+// this is the response for the public profile if someone wants to see the profile of a user
+export class PublicProfileResponse extends UserInfoResponse {
   city: City;
   linkedin: string;
-
-  constructor(partial: Partial<ProfileResponse>) {
+  constructor(partial: Partial<PublicProfileResponse>) {
     super(partial);
     this.city = plainToInstance(City, partial.city);
     this.linkedin = partial.linkedin;
+  }
+}
+
+// this is the response for the private profile if the user||admin wants to see his own profile
+export class PrivateProfileResponse extends PublicProfileResponse {
+  balance: number;
+  constructor(partial: Partial<PrivateProfileResponse>) {
+    super(partial);
+    this.balance = partial.balance;
   }
 }
