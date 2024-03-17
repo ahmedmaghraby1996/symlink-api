@@ -3,6 +3,7 @@ import { toUrl } from 'src/core/helpers/file.helper';
 
 import { User } from 'src/infrastructure/entities/user/user.entity';
 import { City } from 'src/infrastructure/entities/country/city.entity';
+import { Role } from 'src/infrastructure/data/enums/role.enum';
 
 export class UserInfoResponse {
   id: string;
@@ -40,6 +41,7 @@ export class UserInfoExpose {
 export class PublicProfileResponse extends UserInfoResponse {
   city: City;
   linkedin: string;
+  roles: Role[];
   constructor(partial: Partial<PublicProfileResponse>) {
     super(partial);
     this.city = plainToInstance(City, partial.city);
@@ -54,4 +56,14 @@ export class PrivateProfileResponse extends PublicProfileResponse {
     super(partial);
     this.balance = partial.balance;
   }
+}
+
+export class PublicProfileExpose extends UserInfoExpose {
+  @Expose() city: City;
+  @Expose() linkedin: string;
+  @Expose() roles: Role[];
+}
+
+export class PrivateProfileExpose extends PublicProfileExpose{
+  @Expose() balance: number;
 }
