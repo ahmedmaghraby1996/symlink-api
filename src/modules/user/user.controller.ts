@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Get, Inject, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Get, Inject, Param, Patch, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 
 
 import { UserService } from './user.service';
@@ -21,6 +21,7 @@ import { Roles } from '../authentication/guards/roles.decorator';
 import { Role } from 'src/infrastructure/data/enums/role.enum';
 import { PaginatedRequest } from 'src/core/base/requests/paginated.request';
 import { PaginatedResponse } from 'src/core/base/responses/paginated.response';
+import { AdminUpdateUserRequest } from './dto/requests/admin-update-user.request';
 
 
 
@@ -97,6 +98,16 @@ export class UserController {
         page: query.page
       }
     });
+  }
+
+  @Roles(Role.ADMIN)
+  @Patch('/user/:user_id')
+  async updateUser(
+    @Body() req: AdminUpdateUserRequest,
+    @Param('user_id') user_id: string,
+  ) {
+    const user = await this.userService.adminUpdateUser(user_id, req);
+    return new ActionResponse(this._i18nResponse.entity(new PublicProfileResponse(user)));
   }
 }
 
