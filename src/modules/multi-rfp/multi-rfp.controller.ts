@@ -71,7 +71,7 @@ export class MultiRfpController {
   }
 
 
-  @Roles(Role.CLIENT)
+  @Roles(Role.CLIENT, Role.ADMIN)
   @Get('client-All-MultiRFP')
   async clientGetMyAllMultiRFP(
     @Query() multiRFPFilterRequest: MultiRFPFilterRequest,

@@ -54,5 +54,5 @@ export class MultiRFPFilterRequest {
   @IsOptional()
   @IsUUID()
   @IsString()
-  provider_id?: string;
+  user_id?: string;
 }

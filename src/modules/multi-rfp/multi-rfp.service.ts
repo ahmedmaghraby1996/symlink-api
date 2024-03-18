@@ -123,15 +123,18 @@ export class MultiRfpService extends BaseService<MultiRFP> {
   }
 
   async clientGetMyAllMultiRFP(multiRFPFilterRequest: MultiRFPFilterRequest) {
-    const { page, limit, search_by_name, sort_by, order } = multiRFPFilterRequest;
+    const { page, limit, search_by_name, sort_by, order, user_id } = multiRFPFilterRequest;
 
     const skip = (page - 1) * limit;
+    if (user_id && !this.request.user.roles.includes(Role.ADMIN)) {
+      throw new UnauthorizedException('You are not allowed to see this projects');
+    }
 
     const queryBuilder = this.multiRFPRepository
       .createQueryBuilder('multiRFP')
       .leftJoinAndSelect('multiRFP.user', 'user')
       .orderBy(`multiRFP.${sort_by}`, order as 'ASC' | 'DESC')
-      .where('user.id = :userId', { userId: this.request.user.id })
+      .where('user.id = :userId', { userId: user_id ?? this.request.user.id })
       .skip(skip)
       .take(limit);
 
@@ -151,20 +154,20 @@ export class MultiRfpService extends BaseService<MultiRFP> {
   }
 
   async provideGetMyAllMultiRFP(multiRFPFilterRequest: MultiRFPFilterRequest) {
-    const { page, limit, search_by_name, sort_by, order, provider_id } = multiRFPFilterRequest;
+    const { page, limit, search_by_name, sort_by, order, user_id } = multiRFPFilterRequest;
 
     const skip = (page - 1) * limit;
 
-    if (provider_id && !this.request.user.roles.includes(Role.ADMIN)) {
+    if (user_id && !this.request.user.roles.includes(Role.ADMIN)) {
       throw new UnauthorizedException('You are not allowed to see this project');
     }
 
     const queryBuilder = this.multiRFPRepository
       .createQueryBuilder('multiRFP')
       .leftJoinAndSelect('multiRFP.offers', 'offers')
-      .where('offers.user_id = :userId', { userId: provider_id ?? this.request.user.id });
+      .where('offers.user_id = :userId', { userId: user_id ?? this.request.user.id });
 
-    if (!provider_id) {
+    if (!user_id) {
       queryBuilder.andWhere('offers.is_accepted = :isAccepted', { isAccepted: true });
     }
 
