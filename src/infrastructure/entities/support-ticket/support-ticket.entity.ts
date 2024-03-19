@@ -18,7 +18,7 @@ export class SupportTicket extends AuditableEntity {
     @OneToMany(() => TicketComment, (comment) => comment.ticket, { cascade: true })
     ticket_comments: TicketComment[];
 
-    @OneToOne(()=>TicketAttachment, (attachment) => attachment.ticket)
+    @OneToOne(() => TicketAttachment, (attachment) => attachment.ticket)
     @JoinColumn({ name: 'attachment_id' })
     attachment: TicketAttachment;
 
@@ -30,6 +30,12 @@ export class SupportTicket extends AuditableEntity {
 
     @Column({ nullable: false })
     description: string;
+
+    @Column({ nullable: true, default: 0 })
+    new_messages_count: number;
+
+    @Column({ nullable: true, default: true })
+    is_counter_active: boolean;
 
     @Column({
         type: 'enum',

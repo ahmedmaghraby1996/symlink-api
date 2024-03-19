@@ -11,6 +11,7 @@ import { FileService } from '../file/file.service';
 import { TicketAttachment } from 'src/infrastructure/entities/support-ticket/ticket-attachment.entity';
 import { PaginatedRequest } from 'src/core/base/requests/paginated.request';
 import { SupportTicketStatus } from 'src/infrastructure/data/enums/support-ticket-status.enum';
+import { Role } from 'src/infrastructure/data/enums/role.enum';
 
 
 @Injectable()
@@ -61,9 +62,20 @@ export class SupportTicketService extends BaseService<SupportTicket> {
             options.filters = [options.filters];
         }
 
-        options.filters.push(`user_id=${this.currentUser.id}`);
+        const isAdmin = this.currentUser.roles.includes(Role.ADMIN)
+        if (!isAdmin) {
+            options.filters.push(`user_id=${this.currentUser.id}`);
+        }
+
         const tickets = await this.findAll(options);
-        const count = await this.supportTicketRepository.count({ where: { user_id: this.currentUser.id } });
+
+        let count: number;
+        if (isAdmin) {
+            count = await this.supportTicketRepository.count();
+        } else {
+            count = await this.supportTicketRepository.count({ where: { user_id: this.currentUser.id } });
+        }
+
         return { tickets, count };
     }
 
@@ -72,6 +84,15 @@ export class SupportTicketService extends BaseService<SupportTicket> {
         if (!ticket) throw new BadRequestException('Ticket not found');
 
         ticket.status = status;
+        return await this.supportTicketRepository.save(ticket);
+    }
+
+    async reActiveCounter(ticketId: string) {
+        const ticket = await this.supportTicketRepository.findOne({ where: { id: ticketId } });
+        if (!ticket) throw new BadRequestException('Ticket not found');
+
+        ticket.is_counter_active = true;
+        ticket.new_messages_count = 0;
         return await this.supportTicketRepository.save(ticket);
     }
 

@@ -4,6 +4,7 @@ import {
     Controller,
     Get,
     Param,
+    Patch,
     Post,
     Put,
     Query,
@@ -122,5 +123,14 @@ export class SupportTicketController {
             excludeExtraneousValues: true,
         });
         return new ActionResponse<SupportTicketResponse>(result);
+    }
+
+    @Roles(Role.ADMIN)
+    @Patch('/re-active-counter/:ticketId')
+    async reActiveCounter(
+        @Param('ticketId') ticketId: string
+    ): Promise<ActionResponse<boolean>> {
+        await this.supportTicketService.reActiveCounter(ticketId);
+        return new ActionResponse(true);
     }
 }
