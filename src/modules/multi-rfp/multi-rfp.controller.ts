@@ -119,6 +119,22 @@ export class MultiRfpController {
     return new PageDto(projects, pageMetaDto);
   }
 
+  @Roles(Role.ADMIN)
+  @Get('admin-All-MultiRFP')
+  async adminGetAllMultiRFP(
+    @Query() multiRFPFilterRequest: MultiRFPFilterRequest,
+  ) {
+    const { limit, page } = multiRFPFilterRequest;
+    const { allMultiRFPForUserDto, count } =
+      await this.multiRfpService.adminGetAllMultiRFP(multiRFPFilterRequest);
+    const data: MultiRFPResponse[] = this._i18nResponse.entity(
+      allMultiRFPForUserDto,
+    );
+    const pageMetaDto = new PageMetaDto(page, limit, count);
+
+    return new PageDto(data, pageMetaDto);
+  }
+
   @Get(':id')
   async getSingleMultiRFP(@Param('id') id: string) {
     const multiRFP = await this.multiRfpService.getSingleMultiRFP(id);

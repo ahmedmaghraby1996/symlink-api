@@ -12,6 +12,8 @@ import { ActionResponse } from 'src/core/base/responses/action.response';
 import { MessageResponse } from './dto/response/message.response';
 import { plainToClass, plainToInstance } from 'class-transformer';
 import { MessagesListResponse } from './dto/response/messages-list.response';
+import { Roles } from '../authentication/guards/roles.decorator';
+import { Role } from 'src/infrastructure/data/enums/role.enum';
 
 @ApiBearerAuth()
 @ApiHeader({
@@ -27,6 +29,7 @@ export class DiscussionController {
         private readonly discussionService: DiscussionService,
     ) { }
 
+    @Roles(Role.CLIENT, Role.PROVIDER)
     @Post(':multi_RFP_id/messages')
     @UseInterceptors(ClassSerializerInterceptor, FileInterceptor('file'))
     @ApiConsumes('multipart/form-data')

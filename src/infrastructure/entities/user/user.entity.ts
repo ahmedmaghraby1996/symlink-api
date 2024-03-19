@@ -79,6 +79,12 @@ export class User extends AuditableEntity {
   @Column({ default: true })
   is_active: boolean;
 
+  @Column({ nullable: true, default: 0 })
+  completed_projects: number;
+
+  @Column({ nullable: true, default: 0 })
+  active_projects: number;
+
   @ManyToOne(() => City, city => city.users)
   city: City
   @Column({ nullable: true })

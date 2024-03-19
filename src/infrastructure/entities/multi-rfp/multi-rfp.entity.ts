@@ -31,6 +31,9 @@ export class MultiRFP extends AuditableEntity {
   )
   offers: Offer[];
 
+  @Column({ nullable: true , default: 0 })
+  number_of_offers: number;
+
   @Column({
     type: 'enum',
     enum: RequestForProposalStatus,
@@ -78,4 +81,7 @@ export class MultiRFP extends AuditableEntity {
 
   @OneToMany(() => Message, (message) => message.multi_RFP, { cascade: true })
   messages: Message[];
+
+  @Column({ nullable: true })
+  started_at: Date;
 }

@@ -18,6 +18,7 @@ import { RequestForProposalStatus } from 'src/infrastructure/data/enums/request-
 import { OfferFilterRequest } from './dto/offer-filter.request';
 import { AcceptOfferTransaction } from './utils/accept-offer.transation';
 import { OfferSortyBy } from 'src/infrastructure/data/enums/offer-sortby.enum';
+import { Role } from 'src/infrastructure/data/enums/role.enum';
 
 @Injectable()
 export class OffersService extends BaseService<Offer> {
@@ -66,7 +67,10 @@ export class OffersService extends BaseService<Offer> {
       .take(limit)
       .getManyAndCount();
 
-    if (offers[0].multi_RFP.user_id !== this.request.user.id) {
+    if (
+      offers[0].multi_RFP.user_id !== this.request.user.id &&
+      !this.request.user.roles.includes(Role.ADMIN)
+    ) {
       throw new NotFoundException('You are not allowed to see this bids');
     }
 
@@ -99,6 +103,11 @@ export class OffersService extends BaseService<Offer> {
       throw new BadRequestException('You have already made an offer');
     }
     const offer = await this.offersRepository.save(new_Offer);
+
+    // increase number of offers
+    multiRFP.number_of_offers += 1;
+    await this.multiRFPRepository.save(multiRFP);
+
     this.offerGateway.handleNewOffer({
       multip_RFP_id: multi_RFP_id,
       offer: offer,
@@ -122,7 +131,7 @@ export class OffersService extends BaseService<Offer> {
     if (!offer) {
       throw new NotFoundException('No offer founds or not accepted yet');
     }
-    
+
     return offer;
   }
 }

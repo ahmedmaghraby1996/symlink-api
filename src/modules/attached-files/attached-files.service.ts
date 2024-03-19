@@ -14,6 +14,7 @@ import { AttachedFilesFilterRequest } from './dto/attached-files-filter.request'
 import { FileService } from '../file/file.service';
 import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
 import { RequestForProposalStatus } from 'src/infrastructure/data/enums/request-for-proposal.enum';
+import { Role } from 'src/infrastructure/data/enums/role.enum';
 
 @Injectable()
 export class AttachedFilesService {
@@ -44,7 +45,8 @@ export class AttachedFilesService {
 
     if (multiRFP.request_for_proposal_status === RequestForProposalStatus.APPROVED &&
       multiRFP.provider_id != this.request.user.id &&
-      multiRFP.user_id != this.request.user.id
+      multiRFP.user_id != this.request.user.id &&
+      !this.request.user.roles.includes(Role.ADMIN)
     ) {
       throw new UnauthorizedException('You are not allowed to see this project');
     }

@@ -30,7 +30,7 @@ import { OfferResponse } from './dto/offer.response';
 export class OffersController {
   constructor(private readonly offersService: OffersService) {}
 
-  @Roles(Role.CLIENT)
+  @Roles(Role.CLIENT, Role.ADMIN)
   @Get(':multi_RFP_id/all-offers-for-project')
   async getAllOffersForProject(
     @Param('multi_RFP_id') multi_RFP_id: string,
