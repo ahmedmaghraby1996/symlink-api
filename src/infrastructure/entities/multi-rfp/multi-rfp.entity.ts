@@ -31,6 +31,9 @@ export class MultiRFP extends AuditableEntity {
   )
   offers: Offer[];
 
+  @Column({ nullable: true , default: 0 })
+  number_of_offers: number;
+
   @Column({
     type: 'enum',
     enum: RequestForProposalStatus,

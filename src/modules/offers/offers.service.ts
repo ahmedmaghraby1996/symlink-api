@@ -99,6 +99,11 @@ export class OffersService extends BaseService<Offer> {
       throw new BadRequestException('You have already made an offer');
     }
     const offer = await this.offersRepository.save(new_Offer);
+    
+    // increase number of offers
+    multiRFP.number_of_offers += 1;
+    await this.multiRFPRepository.save(multiRFP);
+
     this.offerGateway.handleNewOffer({
       multip_RFP_id: multi_RFP_id,
       offer: offer,
@@ -122,7 +127,7 @@ export class OffersService extends BaseService<Offer> {
     if (!offer) {
       throw new NotFoundException('No offer founds or not accepted yet');
     }
-    
+
     return offer;
   }
 }
