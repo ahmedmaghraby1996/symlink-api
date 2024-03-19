@@ -36,7 +36,7 @@ export class AcceptOfferTransaction extends BaseTransaction<
       const multiRFP = await context.findOne(MultiRFP, {
         where: { id: multi_RFP_id },
       });
-      
+
       if (!multiRFP) {
         throw new NotFoundException('This Project not found');
       }
@@ -61,7 +61,8 @@ export class AcceptOfferTransaction extends BaseTransaction<
       offer.is_accepted = true;
       offer.acceptedAt = new Date();
       multiRFP.request_for_proposal_status = RequestForProposalStatus.APPROVED;
-      multiRFP.provider_id =offer.user_id;
+      multiRFP.started_at = new Date();
+      multiRFP.provider_id = offer.user_id;
       await context.save(multiRFP);
       const offer_accepted = await context.save(offer);
 

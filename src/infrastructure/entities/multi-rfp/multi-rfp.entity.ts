@@ -81,4 +81,7 @@ export class MultiRFP extends AuditableEntity {
 
   @OneToMany(() => Message, (message) => message.multi_RFP, { cascade: true })
   messages: Message[];
+
+  @Column({ nullable: true })
+  started_at: Date;
 }
