@@ -245,6 +245,10 @@ export class MultiRfpService extends BaseService<MultiRFP> {
       throw new UnauthorizedException('You are not allowed to see this project');
     }
 
+    if (this.request.user.roles.includes(Role.PROVIDER)) {
+      multiRFP.number_of_offers = null;
+    }
+
     return new MultiRFPResponse(multiRFP);
   }
 
@@ -302,5 +306,32 @@ export class MultiRfpService extends BaseService<MultiRFP> {
     }
 
     await this.multiRFPRepository.softRemove(multiRFP);
+  }
+
+  async adminGetAllMultiRFP(multiRFPFilterRequest: MultiRFPFilterRequest) {
+    const { page, limit, search_by_name, sort_by, order } = multiRFPFilterRequest;
+
+    const skip = (page - 1) * limit;
+
+    const queryBuilder = this.multiRFPRepository
+      .createQueryBuilder('multiRFP')
+      .leftJoinAndSelect('multiRFP.user', 'user')
+      .orderBy(`multiRFP.${sort_by}`, order as 'ASC' | 'DESC')
+      .skip(skip)
+      .take(limit);
+
+    if (search_by_name) {
+      queryBuilder.andWhere('multiRFP.project_name LIKE :projectName', {
+        projectName: `%${search_by_name}%`,
+      });
+    }
+
+    const [allMultiRFPForUser, count] = await queryBuilder.getManyAndCount();
+
+    const allMultiRFPForUserDto = allMultiRFPForUser.map(
+      (item) => new MultiRFPResponse(item),
+    );
+
+    return { allMultiRFPForUserDto, count };
   }
 }
