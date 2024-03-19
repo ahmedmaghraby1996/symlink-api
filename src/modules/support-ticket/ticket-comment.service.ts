@@ -61,6 +61,11 @@ export class TicketCommentService extends BaseService<TicketComment> {
             attachment: attachedFile
         });
 
+        if (ticket.is_counter_active) {
+            ticket.new_messages_count++;
+            await this.supportTicketRepository.save(ticket);
+        }
+
         const savedComment = await this.ticketCommentRepository.save(createdComment);
 
         const transformedComment = plainToInstance(TicketCommentResponse, savedComment, {
@@ -82,6 +87,13 @@ export class TicketCommentService extends BaseService<TicketComment> {
 
         if (!this.currentUser.roles.includes(Role.ADMIN) && supportTicket.user_id !== this.currentUser.id) {
             throw new UnauthorizedException('You are not allowed to view this ticket');
+        }
+
+        // if the user is admin, then we will reset the new messages count
+        if (this.currentUser.roles.includes(Role.ADMIN)) {
+            supportTicket.is_counter_active = false;
+            supportTicket.new_messages_count = 0;
+            await this.supportTicketRepository.save(supportTicket);
         }
 
         query.filters.push(`ticket_id=${ticketId}`);

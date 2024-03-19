@@ -61,12 +61,12 @@ export class SupportTicketService extends BaseService<SupportTicket> {
         } else if (typeof options.filters === 'string') {
             options.filters = [options.filters];
         }
-        
+
         const isAdmin = this.currentUser.roles.includes(Role.ADMIN)
         if (!isAdmin) {
             options.filters.push(`user_id=${this.currentUser.id}`);
         }
-        
+
         const tickets = await this.findAll(options);
 
         let count: number;
@@ -75,7 +75,7 @@ export class SupportTicketService extends BaseService<SupportTicket> {
         } else {
             count = await this.supportTicketRepository.count({ where: { user_id: this.currentUser.id } });
         }
-        
+
         return { tickets, count };
     }
 
@@ -84,6 +84,15 @@ export class SupportTicketService extends BaseService<SupportTicket> {
         if (!ticket) throw new BadRequestException('Ticket not found');
 
         ticket.status = status;
+        return await this.supportTicketRepository.save(ticket);
+    }
+
+    async reActiveCounter(ticketId: string) {
+        const ticket = await this.supportTicketRepository.findOne({ where: { id: ticketId } });
+        if (!ticket) throw new BadRequestException('Ticket not found');
+
+        ticket.is_counter_active = true;
+        ticket.new_messages_count = 0;
         return await this.supportTicketRepository.save(ticket);
     }
 

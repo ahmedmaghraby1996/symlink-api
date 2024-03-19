@@ -14,5 +14,6 @@ export class SupportTicketResponse {
     @Expose() updated_at: Date;
     @Expose() user_id: string;
     @Expose() @Type(() => RegisterResponse) user: RegisterResponse;
-
+    @Expose() new_messages_count: number;
+    @Expose() is_counter_active: boolean;
 }
