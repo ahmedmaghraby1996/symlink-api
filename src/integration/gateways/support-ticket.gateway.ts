@@ -12,6 +12,7 @@ import { SupportTicketPrivacyMiddleware } from './middleware/ws-support-ticket-p
 import { SupportTicket } from 'src/infrastructure/entities/support-ticket/support-ticket.entity';
 import { TicketComment } from 'src/infrastructure/entities/support-ticket/ticket-comment.entity';
 import { TicketCommentResponse } from 'src/modules/support-ticket/dto/response/ticket-comment.response';
+import { Role } from 'src/infrastructure/data/enums/role.enum';
 
 @WebSocketGateway({ namespace: Gateways.SupportTicket.Namespace, cors: { origin: '*' } })
 @UseGuards(WsJwtAuthGuard)
@@ -35,7 +36,7 @@ export class SupportTicketGateway {
         const connectedSockets: any = this.server.sockets
        
         connectedSockets.forEach(socket => {
-            if (socket.user && (socket.user.id === ticketOwnerId || socket.user.roles.includes('ADMIN'))) {
+            if (socket.user && (socket.user.id === ticketOwnerId || socket.user.roles.includes(Role.ADMIN))) {
                 socket.emit(`support_ticket_${payload.supportTicket.id}`, payload);
             }
         });
