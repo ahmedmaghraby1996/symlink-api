@@ -66,4 +66,6 @@ export class PublicProfileExpose extends UserInfoExpose {
 
 export class PrivateProfileExpose extends PublicProfileExpose{
   @Expose() balance: number;
+  @Expose() completed_projects: number;
+  @Expose() active_projects: number;
 }
