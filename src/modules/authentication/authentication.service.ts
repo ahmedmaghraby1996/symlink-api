@@ -50,6 +50,7 @@ export class AuthenticationService {
 
   async login(user: any) {
     if (!user) throw new BadRequestException('Email or password is incorrect');
+    if (user.is_active === false) throw new BadRequestException('You account has been disabled, please contact support');
     const payload = { username: user.username, sub: user.id };
     return {
       ...user,

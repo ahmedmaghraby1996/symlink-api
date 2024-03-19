@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 import { MultiRFPSortBy } from 'src/infrastructure/data/enums/multi-rfp-sortby.enum';
 
 export class MultiRFPFilterRequest {
@@ -49,4 +49,10 @@ export class MultiRFPFilterRequest {
   @IsOptional()
   @IsEnum(['ASC', 'DESC'])
   order?: string = "DESC";
+
+  @ApiProperty({required:false, description: "this id for admin if he want to get a data of specific provider"})
+  @IsOptional()
+  @IsUUID()
+  @IsString()
+  user_id?: string;
 }

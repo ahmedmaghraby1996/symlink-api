@@ -17,6 +17,7 @@ import { AttachRequestForProposalRequest } from './dto/attach-request-for-propsa
 import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
 import { FileService } from '../file/file.service';
 import { AttachmentRequestForProposal } from 'src/infrastructure/entities/request-for-proposal/attachment-request-for-propsal.entity';
+import { Role } from 'src/infrastructure/data/enums/role.enum';
 @Injectable()
 export class MultiRfpService extends BaseService<MultiRFP> {
   constructor(
@@ -122,15 +123,18 @@ export class MultiRfpService extends BaseService<MultiRFP> {
   }
 
   async clientGetMyAllMultiRFP(multiRFPFilterRequest: MultiRFPFilterRequest) {
-    const { page, limit, search_by_name, sort_by, order } = multiRFPFilterRequest;
+    const { page, limit, search_by_name, sort_by, order, user_id } = multiRFPFilterRequest;
 
     const skip = (page - 1) * limit;
+    if (user_id && !this.request.user.roles.includes(Role.ADMIN)) {
+      throw new UnauthorizedException('You are not allowed to see this projects');
+    }
 
     const queryBuilder = this.multiRFPRepository
       .createQueryBuilder('multiRFP')
       .leftJoinAndSelect('multiRFP.user', 'user')
       .orderBy(`multiRFP.${sort_by}`, order as 'ASC' | 'DESC')
-      .where('user.id = :userId', { userId: this.request.user.id })
+      .where('user.id = :userId', { userId: user_id ?? this.request.user.id })
       .skip(skip)
       .take(limit);
 
@@ -150,15 +154,24 @@ export class MultiRfpService extends BaseService<MultiRFP> {
   }
 
   async provideGetMyAllMultiRFP(multiRFPFilterRequest: MultiRFPFilterRequest) {
-    const { page, limit, search_by_name, sort_by, order } = multiRFPFilterRequest;
+    const { page, limit, search_by_name, sort_by, order, user_id } = multiRFPFilterRequest;
 
     const skip = (page - 1) * limit;
+
+    if (user_id && !this.request.user.roles.includes(Role.ADMIN)) {
+      throw new UnauthorizedException('You are not allowed to see this project');
+    }
 
     const queryBuilder = this.multiRFPRepository
       .createQueryBuilder('multiRFP')
       .leftJoinAndSelect('multiRFP.offers', 'offers')
-      .where('offers.user_id = :userId', { userId: this.request.user.id })
-      .andWhere('offers.is_accepted = :isAccepted', { isAccepted: true })
+      .where('offers.user_id = :userId', { userId: user_id ?? this.request.user.id });
+
+    if (!user_id) {
+      queryBuilder.andWhere('offers.is_accepted = :isAccepted', { isAccepted: true });
+    }
+
+    queryBuilder
       .orderBy(`multiRFP.${sort_by}`, order as 'ASC' | 'DESC')
       .skip(skip)
       .take(limit);
@@ -208,7 +221,7 @@ export class MultiRfpService extends BaseService<MultiRFP> {
 
     return { projects, count };
   }
-  
+
   async getSingleMultiRFP(id: string) {
     const multiRFP = await this.multiRFPRepository.findOne({
       where: { id },

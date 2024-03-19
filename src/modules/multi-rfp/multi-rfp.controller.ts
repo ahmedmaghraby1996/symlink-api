@@ -71,7 +71,7 @@ export class MultiRfpController {
   }
 
 
-  @Roles(Role.CLIENT)
+  @Roles(Role.CLIENT, Role.ADMIN)
   @Get('client-All-MultiRFP')
   async clientGetMyAllMultiRFP(
     @Query() multiRFPFilterRequest: MultiRFPFilterRequest,
@@ -88,7 +88,7 @@ export class MultiRfpController {
     return new PageDto(data, pageMetaDto);
   }
 
-  @Roles(Role.PROVIDER)
+  @Roles(Role.PROVIDER, Role.ADMIN)
   @Get('provider-All-MultiRFP')
   async providerGetMyAllMultiRFP(
     @Query() multiRFPFilterRequest: MultiRFPFilterRequest,

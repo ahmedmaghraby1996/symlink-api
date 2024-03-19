@@ -1,4 +1,4 @@
-import { Inject, Injectable, Scope } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/infrastructure/entities/user/user.entity';
 import { Repository } from 'typeorm';
@@ -7,12 +7,17 @@ import { Request } from 'express';
 import { REQUEST } from '@nestjs/core';
 import { FileService } from '../file/file.service';
 import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
+import { AdminUpdateUserRequest } from './dto/requests/admin-update-user.request';
+import * as bcrypt from 'bcrypt';
+import { ConfigService } from '@nestjs/config';
+
 @Injectable({ scope: Scope.REQUEST })
 export class UserService extends BaseService<User> {
   constructor(
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     @Inject(REQUEST) private readonly request: Request,
     @Inject(FileService) private _fileService: FileService,
+    @Inject(ConfigService) private readonly _config: ConfigService,
   ) {
     super(userRepo);
 
@@ -45,9 +50,22 @@ export class UserService extends BaseService<User> {
     return user;
   }
 
+  async adminUpdateUser(user_id: string, req: AdminUpdateUserRequest) {
+    const user = await this.findOne(user_id);
+    if (!user) throw new NotFoundException('User not found');
 
-
-
+    if (req.role) user.roles = [req.role];
+    if (req.is_active) user.is_active = req.is_active;
+    if (req.password) {
+      user.password = await bcrypt.hash(req.password + this._config.get('app.key'), 10);
+    }
+    user.email = req.email;
+    user.name = req.name;
+    user.phone = req.phone;
+    user.linkedin = req.linkedin;
+    user.city_id = req.city_id;
+    return await user.save();
+  }
 }
 
 

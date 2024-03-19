@@ -16,7 +16,7 @@ import { UpdateProvProjectRequest } from './dto/requests/update-provier-project-
 import { ExpertDetailsQueryRequest } from './dto/requests/expert-details-query-request';
 import { UserService } from '../user/user.service';
 import { plainToInstance } from 'class-transformer';
-import { ProfileResponse } from '../user/dto/response/profile.response';
+import { PublicProfileResponse } from '../user/dto/response/profile.response';
 import { I18nResponse } from 'src/core/helpers/i18n.helper';
 
 @ApiBearerAuth()
@@ -45,7 +45,7 @@ export class ProviderController {
     const user = await this.userService.getProfile(user_id);
     const userResponse = plainToInstance
     return new ActionResponse({
-      info, certifcate, projects, user: this._i18nResponse.entity(new ProfileResponse(user))
+      info, certifcate, projects, user: this._i18nResponse.entity(new PublicProfileResponse(user))
     })
   }
 
