@@ -11,6 +11,7 @@ import { FileService } from '../file/file.service';
 import { TicketAttachment } from 'src/infrastructure/entities/support-ticket/ticket-attachment.entity';
 import { PaginatedRequest } from 'src/core/base/requests/paginated.request';
 import { SupportTicketStatus } from 'src/infrastructure/data/enums/support-ticket-status.enum';
+import { Role } from 'src/infrastructure/data/enums/role.enum';
 
 
 @Injectable()
@@ -60,10 +61,21 @@ export class SupportTicketService extends BaseService<SupportTicket> {
         } else if (typeof options.filters === 'string') {
             options.filters = [options.filters];
         }
-
-        options.filters.push(`user_id=${this.currentUser.id}`);
+        
+        const isAdmin = this.currentUser.roles.includes(Role.ADMIN)
+        if (!isAdmin) {
+            options.filters.push(`user_id=${this.currentUser.id}`);
+        }
+        
         const tickets = await this.findAll(options);
-        const count = await this.supportTicketRepository.count({ where: { user_id: this.currentUser.id } });
+
+        let count: number;
+        if (isAdmin) {
+            count = await this.supportTicketRepository.count();
+        } else {
+            count = await this.supportTicketRepository.count({ where: { user_id: this.currentUser.id } });
+        }
+        
         return { tickets, count };
     }
 
