@@ -240,7 +240,8 @@ export class MultiRfpService extends BaseService<MultiRFP> {
 
     if (multiRFP.request_for_proposal_status === RequestForProposalStatus.APPROVED &&
       multiRFP.provider_id != this.request.user.id &&
-      multiRFP.user_id != this.request.user.id
+      multiRFP.user_id != this.request.user.id &&
+      !this.request.user.roles.includes(Role.ADMIN)
     ) {
       throw new UnauthorizedException('You are not allowed to see this project');
     }
