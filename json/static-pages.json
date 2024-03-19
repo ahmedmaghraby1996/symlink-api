@@ -1,0 +1,18 @@
+[
+   
+    {
+        "static_page_type": "TERMS_AND_CONDITIONS",
+        "content_ar": "المحتوى العربي لصفحة الشروط والأحكام",
+        "content_en": "English content for Terms and Conditions page"
+    },
+    {
+        "static_page_type": "ABOUT_SYMLINK",
+        "content_ar": "المحتوى العربي لصفحة عن سيملينك",
+        "content_en": "English content for About Symlink page"
+    },
+    {
+        "static_page_type": "WHO_ARE_WE",
+        "content_ar": "المحتوى العربي لصفحة من نحن",
+        "content_en": "English content for Who We Are page"
+    }
+]

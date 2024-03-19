@@ -18,6 +18,7 @@ import { SupportTicket } from "../entities/support-ticket/support-ticket.entity"
 import { TicketComment } from "../entities/support-ticket/ticket-comment.entity";
 import { TicketAttachment } from "../entities/support-ticket/ticket-attachment.entity";
 import { AttachmentRequestForProposal } from "../entities/request-for-proposal/attachment-request-for-propsal.entity";
+import { StaticPage } from "../entities/static-pages/statis-page.entity";
 
 export const DB_ENTITIES = [
   User,
@@ -39,7 +40,8 @@ export const DB_ENTITIES = [
   SupportTicket,
   TicketComment,
   TicketAttachment,
-  AttachmentRequestForProposal
+  AttachmentRequestForProposal,
+  StaticPage
 ];
 
 export const DB_VIEWS = [];
