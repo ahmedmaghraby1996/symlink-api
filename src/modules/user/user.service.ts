@@ -71,7 +71,11 @@ export class UserService extends BaseService<User> {
     if (req.password) {
       user.password = await bcrypt.hash(req.password + this._config.get('app.key'), 10);
     }
-    user.email = req.email;
+    if (req.email) {
+      const exsitUser = await this.findOne({ email: req.email });
+      if (exsitUser && exsitUser.id !== user.id) throw new BadRequestException('Email already exists');
+      user.email = req.email;
+    }
     user.name = req.name;
     user.phone = req.phone;
     user.linkedin = req.linkedin;
