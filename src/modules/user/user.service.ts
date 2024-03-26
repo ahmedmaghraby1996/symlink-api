@@ -57,6 +57,7 @@ export class UserService extends BaseService<User> {
     if (req.email) {
       const exsitUser = await this.findOne({ email: req.email });
       if (exsitUser && exsitUser.id !== user.id) throw new BadRequestException('Email already exists');
+      user.username = req.email;
     }
     Object.assign(user, req);
     return await this.update(user);
@@ -75,6 +76,7 @@ export class UserService extends BaseService<User> {
       const exsitUser = await this.findOne({ email: req.email });
       if (exsitUser && exsitUser.id !== user.id) throw new BadRequestException('Email already exists');
       user.email = req.email;
+      user.username = req.email;
     }
     user.name = req.name;
     user.phone = req.phone;
