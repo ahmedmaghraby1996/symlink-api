@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Inject, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Head, Header, Headers, Inject, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { DeleteResult } from 'typeorm';
@@ -27,13 +27,16 @@ export class AddressController {
     constructor(private addressService: AddressService,
         @Inject(I18nResponse) private readonly _i18nResponse: I18nResponse,) { }
 
-@Get('country')
-async getCountries(@Query() query:PaginatedRequest){
-    return new ActionResponse( this._i18nResponse.entity(await this.addressService.findAll(query)))
-}
-@Get('country/:id')
-async getCity(@Param("id") id:string){
-    return new ActionResponse( this._i18nResponse.entity( await this.addressService.getCities(id)))
-}
+    @Get('country')
+    async getCountries(@Query() query: PaginatedRequest) {
+        return new ActionResponse(this._i18nResponse.entity(await this.addressService.findAll(query)))
+    }
+    @Get('country/:id')
+    async getCity(
+        @Param("id") id: string,
+        @Headers('Accept-Language') lang?: string
+    ) {
+        return new ActionResponse(this._i18nResponse.entity(await this.addressService.getCities(id, lang)))
+    }
 
 }

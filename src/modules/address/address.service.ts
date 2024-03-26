@@ -22,15 +22,27 @@ export class AddressService extends BaseService<Country> {
     @InjectRepository(City)
     public city_repo: Repository<City>,
     @Inject(REQUEST) request: Request,
-   
+
   ) {
     super(country_repo);
   }
 
-  async getCities(id:string)
-  {
-return await  this.city_repo.find({where:{country_id:id}})
+  async getCities(id: string, lang: string) {
+    let sortBy: string;
+    if (lang === 'ar') {
+      sortBy = 'name_ar';
+    } else {
+      sortBy = 'name_en';
+    }
+    
+    return await this.city_repo.find({
+      where: { country_id: id },
+      order: {
+        [sortBy]: 'ASC' 
+      }
+    });
   }
+  
 
 
 

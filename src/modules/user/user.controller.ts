@@ -51,16 +51,8 @@ export class UserController {
     @Body() req: UpdateProfileRequest,
     @UploadedFile(new UploadValidator().build()) file: Express.Multer.File,
   ) {
-    const user = this.request.user;
     req.file = file;
-    if (req.file) await this.userService.updateImage(req);
-    user.email = req.email;
-    user.name = req.name;
-    user.phone = req.phone;
-    user.linkedin = req.linkedin;
-    user.city_id = req.city_id;
-
-    const result = await this.userService.update(user);
+    const result = await this.userService.updateUser(req);
     return new ActionResponse(this._i18nResponse.entity(new UserInfoResponse(result)));
   }
 
