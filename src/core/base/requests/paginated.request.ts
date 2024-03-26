@@ -5,6 +5,7 @@ import { toRightNumber } from 'src/core/helpers/cast.helper';
 import {
   LessThan,
   LessThanOrEqual,
+  Like,
   MoreThan,
   MoreThanOrEqual,
   Not,
@@ -26,13 +27,13 @@ export interface IncludesFilter {
 
 export class PaginatedRequest {
   @Transform(({ value }) => toRightNumber(value, { min: 1 }))
-  @ApiProperty({ required: false, minimum: 1,default: 1 })
+  @ApiProperty({ required: false, minimum: 1, default: 1 })
   @IsOptional()
   @IsNumber()
   page: number;
 
   @Transform(({ value }) => toRightNumber(value, { min: 1 }))
-  @ApiProperty({ required: false ,default: 10 })
+  @ApiProperty({ required: false, default: 10 })
   @IsOptional()
   @IsNumber()
   limit: number;
@@ -99,6 +100,15 @@ export class PaginatedRequest {
             break;
           case '!=':
             whereFilter = { ...whereFilter, [key]: Not(value) };
+            break;
+          case ':=:':
+            whereFilter = { ...whereFilter, [key]: Like(`%${value}%`) };
+            break;
+          case '=:':
+            whereFilter = { ...whereFilter, [key]: Like(`${value}%`) };
+            break;
+          case ':=':
+            whereFilter = { ...whereFilter, [key]: Like(`%${value}`) };
             break;
           default:
             whereFilter = { ...whereFilter, [key]: value };
@@ -168,6 +178,9 @@ export class PaginatedRequest {
     if (statement.includes('<')) return '<';
     if (statement.includes('>')) return '>';
     if (statement.includes('!=')) return '!=';
+    if (statement.includes(':=:')) return ':=:';
+    if (statement.includes('=:')) return '=:';
+    if (statement.includes(':=')) return ':=';
     return '=';
   }
 }
