@@ -1,172 +1,2105 @@
 {
-    "countries": [
-      {
-        "name": {
-          "en": "United States",
-          "ar": "الولايات المتحدة"
-        },
-        "cities": [
-          {
-            "name": {
-              "en": "New York",
-              "ar": "نيويورك"
-            }
-          },
-          {
-            "name": {
-              "en": "Los Angeles",
-              "ar": "لوس أنجلوس"
-            }
-          },
-          {
-            "name": {
-              "en": "Chicago",
-              "ar": "شيكاغو"
-            }
-          },
-          {
-            "name": {
-              "en": "Houston",
-              "ar": "هيوستن"
-            }
-          }
-        
-        ]
+  "countries": [
+    {
+      "name": {
+        "en": "Palestine",
+        "ar": "فلسطين"
       },
-      {
-        "name": {
-          "en": "United Kingdom",
-          "ar": "المملكة المتحدة"
-        },
-        "cities": [
-          {
-            "name": {
-              "en": "London",
-              "ar": "لندن"
-            }
-          },
-          {
-            "name": {
-              "en": "Manchester",
-              "ar": "مانشستر"
-            }
-          },
-          {
-            "name": {
-              "en": "Birmingham",
-              "ar": "بيرمنغهام"
-            }
-          },
-          {
-            "name": {
-              "en": "Edinburgh",
-              "ar": "إدنبرة"
-            }
+      "cities": [
+        {
+          "name": {
+            "en": "Jerusalem",
+            "ar": "القدس"
           }
-        
-        ]
+        },
+        {
+          "name": {
+            "en": "Gaza",
+            "ar": "غزة"
+          }
+        },
+        {
+          "name": {
+            "en": "Hebron",
+            "ar": "الخليل"
+          }
+        },
+        {
+          "name": {
+            "en": "Nablus",
+            "ar": "نابلس"
+          }
+        },
+        {
+          "name": {
+            "en": "Ramallah",
+            "ar": "رام الله"
+          }
+        },
+        {
+          "name": {
+            "en": "Bethlehem",
+            "ar": "بيت لحم"
+          }
+        },
+        {
+          "name": {
+            "en": "Jenin",
+            "ar": "جنين"
+          }
+        },
+        {
+          "name": {
+            "en": "Tulkarm",
+            "ar": "طولكرم"
+          }
+        },
+        {
+          "name": {
+            "en": "Qalqilya",
+            "ar": "قلقيلية"
+          }
+        },
+        {
+          "name": {
+            "en": "Rafah",
+            "ar": "رفح"
+          }
+        },
+        {
+          "name": {
+            "en": "Haifa",
+            "ar": "حيفا"
+          }
+        },
+        {
+          "name": {
+            "en": "Jaffa",
+            "ar": "يافا"
+          }
+        },
+        {
+          "name": {
+            "en": "Acre",
+            "ar": "عكا"
+          }
+        },
+        {
+          "name": {
+            "en": "Safed",
+            "ar": "صفد"
+          }
+        },
+        {
+          "name": {
+            "en": "Tiberias",
+            "ar": "طبريا"
+          }
+        },
+        {
+          "name": {
+            "en": "Beersheba",
+            "ar": "بئر السبع"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Egypt",
+        "ar": "مصر"
       },
-      {
-        "name": {
-          "en": "France",
-          "ar": "فرنسا"
-        },
-        "cities": [
-          {
-            "name": {
-              "en": "Paris",
-              "ar": "باريس"
-            }
-          },
-          {
-            "name": {
-              "en": "Marseille",
-              "ar": "مرسيليا"
-            }
-          },
-          {
-            "name": {
-              "en": "Lyon",
-              "ar": "ليون"
-            }
-          },
-          {
-            "name": {
-              "en": "Toulouse",
-              "ar": "تولوز"
-            }
+      "cities": [
+        {
+          "name": {
+            "en": "Cairo",
+            "ar": "القاهرة"
           }
-       
-        ]
+        },
+        {
+          "name": {
+            "en": "Alexandria",
+            "ar": "الإسكندرية"
+          }
+        },
+        {
+          "name": {
+            "en": "Giza",
+            "ar": "الجيزة"
+          }
+        },
+        {
+          "name": {
+            "en": "Luxor",
+            "ar": "الأقصر"
+          }
+        },
+        {
+          "name": {
+            "en": "Aswan",
+            "ar": "أسوان"
+          }
+        },
+        {
+          "name": {
+            "en": "Sharm El Sheikh",
+            "ar": "شرم الشيخ"
+          }
+        },
+        {
+          "name": {
+            "en": "Hurghada",
+            "ar": "الغردقة"
+          }
+        },
+        {
+          "name": {
+            "en": "Asyut",
+            "ar": "أسيوط"
+          }
+        },
+        {
+          "name": {
+            "en": "Fayoum",
+            "ar": "الفيوم"
+          }
+        },
+        {
+          "name": {
+            "en": "Mansoura",
+            "ar": "المنصورة"
+          }
+        },
+        {
+          "name": {
+            "en": "Port Said",
+            "ar": "بورسعيد"
+          }
+        },
+        {
+          "name": {
+            "en": "Suez",
+            "ar": "السويس"
+          }
+        },
+        {
+          "name": {
+            "en": "Ismailia",
+            "ar": "الإسماعيلية"
+          }
+        },
+        {
+          "name": {
+            "en": "Tanta",
+            "ar": "طنطا"
+          }
+        },
+        {
+          "name": {
+            "en": "Zagazig",
+            "ar": "الزقازيق"
+          }
+        },
+        {
+          "name": {
+            "en": "Damietta",
+            "ar": "دمياط"
+          }
+        },
+        {
+          "name": {
+            "en": "Minya",
+            "ar": "المنيا"
+          }
+        },
+        {
+          "name": {
+            "en": "Beni Suef",
+            "ar": "بني سويف"
+          }
+        },
+        {
+          "name": {
+            "en": "Sohag",
+            "ar": "سوهاج"
+          }
+        },
+        {
+          "name": {
+            "en": "El Mahalla El Kubra",
+            "ar": "المحلة الكبرى"
+          }
+        },
+        {
+          "name": {
+            "en": "Kafr El Sheikh",
+            "ar": "كفر الشيخ"
+          }
+        },
+        {
+          "name": {
+            "en": "Luxor",
+            "ar": "الأقصر"
+          }
+        },
+        {
+          "name": {
+            "en": "Qena",
+            "ar": "قنا"
+          }
+        },
+        {
+          "name": {
+            "en": "Marsa Matruh",
+            "ar": "مرسى مطروح"
+          }
+        },
+        {
+          "name": {
+            "en": "Banha",
+            "ar": "بنها"
+          }
+        },
+        {
+          "name": {
+            "en": "Kafr El Dawar",
+            "ar": "كفر الدوار"
+          }
+        },
+        {
+          "name": {
+            "en": "Damietta",
+            "ar": "دمياط"
+          }
+        },
+        {
+          "name": {
+            "en": "Damanhur",
+            "ar": "دمنهور"
+          }
+        },
+        {
+          "name": {
+            "en": "Matay",
+            "ar": "ميت غمر"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Saudi Arabia",
+        "ar": "المملكة العربية السعودية"
       },
-   
-      {
-        "name": {
-          "en": "China",
-          "ar": "الصين"
-        },
-        "cities": [
-          {
-            "name": {
-              "en": "Beijing",
-              "ar": "بكين"
-            }
-          },
-          {
-            "name": {
-              "en": "Shanghai",
-              "ar": "شنغهاي"
-            }
-          },
-          {
-            "name": {
-              "en": "Guangzhou",
-              "ar": "غوانغتشو"
-            }
-          },
-          {
-            "name": {
-              "en": "Chongqing",
-              "ar": "تشونغتشينغ"
-            }
+      "cities": [
+        {
+          "name": {
+            "en": "Riyadh",
+            "ar": "الرياض"
           }
-        
-        ]
+        },
+        {
+          "name": {
+            "en": "Jeddah",
+            "ar": "جدة"
+          }
+        },
+        {
+          "name": {
+            "en": "Mecca",
+            "ar": "مكة المكرمة"
+          }
+        },
+        {
+          "name": {
+            "en": "Medina",
+            "ar": "المدينة المنورة"
+          }
+        },
+        {
+          "name": {
+            "en": "Dammam",
+            "ar": "الدمام"
+          }
+        },
+        {
+          "name": {
+            "en": "Khobar",
+            "ar": "الخبر"
+          }
+        },
+        {
+          "name": {
+            "en": "Jubail",
+            "ar": "الجبيل"
+          }
+        },
+        {
+          "name": {
+            "en": "Tabuk",
+            "ar": "تبوك"
+          }
+        },
+        {
+          "name": {
+            "en": "Ta'if",
+            "ar": "الطائف"
+          }
+        },
+        {
+          "name": {
+            "en": "Abha",
+            "ar": "أبها"
+          }
+        },
+        {
+          "name": {
+            "en": "Al Khobar",
+            "ar": "الخبر"
+          }
+        },
+        {
+          "name": {
+            "en": "Hail",
+            "ar": "حائل"
+          }
+        },
+        {
+          "name": {
+            "en": "Buraidah",
+            "ar": "بريدة"
+          }
+        },
+        {
+          "name": {
+            "en": "Najran",
+            "ar": "نجران"
+          }
+        },
+        {
+          "name": {
+            "en": "Yanbu",
+            "ar": "ينبع"
+          }
+        },
+        {
+          "name": {
+            "en": "Sakaka",
+            "ar": "سكاكا"
+          }
+        },
+        {
+          "name": {
+            "en": "Al Bahah",
+            "ar": "الباحة"
+          }
+        },
+        {
+          "name": {
+            "en": "Arar",
+            "ar": "عرعر"
+          }
+        },
+        {
+          "name": {
+            "en": "Jizan",
+            "ar": "جيزان"
+          }
+        },
+        {
+          "name": {
+            "en": "Rafha",
+            "ar": "رفحاء"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "United Arab Emirates",
+        "ar": "الإمارات العربية المتحدة"
       },
-      {
-        "name": {
-          "en": "Japan",
-          "ar": "اليابان"
-        },
-        "cities": [
-          {
-            "name": {
-              "en": "Tokyo",
-              "ar": "طوكيو"
-            }
-          },
-          {
-            "name": {
-              "en": "Osaka",
-              "ar": "أوساكا"
-            }
-          },
-          {
-            "name": {
-              "en": "Kyoto",
-              "ar": "كيوتو"
-            }
-          },
-          {
-            "name": {
-              "en": "Sapporo",
-              "ar": "سابورو"
-            }
+      "cities": [
+        {
+          "name": {
+            "en": "Dubai",
+            "ar": "دبي"
           }
-          
-        ]
-      }
-    
-    ]
-  }
-  
+        },
+        {
+          "name": {
+            "en": "Abu Dhabi",
+            "ar": "أبو ظبي"
+          }
+        },
+        {
+          "name": {
+            "en": "Sharjah",
+            "ar": "الشارقة"
+          }
+        },
+        {
+          "name": {
+            "en": "Ajman",
+            "ar": "عجمان"
+          }
+        },
+        {
+          "name": {
+            "en": "Fujairah",
+            "ar": "الفجيرة"
+          }
+        },
+        {
+          "name": {
+            "en": "Ras Al Khaimah",
+            "ar": "رأس الخيمة"
+          }
+        },
+        {
+          "name": {
+            "en": "Umm Al Quwain",
+            "ar": "أم القيوين"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "United States",
+        "ar": "الولايات المتحدة"
+      },
+      "cities": [
+        {
+          "name": {
+            "en": "New York",
+            "ar": "نيويورك"
+          }
+        },
+        {
+          "name": {
+            "en": "Los Angeles",
+            "ar": "لوس أنجلوس"
+          }
+        },
+        {
+          "name": {
+            "en": "Chicago",
+            "ar": "شيكاغو"
+          }
+        },
+        {
+          "name": {
+            "en": "Houston",
+            "ar": "هيوستن"
+          }
+        },
+        {
+          "name": {
+            "en": "Phoenix",
+            "ar": "فينيكس"
+          }
+        },
+        {
+          "name": {
+            "en": "Philadelphia",
+            "ar": "فيلادلفيا"
+          }
+        },
+        {
+          "name": {
+            "en": "San Antonio",
+            "ar": "سان أنطونيو"
+          }
+        },
+        {
+          "name": {
+            "en": "San Diego",
+            "ar": "سان دييغو"
+          }
+        },
+        {
+          "name": {
+            "en": "Dallas",
+            "ar": "دالاس"
+          }
+        },
+        {
+          "name": {
+            "en": "San Jose",
+            "ar": "سان خوسيه"
+          }
+        },
+        {
+          "name": {
+            "en": "Austin",
+            "ar": "أوستن"
+          }
+        },
+        {
+          "name": {
+            "en": "Jacksonville",
+            "ar": "جاكسونفيل"
+          }
+        },
+        {
+          "name": {
+            "en": "Indianapolis",
+            "ar": "إنديانابوليس"
+          }
+        },
+        {
+          "name": {
+            "en": "San Francisco",
+            "ar": "سان فرانسيسكو"
+          }
+        },
+        {
+          "name": {
+            "en": "Columbus",
+            "ar": "كولومبوس"
+          }
+        },
+        {
+          "name": {
+            "en": "Fort Worth",
+            "ar": "فورت وورث"
+          }
+        },
+        {
+          "name": {
+            "en": "Charlotte",
+            "ar": "شارلوت"
+          }
+        },
+        {
+          "name": {
+            "en": "Detroit",
+            "ar": "ديترويت"
+          }
+        },
+        {
+          "name": {
+            "en": "El Paso",
+            "ar": "إل باسو"
+          }
+        },
+        {
+          "name": {
+            "en": "Memphis",
+            "ar": "ممفيس"
+          }
+        },
+        {
+          "name": {
+            "en": "Boston",
+            "ar": "بوسطن"
+          }
+        },
+        {
+          "name": {
+            "en": "Seattle",
+            "ar": "سياتل"
+          }
+        },
+        {
+          "name": {
+            "en": "Denver",
+            "ar": "دينفر"
+          }
+        },
+        {
+          "name": {
+            "en": "Washington",
+            "ar": "واشنطن"
+          }
+        },
+        {
+          "name": {
+            "en": "Nashville",
+            "ar": "ناشفيل"
+          }
+        },
+        {
+          "name": {
+            "en": "Portland",
+            "ar": "بورتلاند"
+          }
+        },
+        {
+          "name": {
+            "en": "Las Vegas",
+            "ar": "لاس فيغاس"
+          }
+        },
+        {
+          "name": {
+            "en": "Louisville",
+            "ar": "لويزفيل"
+          }
+        },
+        {
+          "name": {
+            "en": "Oklahoma City",
+            "ar": "مدينة أوكلاهوما"
+          }
+        },
+        {
+          "name": {
+            "en": "Milwaukee",
+            "ar": "ميلووكي"
+          }
+        },
+        {
+          "name": {
+            "en": "Albuquerque",
+            "ar": "ألباكركي"
+          }
+        },
+        {
+          "name": {
+            "en": "Tucson",
+            "ar": "توسون"
+          }
+        },
+        {
+          "name": {
+            "en": "Fresno",
+            "ar": "فريسنو"
+          }
+        },
+        {
+          "name": {
+            "en": "Sacramento",
+            "ar": "ساكرامنتو"
+          }
+        },
+        {
+          "name": {
+            "en": "Long Beach",
+            "ar": "لونغ بيتش"
+          }
+        },
+        {
+          "name": {
+            "en": "Kansas City",
+            "ar": "مدينة كانساس"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Yemen",
+        "ar": "اليمن"
+      },
+      "cities": [
+        {
+          "name": {
+            "en": "Sana'a",
+            "ar": "صنعاء"
+          }
+        },
+        {
+          "name": {
+            "en": "Aden",
+            "ar": "عدن"
+          }
+        },
+        {
+          "name": {
+            "en": "Taiz",
+            "ar": "تعز"
+          }
+        },
+        {
+          "name": {
+            "en": "Al Hudaydah",
+            "ar": "الحديدة"
+          }
+        },
+        {
+          "name": {
+            "en": "Ibb",
+            "ar": "إب"
+          }
+        },
+        {
+          "name": {
+            "en": "Dhamar",
+            "ar": "ذمار"
+          }
+        },
+        {
+          "name": {
+            "en": "Al-Mukalla",
+            "ar": "المكلا"
+          }
+        },
+        {
+          "name": {
+            "en": "Saywun",
+            "ar": "سيؤون"
+          }
+        },
+        {
+          "name": {
+            "en": "Zabid",
+            "ar": "زبيد"
+          }
+        },
+        {
+          "name": {
+            "en": "Al Bayda",
+            "ar": "البيضاء"
+          }
+        },
+        {
+          "name": {
+            "en": "Hajjah",
+            "ar": "حجة"
+          }
+        },
+        {
+          "name": {
+            "en": "Al Mukalla",
+            "ar": "المكلا"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Jordan",
+        "ar": "الأردن"
+      },
+      "cities": [
+        {
+          "name": {
+            "en": "Amman",
+            "ar": "عمان"
+          }
+        },
+        {
+          "name": {
+            "en": "Aqaba",
+            "ar": "العقبة"
+          }
+        },
+        {
+          "name": {
+            "en": "Irbid",
+            "ar": "إربد"
+          }
+        },
+        {
+          "name": {
+            "en": "Zarqa",
+            "ar": "الزرقاء"
+          }
+        },
+        {
+          "name": {
+            "en": "Ma'an",
+            "ar": "معان"
+          }
+        },
+        {
+          "name": {
+            "en": "Madaba",
+            "ar": "مادبا"
+          }
+        },
+        {
+          "name": {
+            "en": "Karak",
+            "ar": "الكرك"
+          }
+        },
+        {
+          "name": {
+            "en": "Jerash",
+            "ar": "جرش"
+          }
+        },
+        {
+          "name": {
+            "en": "Salt",
+            "ar": "السلط"
+          }
+        },
+        {
+          "name": {
+            "en": "Tafilah",
+            "ar": "الطفيلة"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Syria",
+        "ar": "سوريا"
+      },
+      "cities": [
+        {
+          "name": {
+            "en": "Damascus",
+            "ar": "دمشق"
+          }
+        },
+        {
+          "name": {
+            "en": "Aleppo",
+            "ar": "حلب"
+          }
+        },
+        {
+          "name": {
+            "en": "Homs",
+            "ar": "حمص"
+          }
+        },
+        {
+          "name": {
+            "en": "Hama",
+            "ar": "حماة"
+          }
+        },
+        {
+          "name": {
+            "en": "Latakia",
+            "ar": "اللاذقية"
+          }
+        },
+        {
+          "name": {
+            "en": "Deir ez-Zor",
+            "ar": "دير الزور"
+          }
+        },
+        {
+          "name": {
+            "en": "Raqqa",
+            "ar": "الرقة"
+          }
+        },
+        {
+          "name": {
+            "en": "Idlib",
+            "ar": "إدلب"
+          }
+        },
+        {
+          "name": {
+            "en": "Daraa",
+            "ar": "درعا"
+          }
+        },
+        {
+          "name": {
+            "en": "Qamishli",
+            "ar": "قامشلي"
+          }
+        },
+        {
+          "name": {
+            "en": "Tartus",
+            "ar": "طرطوس"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Bahrain",
+        "ar": "البحرين"
+      },
+      "cities": [
+        {
+          "name": {
+            "en": "Manama",
+            "ar": "المنامة"
+          }
+        },
+        {
+          "name": {
+            "en": "Muharraq",
+            "ar": "المحرق"
+          }
+        },
+        {
+          "name": {
+            "en": "Riffa",
+            "ar": "الرفاع"
+          }
+        },
+        {
+          "name": {
+            "en": "Hamad Town",
+            "ar": "مدينة حمد"
+          }
+        },
+        {
+          "name": {
+            "en": "Isa Town",
+            "ar": "مدينة عيسى"
+          }
+        },
+        {
+          "name": {
+            "en": "Sitrah",
+            "ar": "سترة"
+          }
+        },
+        {
+          "name": {
+            "en": "Juffair",
+            "ar": "الجفير"
+          }
+        },
+        {
+          "name": {
+            "en": "Budaiya",
+            "ar": "البديع"
+          }
+        },
+        {
+          "name": {
+            "en": "Saar",
+            "ar": "سار"
+          }
+        },
+        {
+          "name": {
+            "en": "A'ali",
+            "ar": "عالي"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Kuwait",
+        "ar": "الكويت"
+      },
+      "cities": [
+        {
+          "name": {
+            "en": "Kuwait City",
+            "ar": "مدينة الكويت"
+          }
+        },
+        {
+          "name": {
+            "en": "Hawalli",
+            "ar": "حولي"
+          }
+        },
+        {
+          "name": {
+            "en": "Farwaniya",
+            "ar": "الفروانية"
+          }
+        },
+        {
+          "name": {
+            "en": "Salmiya",
+            "ar": "السالمية"
+          }
+        },
+        {
+          "name": {
+            "en": "Jahra",
+            "ar": "الجهراء"
+          }
+        },
+        {
+          "name": {
+            "en": "Ahmadi",
+            "ar": "الأحمدي"
+          }
+        },
+        {
+          "name": {
+            "en": "Mubarak Al-Kabeer",
+            "ar": "مبارك الكبير"
+          }
+        },
+        {
+          "name": {
+            "en": "Sabah Al-Salem",
+            "ar": "صباح السالم"
+          }
+        },
+        {
+          "name": {
+            "en": "Al-Farwaniyah",
+            "ar": "الفروانية"
+          }
+        },
+        {
+          "name": {
+            "en": "Al-Ahmadi",
+            "ar": "الأحمدي"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Oman",
+        "ar": "عُمان"
+      },
+      "cities": [
+        {
+          "name": {
+            "en": "Muscat",
+            "ar": "مسقط"
+          }
+        },
+        {
+          "name": {
+            "en": "Salalah",
+            "ar": "صلالة"
+          }
+        },
+        {
+          "name": {
+            "en": "Sohar",
+            "ar": "صحار"
+          }
+        },
+        {
+          "name": {
+            "en": "Nizwa",
+            "ar": "نزوى"
+          }
+        },
+        {
+          "name": {
+            "en": "Sur",
+            "ar": "صور"
+          }
+        },
+        {
+          "name": {
+            "en": "Ibri",
+            "ar": "عبري"
+          }
+        },
+        {
+          "name": {
+            "en": "Rustaq",
+            "ar": "الرستاق"
+          }
+        },
+        {
+          "name": {
+            "en": "Al Buraimi",
+            "ar": "البريمي"
+          }
+        },
+        {
+          "name": {
+            "en": "Al Khaburah",
+            "ar": "الخابورة"
+          }
+        },
+        {
+          "name": {
+            "en": "Barka",
+            "ar": "بركاء"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Lebanon",
+        "ar": "لبنان"
+      },
+      "cities": [
+        {
+          "name": {
+            "en": "Beirut",
+            "ar": "بيروت"
+          }
+        },
+        {
+          "name": {
+            "en": "Tripoli",
+            "ar": "طرابلس"
+          }
+        },
+        {
+          "name": {
+            "en": "Sidon",
+            "ar": "صيدا"
+          }
+        },
+        {
+          "name": {
+            "en": "Tyre",
+            "ar": "صور"
+          }
+        },
+        {
+          "name": {
+            "en": "Jounieh",
+            "ar": "جونية"
+          }
+        },
+        {
+          "name": {
+            "en": "Zahle",
+            "ar": "زحلة"
+          }
+        },
+        {
+          "name": {
+            "en": "Baabda",
+            "ar": "بعبدا"
+          }
+        },
+        {
+          "name": {
+            "en": "Batroun",
+            "ar": "البترون"
+          }
+        },
+        {
+          "name": {
+            "en": "Baalbek",
+            "ar": "بعلبك"
+          }
+        },
+        {
+          "name": {
+            "en": "Byblos",
+            "ar": "جبيل"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Iraq",
+        "ar": "العراق"
+      },
+      "cities": [
+        {
+          "name": {
+            "en": "Baghdad",
+            "ar": "بغداد"
+          }
+        },
+        {
+          "name": {
+            "en": "Basra",
+            "ar": "البصرة"
+          }
+        },
+        {
+          "name": {
+            "en": "Mosul",
+            "ar": "الموصل"
+          }
+        },
+        {
+          "name": {
+            "en": "Erbil",
+            "ar": "أربيل"
+          }
+        },
+        {
+          "name": {
+            "en": "Kirkuk",
+            "ar": "كركوك"
+          }
+        },
+        {
+          "name": {
+            "en": "Najaf",
+            "ar": "النجف"
+          }
+        },
+        {
+          "name": {
+            "en": "Karbala",
+            "ar": "كربلاء"
+          }
+        },
+        {
+          "name": {
+            "en": "Diyala",
+            "ar": "ديالى"
+          }
+        },
+        {
+          "name": {
+            "en": "Sulaymaniyah",
+            "ar": "السليمانية"
+          }
+        },
+        {
+          "name": {
+            "en": "Ramadi",
+            "ar": "الرمادي"
+          }
+        },
+        {
+          "name": {
+            "en": "Hilla",
+            "ar": "الحلة"
+          }
+        },
+        {
+          "name": {
+            "en": "Fallujah",
+            "ar": "الفلوجة"
+          }
+        },
+        {
+          "name": {
+            "en": "Samawah",
+            "ar": "السماوة"
+          }
+        },
+        {
+          "name": {
+            "en": "Tikrit",
+            "ar": "تكريت"
+          }
+        },
+        {
+          "name": {
+            "en": "Kut",
+            "ar": "الكوت"
+          }
+        },
+        {
+          "name": {
+            "en": "Nasiriyah",
+            "ar": "الناصرية"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Qatar",
+        "ar": "قطر"
+      },
+      "cities": [
+        {
+          "name": {
+            "en": "Doha",
+            "ar": "الدوحة"
+          }
+        },
+        {
+          "name": {
+            "en": "Al Rayyan",
+            "ar": "الريان"
+          }
+        },
+        {
+          "name": {
+            "en": "Umm Salal",
+            "ar": "أم صلال"
+          }
+        },
+        {
+          "name": {
+            "en": "Al Wakrah",
+            "ar": "الوكرة"
+          }
+        },
+        {
+          "name": {
+            "en": "Al Khor",
+            "ar": "الخور"
+          }
+        },
+        {
+          "name": {
+            "en": "Al Daayen",
+            "ar": "الضعاين"
+          }
+        },
+        {
+          "name": {
+            "en": "Mesaieed",
+            "ar": "مسيعيد"
+          }
+        },
+        {
+          "name": {
+            "en": "Lusail",
+            "ar": "لوسيل"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "United Kingdom",
+        "ar": "المملكة المتحدة"
+      },
+      "cities": [
+        {
+          "name": {
+            "en": "London",
+            "ar": "لندن"
+          }
+        },
+        {
+          "name": {
+            "en": "Manchester",
+            "ar": "مانشستر"
+          }
+        },
+        {
+          "name": {
+            "en": "Birmingham",
+            "ar": "بيرمنغهام"
+          }
+        },
+        {
+          "name": {
+            "en": "Edinburgh",
+            "ar": "إدنبرة"
+          }
+        },
+        {
+          "name": {
+            "en": "Glasgow",
+            "ar": "غلاسكو"
+          }
+        },
+        {
+          "name": {
+            "en": "Liverpool",
+            "ar": "ليفربول"
+          }
+        },
+        {
+          "name": {
+            "en": "Bristol",
+            "ar": "بريستول"
+          }
+        },
+        {
+          "name": {
+            "en": "Leeds",
+            "ar": "ليدز"
+          }
+        },
+        {
+          "name": {
+            "en": "Sheffield",
+            "ar": "شيفيلد"
+          }
+        },
+        {
+          "name": {
+            "en": "Newcastle",
+            "ar": "نيوكاسل"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "France",
+        "ar": "فرنسا"
+      },
+      "cities": [
+        {
+          "name": {
+            "en": "Paris",
+            "ar": "باريس"
+          }
+        },
+        {
+          "name": {
+            "en": "Marseille",
+            "ar": "مرسيليا"
+          }
+        },
+        {
+          "name": {
+            "en": "Lyon",
+            "ar": "ليون"
+          }
+        },
+        {
+          "name": {
+            "en": "Toulouse",
+            "ar": "تولوز"
+          }
+        },
+        {
+          "name": {
+            "en": "Nice",
+            "ar": "نيس"
+          }
+        },
+        {
+          "name": {
+            "en": "Nantes",
+            "ar": "نانت"
+          }
+        },
+        {
+          "name": {
+            "en": "Strasbourg",
+            "ar": "ستراسبورغ"
+          }
+        },
+        {
+          "name": {
+            "en": "Montpellier",
+            "ar": "مونبلييه"
+          }
+        },
+        {
+          "name": {
+            "en": "Bordeaux",
+            "ar": "بوردو"
+          }
+        },
+        {
+          "name": {
+            "en": "Lille",
+            "ar": "ليل"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "China",
+        "ar": "الصين"
+      },
+      "cities": [
+        {
+          "name": {
+            "en": "Beijing",
+            "ar": "بكين"
+          }
+        },
+        {
+          "name": {
+            "en": "Shanghai",
+            "ar": "شنغهاي"
+          }
+        },
+        {
+          "name": {
+            "en": "Guangzhou",
+            "ar": "غوانغتشو"
+          }
+        },
+        {
+          "name": {
+            "en": "Chongqing",
+            "ar": "تشونغتشينغ"
+          }
+        },
+        {
+          "name": {
+            "en": "Shenzhen",
+            "ar": "شنتشن"
+          }
+        },
+        {
+          "name": {
+            "en": "Tianjin",
+            "ar": "تيانجين"
+          }
+        },
+        {
+          "name": {
+            "en": "Wuhan",
+            "ar": "ووهان"
+          }
+        },
+        {
+          "name": {
+            "en": "Chengdu",
+            "ar": "تشنغدو"
+          }
+        },
+        {
+          "name": {
+            "en": "Nanjing",
+            "ar": "نانجينغ"
+          }
+        },
+        {
+          "name": {
+            "en": "Hangzhou",
+            "ar": "هانغتشو"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Germany",
+        "ar": "ألمانيا",
+        "de": "Deutschland"
+      },
+      "cities": [
+        {
+          "name": {
+            "en": "Berlin",
+            "ar": "برلين",
+            "de": "Berlin"
+          }
+        },
+        {
+          "name": {
+            "en": "Munich",
+            "ar": "ميونخ",
+            "de": "München"
+          }
+        },
+        {
+          "name": {
+            "en": "Hamburg",
+            "ar": "هامبورغ",
+            "de": "Hamburg"
+          }
+        },
+        {
+          "name": {
+            "en": "Frankfurt",
+            "ar": "فرانكفورت",
+            "de": "Frankfurt"
+          }
+        },
+        {
+          "name": {
+            "en": "Cologne",
+            "ar": "كولونيا",
+            "de": "Köln"
+          }
+        },
+        {
+          "name": {
+            "en": "Stuttgart",
+            "ar": "شتوتغارت",
+            "de": "Stuttgart"
+          }
+        },
+        {
+          "name": {
+            "en": "Düsseldorf",
+            "ar": "دوسلدورف",
+            "de": "Düsseldorf"
+          }
+        },
+        {
+          "name": {
+            "en": "Dortmund",
+            "ar": "دورتموند",
+            "de": "Dortmund"
+          }
+        },
+        {
+          "name": {
+            "en": "Essen",
+            "ar": "إسن",
+            "de": "Essen"
+          }
+        },
+        {
+          "name": {
+            "en": "Leipzig",
+            "ar": "ليبزيغ",
+            "de": "Leipzig"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "India",
+        "ar": "الهند"
+      },
+      "cities": [
+        {
+          "name": {
+            "en": "Delhi",
+            "ar": "دلهي"
+          }
+        },
+        {
+          "name": {
+            "en": "Mumbai",
+            "ar": "مومباي"
+          }
+        },
+        {
+          "name": {
+            "en": "Kolkata",
+            "ar": "كولكاتا"
+          }
+        },
+        {
+          "name": {
+            "en": "Chennai",
+            "ar": "تشيناي"
+          }
+        },
+        {
+          "name": {
+            "en": "Bangalore",
+            "ar": "بنغالور"
+          }
+        },
+        {
+          "name": {
+            "en": "Hyderabad",
+            "ar": "حيدر أباد"
+          }
+        },
+        {
+          "name": {
+            "en": "Pune",
+            "ar": "بونا"
+          }
+        },
+        {
+          "name": {
+            "en": "Ahmedabad",
+            "ar": "أحمد آباد"
+          }
+        },
+        {
+          "name": {
+            "en": "Jaipur",
+            "ar": "جايبور"
+          }
+        },
+        {
+          "name": {
+            "en": "Lucknow",
+            "ar": "لكناو"
+          }
+        },
+        {
+          "name": {
+            "en": "Kanpur",
+            "ar": "كانبور"
+          }
+        },
+        {
+          "name": {
+            "en": "Nagpur",
+            "ar": "ناجبور"
+          }
+        },
+        {
+          "name": {
+            "en": "Visakhapatnam",
+            "ar": "فيشاخاباتنام"
+          }
+        },
+        {
+          "name": {
+            "en": "Bhopal",
+            "ar": "بوبال"
+          }
+        },
+        {
+          "name": {
+            "en": "Patna",
+            "ar": "باتنا"
+          }
+        },
+        {
+          "name": {
+            "en": "Ludhiana",
+            "ar": "لوديانا"
+          }
+        },
+        {
+          "name": {
+            "en": "Agra",
+            "ar": "آغرا"
+          }
+        },
+        {
+          "name": {
+            "en": "Nashik",
+            "ar": "ناشيك"
+          }
+        },
+        {
+          "name": {
+            "en": "Vadodara",
+            "ar": "فادودارا"
+          }
+        },
+        {
+          "name": {
+            "en": "Faridabad",
+            "ar": "فريد آباد"
+          }
+        },
+        {
+          "name": {
+            "en": "Meerut",
+            "ar": "ميرات"
+          }
+        },
+        {
+          "name": {
+            "en": "Rajkot",
+            "ar": "راجكوت"
+          }
+        },
+        {
+          "name": {
+            "en": "Kalyan",
+            "ar": "كاليان"
+          }
+        },
+        {
+          "name": {
+            "en": "Vasai-Virar",
+            "ar": "فاساي-فيرار"
+          }
+        },
+        {
+          "name": {
+            "en": "Varanasi",
+            "ar": "فاراناسي"
+          }
+        },
+        {
+          "name": {
+            "en": "Srinagar",
+            "ar": "سريناغار"
+          }
+        },
+        {
+          "name": {
+            "en": "Aurangabad",
+            "ar": "أورانج آباد"
+          }
+        },
+        {
+          "name": {
+            "en": "Dhanbad",
+            "ar": "دانباد"
+          }
+        },
+        {
+          "name": {
+            "en": "Amritsar",
+            "ar": "أمريتسار"
+          }
+        },
+        {
+          "name": {
+            "en": "Navi Mumbai",
+            "ar": "نافي مومباي"
+          }
+        },
+        {
+          "name": {
+            "en": "Allahabad",
+            "ar": "الله آباد"
+          }
+        },
+        {
+          "name": {
+            "en": "Ranchi",
+            "ar": "رانشي"
+          }
+        },
+        {
+          "name": {
+            "en": "Howrah",
+            "ar": "هاوراه"
+          }
+        },
+        {
+          "name": {
+            "en": "Coimbatore",
+            "ar": "كويمباتور"
+          }
+        },
+        {
+          "name": {
+            "en": "Jabalpur",
+            "ar": "جبالبور"
+          }
+        },
+        {
+          "name": {
+            "en": "Gwalior",
+            "ar": "جواليور"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Japan",
+        "ar": "اليابان"
+      },
+      "cities": [
+        {
+          "name": {
+            "en": "Tokyo",
+            "ar": "طوكيو"
+          }
+        },
+        {
+          "name": {
+            "en": "Osaka",
+            "ar": "أوساكا"
+          }
+        },
+        {
+          "name": {
+            "en": "Kyoto",
+            "ar": "كيوتو"
+          }
+        },
+        {
+          "name": {
+            "en": "Sapporo",
+            "ar": "سابورو"
+          }
+        },
+        {
+          "name": {
+            "en": "Nagoya",
+            "ar": "ناغويا"
+          }
+        },
+        {
+          "name": {
+            "en": "Fukuoka",
+            "ar": "فوكوكا"
+          }
+        },
+        {
+          "name": {
+            "en": "Yokohama",
+            "ar": "يوكوهاما"
+          }
+        },
+        {
+          "name": {
+            "en": "Kobe",
+            "ar": "كوبي"
+          }
+        },
+        {
+          "name": {
+            "en": "Sendai",
+            "ar": "سنداي"
+          }
+        },
+        {
+          "name": {
+            "en": "Hiroshima",
+            "ar": "هيروشيما"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Italy",
+        "ar": "إيطاليا"
+      },
+      "cities": [
+        {
+          "name": {
+            "en": "Rome",
+            "ar": "روما"
+          }
+        },
+        {
+          "name": {
+            "en": "Milan",
+            "ar": "ميلان"
+          }
+        },
+        {
+          "name": {
+            "en": "Naples",
+            "ar": "نابولي"
+          }
+        },
+        {
+          "name": {
+            "en": "Turin",
+            "ar": "تورينو"
+          }
+        },
+        {
+          "name": {
+            "en": "Palermo",
+            "ar": "باليرمو"
+          }
+        },
+        {
+          "name": {
+            "en": "Genoa",
+            "ar": "جنوة"
+          }
+        },
+        {
+          "name": {
+            "en": "Bologna",
+            "ar": "بولونيا"
+          }
+        },
+        {
+          "name": {
+            "en": "Florence",
+            "ar": "فلورنسا"
+          }
+        },
+        {
+          "name": {
+            "en": "Bari",
+            "ar": "باري"
+          }
+        },
+        {
+          "name": {
+            "en": "Catania",
+            "ar": "كاتانيا"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Russia",
+        "ar": "روسيا"
+      },
+      "cities": [
+        {
+          "name": {
+            "en": "Moscow",
+            "ar": "موسكو"
+          }
+        },
+        {
+          "name": {
+            "en": "Saint Petersburg",
+            "ar": "سانت بطرسبرغ"
+          }
+        },
+        {
+          "name": {
+            "en": "Novosibirsk",
+            "ar": "نوفوسيبيرسك"
+          }
+        },
+        {
+          "name": {
+            "en": "Yekaterinburg",
+            "ar": "يكاترينبورغ"
+          }
+        },
+        {
+          "name": {
+            "en": "Nizhny Novgorod",
+            "ar": "نيجني نوفغورود"
+          }
+        },
+        {
+          "name": {
+            "en": "Kazan",
+            "ar": "قازان"
+          }
+        },
+        {
+          "name": {
+            "en": "Chelyabinsk",
+            "ar": "تشيليابينسك"
+          }
+        },
+        {
+          "name": {
+            "en": "Omsk",
+            "ar": "أومسك"
+          }
+        },
+        {
+          "name": {
+            "en": "Samara",
+            "ar": "سامارا"
+          }
+        },
+        {
+          "name": {
+            "en": "Rostov-on-Don",
+            "ar": "روستوف على نهر الدون"
+          }
+        },
+        {
+          "name": {
+            "en": "Ufa",
+            "ar": "أوفا"
+          }
+        },
+        {
+          "name": {
+            "en": "Krasnoyarsk",
+            "ar": "كراسنويارسك"
+          }
+        },
+        {
+          "name": {
+            "en": "Voronezh",
+            "ar": "فورونيج"
+          }
+        },
+        {
+          "name": {
+            "en": "Volgograd",
+            "ar": "فولغوغراد"
+          }
+        },
+        {
+          "name": {
+            "en": "Saratov",
+            "ar": "ساراتوف"
+          }
+        },
+        {
+          "name": {
+            "en": "Krasnodar",
+            "ar": "كراسنودار"
+          }
+        },
+        {
+          "name": {
+            "en": "Tolyatti",
+            "ar": "تولياتي"
+          }
+        },
+        {
+          "name": {
+            "en": "Izhevsk",
+            "ar": "إيجيفسك"
+          }
+        }
+      ]
+    }
+  ]
+}
