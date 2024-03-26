@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/infrastructure/entities/user/user.entity';
 import { Repository } from 'typeorm';
@@ -10,6 +10,7 @@ import { UploadFileRequest } from '../file/dto/requests/upload-file.request';
 import { AdminUpdateUserRequest } from './dto/requests/admin-update-user.request';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
+import { UpdateProfileRequest } from './dto/requests/update-profile.request';
 
 @Injectable({ scope: Scope.REQUEST })
 export class UserService extends BaseService<User> {
@@ -48,6 +49,17 @@ export class UserService extends BaseService<User> {
         await super.update(user);
       } catch (e) { }
     return user;
+  }
+
+  async updateUser(req: UpdateProfileRequest) {
+    const user = this.request.user;
+    if (req.file) await this.updateImage(req);
+    if (req.email) {
+      const exsitUser = await this.findOne({ email: req.email });
+      if (exsitUser && exsitUser.id !== user.id) throw new BadRequestException('Email already exists');
+    }
+    Object.assign(user, req);
+    return await this.update(user);
   }
 
   async adminUpdateUser(user_id: string, req: AdminUpdateUserRequest) {
